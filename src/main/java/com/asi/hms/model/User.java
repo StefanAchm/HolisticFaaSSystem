@@ -1,21 +1,17 @@
 package com.asi.hms.model;
 
+import com.asi.hms.exceptions.HolisticFaaSException;
+import com.google.auth.oauth2.GoogleCredentials;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 public class User {
 
-    private String name;
     private String accessKeyId;
     private String secretAccessKey;
 
-    public User() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private GoogleCredentials googleCredentials;
 
     public String getAccessKeyId() {
         return accessKeyId;
@@ -32,4 +28,25 @@ public class User {
     public void setSecretAccessKey(String secretAccessKey) {
         this.secretAccessKey = secretAccessKey;
     }
+
+    public GoogleCredentials getGoogleCredentials() {
+        return googleCredentials;
+    }
+
+    public void setGoogleCredentialsFromInputStream(InputStream inputStream) throws HolisticFaaSException {
+
+        try {
+
+            this.googleCredentials = GoogleCredentials
+                    .fromStream(inputStream)
+                    .createScoped("https://www.googleapis.com/auth/cloud-platform");
+
+        } catch (IOException e) {
+
+            throw new HolisticFaaSException(e.getMessage());
+
+        }
+
+    }
+
 }

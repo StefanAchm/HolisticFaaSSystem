@@ -14,7 +14,9 @@ import software.amazon.awssdk.services.lambda.waiters.LambdaWaiter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 // TODO: use a logger
 public class DeployAws implements DeployInterface {
@@ -34,7 +36,7 @@ public class DeployAws implements DeployInterface {
             LambdaWaiter waiter = awsLambda.waiter();
 
             // TODO: What file paths are allowed and possible?
-            InputStream is = new FileInputStream(function.getSource());
+            InputStream is = Files.newInputStream(function.getFilePath());
             SdkBytes fileToUpload = SdkBytes.fromInputStream(is);
 
             FunctionCode code = FunctionCode.builder()
@@ -48,7 +50,7 @@ public class DeployAws implements DeployInterface {
                     .runtime(function.getRuntime())
                     .code(code)
                     .memorySize(function.getMemory())
-                    .timeout(function.getTimeout())
+                    .timeout(function.getTimeoutSecs()) // Timeout in seconds
                     .build();
 
             // Create a Lambda function using a waiter
@@ -61,7 +63,7 @@ public class DeployAws implements DeployInterface {
             waiterResponse.matched().response().ifPresent(System.out::println);
             System.out.println("Function created with arn: " + functionResponse.functionArn());
 
-        } catch (LambdaException | FileNotFoundException e) {
+        } catch (LambdaException | IOException e) {
 
             throw new HolisticFaaSException(e.getMessage());
 

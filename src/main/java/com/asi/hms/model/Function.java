@@ -2,6 +2,9 @@ package com.asi.hms.model;
 
 import com.asi.hms.enums.Region;
 
+import java.net.URI;
+import java.nio.file.Path;
+
 // functions:
 //  - archive: "https://bucket.s3.region.amazonaws.com/../.."
 //    name: "function1"
@@ -30,7 +33,7 @@ public class Function {
      * The source of the function. <br>
      * It can be an archive, a URL, or a path.
      */
-    private String source;
+    private Path filePath;
 
     /**
      * The name of the function.
@@ -46,12 +49,13 @@ public class Function {
     private Integer memory;
 
     /**
-     * The maximum execution time for the function.
+     * The maximum execution time for the function (in seconds)
      * TODO: check which unit (and possible values) is used for timeout for all providers
      *
      * AWS: The default value for this setting is 3 seconds, but you can adjust this in increments of 1 second up to a maximum value of 15 minutes.
+     * https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html#lambda-CreateFunction-request-Timeout
      */
-    private Integer timeout;
+    private Integer timeoutSecs;
 
     /**
      * The handler of the function.
@@ -61,6 +65,9 @@ public class Function {
     /**
      * The regions, where the function is deployed.
      * TODO: check which regions are available for all providers
+     *
+     *
+     * GCP: https://cloud.google.com/compute/docs/regions-zones/viewing-regions-zones?hl=de#rest
      */
     private Region region;
 
@@ -70,12 +77,18 @@ public class Function {
      */
     private String runtime;
 
-    public String getSource() {
-        return source;
+    /**
+     * The name of the project, where the function is deployed. <br>
+     * (Currently only used for GCP)
+     */
+    private String projectName;
+
+    public Path getFilePath() {
+        return filePath;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setFilePath(Path filePath) {
+        this.filePath = filePath;
     }
 
     public String getName() {
@@ -94,12 +107,12 @@ public class Function {
         this.memory = memory;
     }
 
-    public Integer getTimeout() {
-        return timeout;
+    public Integer getTimeoutSecs() {
+        return timeoutSecs;
     }
 
-    public void setTimeout(Integer timeout) {
-        this.timeout = timeout;
+    public void setTimeoutSecs(Integer timeoutSecs) {
+        this.timeoutSecs = timeoutSecs;
     }
 
     public String getHandler() {
@@ -124,5 +137,13 @@ public class Function {
 
     public void setRuntime(String runtime) {
         this.runtime = runtime;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

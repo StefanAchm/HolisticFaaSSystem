@@ -29,10 +29,10 @@ public class DeployService {
         DeployInterface deployInterface = new DeployAws();
 
         Function function = new Function();
-        function.setSource(deployFunction.getSource());
+//        function.setSource(deployFunction.getSource()); // todo
         function.setName(deployFunction.getName());
         function.setMemory(deployFunction.getMemory());
-        function.setTimeout(deployFunction.getTimeout());
+        function.setTimeoutSecs(deployFunction.getTimeout());
         function.setHandler(deployFunction.getHandler());
         function.setRegion(deployFunction.getRegion());
         function.setRuntime(deployFunction.getRuntime());
