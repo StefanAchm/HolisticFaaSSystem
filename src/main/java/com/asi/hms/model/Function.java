@@ -1,5 +1,7 @@
 package com.asi.hms.model;
 
+import com.asi.hms.enums.Region;
+
 // functions:
 //  - archive: "https://bucket.s3.region.amazonaws.com/../.."
 //    name: "function1"
@@ -20,8 +22,8 @@ package com.asi.hms.model;
 //  - archive: "https://storage.cloud.google.com/bucket/../.."
 //    name: "function2"
 
-import com.asi.hms.enums.Region;
 
+// https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html
 public class Function {
 
     /**
@@ -38,20 +40,18 @@ public class Function {
     /**
      * The maximum amount of memory that the function can use at runtime.
      * TODO: check which unit (and possible values) is used for memory for all providers
+     *
+     * AWS: a value between 128 MB and 10,240 MB in 1-MB increments. At 1,769 MB, a function has the equivalent of one vCPU (one vCPU-second of credits per second).
      */
     private Integer memory;
 
     /**
      * The maximum execution time for the function.
      * TODO: check which unit (and possible values) is used for timeout for all providers
+     *
+     * AWS: The default value for this setting is 3 seconds, but you can adjust this in increments of 1 second up to a maximum value of 15 minutes.
      */
     private Integer timeout;
-
-    /**
-     * The provider, where to deploy the function.
-     * TODO: use enum or a class for providers
-     */
-    private String provider;
 
     /**
      * The handler of the function.
@@ -100,14 +100,6 @@ public class Function {
 
     public void setTimeout(Integer timeout) {
         this.timeout = timeout;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 
     public String getHandler() {
