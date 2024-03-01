@@ -23,7 +23,7 @@ class DeployServiceTest {
         DeployAws deployAws = new DeployAws();
 
         Function function = new Function();
-        function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/HolisticFaasSampleGenerator-1.0-SNAPSHOT.zip"));
+        function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/aws-helloworld-java-1.0-SNAPSHOT.zip"));
         function.setName("HelloWorld-" + UUID.randomUUID()); // To avoid name conflict (update)
         function.setMemory(128);
         function.setTimeoutSecs(3);
