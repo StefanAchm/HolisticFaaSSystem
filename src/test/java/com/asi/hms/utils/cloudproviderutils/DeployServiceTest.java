@@ -2,6 +2,8 @@ package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.enums.RegionAWS;
 import com.asi.hms.enums.RegionGCP;
+import com.asi.hms.enums.RuntimeAWS;
+import com.asi.hms.enums.RuntimeGCP;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
 import com.asi.hms.model.UserAWS;
@@ -27,7 +29,7 @@ class DeployServiceTest {
         function.setTimeoutSecs(3);
         function.setHandler("com.asi.hsg.HelloWorldHandler::handleRequest");
         function.setRegionInterface(RegionAWS.EU_WEST_1);
-        function.setRuntime("java17");
+        function.setRuntimeInterface(RuntimeAWS.JAVA_17);
 
         UserAWS user = UserAWS.fromResources("aws.properties");
 
@@ -47,7 +49,7 @@ class DeployServiceTest {
         function.setTimeoutSecs(3);
         function.setHandler("com.asi.hsg.HelloWorldHandler");
         function.setRegionInterface(RegionGCP.EUROPE_WEST1);
-        function.setRuntime("java17");
+        function.setRuntimeInterface(RuntimeGCP.JAVA_17);
 
         UserGCP user = UserGCP.fromResources("meedesoro.json");
 

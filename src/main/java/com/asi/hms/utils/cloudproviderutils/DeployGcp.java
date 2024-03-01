@@ -62,7 +62,7 @@ public class DeployGcp implements DeployInterface<UserGCP> {
             CloudFunction cloudFunction = CloudFunction.newBuilder()
                     .setName(parent + "/functions/" + function.getName())
                     .setEntryPoint(function.getHandler())
-                    .setRuntime(function.getRuntime())
+                    .setRuntime(function.getRuntimeInterface().getRuntimeString())
                     .setHttpsTrigger(HttpsTrigger.newBuilder().build()) // Not sure if https trigger is needed
                     .setSourceArchiveUrl(sourceZipFile)
                     .setAvailableMemoryMb(function.getMemory())

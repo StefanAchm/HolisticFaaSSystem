@@ -48,7 +48,7 @@ public class DeployAws implements DeployInterface<UserAWS> {
                     .functionName(function.getName())
                     .handler(function.getHandler())
                     .role(user.getRoleArn()) // The ARN of the role
-                    .runtime(function.getRuntime())
+                    .runtime(function.getRuntimeInterface().getRuntimeString())
                     .code(code)
                     .memorySize(function.getMemory())
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds
