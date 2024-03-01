@@ -1,48 +1,52 @@
 package com.asi.hms.service;
 
+import com.asi.hms.enums.*;
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.DeployFunction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import com.asi.hms.model.*;
+import com.asi.hms.utils.FileUtil;
+import com.asi.hms.utils.cloudproviderutils.DeployAWS;
+import com.asi.hms.utils.cloudproviderutils.DeployGCP;
+import com.asi.hms.utils.cloudproviderutils.DeployInterface;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeployService {
 
-    private final Environment environment;
-
-    @Autowired
-    public DeployService(Environment environment) {
-        this.environment = environment;
-    }
-
     public boolean deploy(DeployFunction deployFunction) throws HolisticFaaSException {
 
-//        // TODO: support other cloud providers
-//        // deployFunction.getProvider()
-//
-//        DeployInterface deployInterface = new DeployAws();
-//
-//        Function function = new Function();
-////        function.setSource(deployFunction.getSource()); // todo
-//        function.setName(deployFunction.getName());
-//        function.setMemory(deployFunction.getMemory());
-//        function.setTimeoutSecs(deployFunction.getTimeout());
-//        function.setHandler(deployFunction.getHandler());
-//        function.setRegion(deployFunction.getRegion());
-//        function.setRuntime(deployFunction.getRuntime());
-//
-//        Role role = new Role();
-//
-//
-//        User user = new User();
-//        user.setAccessKeyId(environment.getProperty("aws.accessKeyId"));
-//        user.setSecretAccessKey(environment.getProperty("aws.secretAccessKey"));
-//        user.setR(deployFunction.getArn());
-//
-//        return deployInterface.deployFunction(function, user);
+        DeployInterface deployInterface;
+        UserInterface user;
+        RegionInterface regionInterface;
+        RuntimeInterface runtimeInterface;
 
-        return false;
+        switch (deployFunction.getProvider()) {
+            case AWS -> {
+                deployInterface = new DeployAWS();
+                user = UserAWS.fromResources("aws.properties"); // TODO: this has to come from the request in the future!
+                regionInterface = RegionAWS.valueOf(deployFunction.getRegion());
+                runtimeInterface = RuntimeAWS.valueOf(deployFunction.getRuntime());
+            }
+            case GCP -> {
+                deployInterface = new DeployGCP();
+                user = UserGCP.fromResources("meedesoro.json"); // TODO: this has to come from the request in the future!
+                regionInterface = RegionGCP.valueOf(deployFunction.getRegion());
+                runtimeInterface = RuntimeGCP.valueOf(deployFunction.getRuntime());
+            } default -> throw new HolisticFaaSException("Provider not supported");
+        }
+
+        Function function = new Function();
+
+        // TODO: support for other file paths (currently only resources)
+        function.setFilePath(FileUtil.getFilePathFromResourcesFile(deployFunction.getFilePath()));
+
+        function.setName(deployFunction.getName());
+        function.setMemory(deployFunction.getMemory());
+        function.setTimeoutSecs(deployFunction.getTimeoutSecs());
+        function.setHandler(deployFunction.getHandler());
+        function.setRegionInterface(regionInterface);
+        function.setRuntimeInterface(runtimeInterface);
+
+        return deployInterface.deployFunction(function, user);
 
     }
 

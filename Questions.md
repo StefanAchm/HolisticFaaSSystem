@@ -12,5 +12,6 @@ Do you need to create a role for each lambda function?
 
 
 # Some TODOs:
-1. use enums and constants for some properties (Region, provider, runtime, etc.)
-2. Do I need some howTo for users (e.g. create accessKeys, etc.)?
+- Do I need some howTo for users (e.g. create accessKeys, etc.)?
+- Handle exceptions
+- Handle raw types
