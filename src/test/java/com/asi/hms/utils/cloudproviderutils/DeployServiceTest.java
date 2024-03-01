@@ -20,7 +20,7 @@ class DeployServiceTest {
     @Test
     void testDeployFunctionToAWS() throws HolisticFaaSException {
 
-        DeployAws deployAws = new DeployAws();
+        DeployAWS deployAws = new DeployAWS();
 
         Function function = new Function();
         function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/aws-helloworld-java-1.0-SNAPSHOT.zip"));
@@ -40,7 +40,7 @@ class DeployServiceTest {
     @Test
     void testDeployFunctionToGCP() throws HolisticFaaSException {
 
-        DeployGcp deployGcp = new DeployGcp();
+        DeployGCP deployGcp = new DeployGCP();
 
         Function function = new Function();
         function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/gcp-helloworld-java-1.0-SNAPSHOT.zip"));

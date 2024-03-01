@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-public class DeployAws implements DeployInterface<UserAWS> {
+public class DeployAWS implements DeployInterface<UserAWS> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeployAws.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeployAWS.class);
 
     @Override
     public boolean deployFunction(Function function, UserAWS user) throws HolisticFaaSException {

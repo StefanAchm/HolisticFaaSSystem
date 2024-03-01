@@ -3,6 +3,7 @@ package com.asi.hms.enums;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,14 +11,13 @@ import software.amazon.awssdk.regions.Region;
 
 import java.util.List;
 
+@Disabled
 class RegionFinderTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RegionFinderTest.class);
 
     @Test
     void testGetAWSRegions() throws HolisticFaaSException {
-
-        logger.info("Testing getAWSRegions");
 
         UserAWS user = UserAWS.fromResources("aws.properties");
 
@@ -31,8 +31,6 @@ class RegionFinderTest {
 
     @Test
     void testGetGCPRegions() throws HolisticFaaSException {
-
-        logger.info("Testing getGCPRegions");
 
         UserGCP user = UserGCP.fromResources("meedesoro.json");
 

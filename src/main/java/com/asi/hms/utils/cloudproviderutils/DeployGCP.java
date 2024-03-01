@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
-public class DeployGcp implements DeployInterface<UserGCP> {
+public class DeployGCP implements DeployInterface<UserGCP> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeployGcp.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeployGCP.class);
 
     @Override
     public boolean deployFunction(Function function, UserGCP user) throws HolisticFaaSException {
