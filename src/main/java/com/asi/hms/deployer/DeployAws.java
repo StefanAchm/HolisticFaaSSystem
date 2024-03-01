@@ -3,6 +3,8 @@ package com.asi.hms.deployer;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
 import com.asi.hms.model.UserAWS;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
@@ -15,8 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-// TODO: use a logger
 public class DeployAws implements DeployInterface<UserAWS> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeployAws.class);
 
     @Override
     public boolean deployFunction(Function function, UserAWS user) throws HolisticFaaSException {
@@ -57,8 +60,8 @@ public class DeployAws implements DeployInterface<UserAWS> {
                     .build();
 
             WaiterResponse<GetFunctionResponse> waiterResponse = waiter.waitUntilFunctionExists(getFunctionRequest);
-            waiterResponse.matched().response().ifPresent(System.out::println);
-            System.out.println("Function created with arn: " + functionResponse.functionArn());
+            waiterResponse.matched().response()
+                    .ifPresent(l -> logger.info("Function created with arn: {}", functionResponse.functionArn()));
 
         } catch (LambdaException | IOException e) {
 

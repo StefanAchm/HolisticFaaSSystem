@@ -4,6 +4,8 @@ package com.asi.hms.deployer;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
 import com.asi.hms.model.UserGCP;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;
 import com.google.protobuf.Duration;
@@ -13,6 +15,8 @@ import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
 public class DeployGcp implements DeployInterface<UserGCP> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeployGcp.class);
 
     @Override
     public boolean deployFunction(Function function, UserGCP user) throws HolisticFaaSException {
@@ -71,12 +75,11 @@ public class DeployGcp implements DeployInterface<UserGCP> {
                     .build();
 
             CloudFunction cloudFunction1 = client.createFunctionAsync(request).get();
-            System.out.println("Function created: " + cloudFunction1);
+
+            logger.info("Function created: {}", cloudFunction1);
 
 
         } catch (IOException | ExecutionException e) {
-
-            e.printStackTrace();
 
             throw new HolisticFaaSException(e.getMessage());
 
@@ -97,7 +100,7 @@ public class DeployGcp implements DeployInterface<UserGCP> {
 
         Bucket bucket = storage.create(BucketInfo.of(bucketName));
 
-        System.out.println("Bucket " + bucket.getName() + " created.");
+        logger.info("Bucket {} created.", bucket.getName());
 
         return "gs://" + bucketName;
 
@@ -123,10 +126,9 @@ public class DeployGcp implements DeployInterface<UserGCP> {
         try {
 
             byte[] bytes = Files.readAllBytes(function.getFilePath());
-            Blob blob = storage.create(blobInfo, bytes);
+            storage.create(blobInfo, bytes);
 
-            System.out.println("File " + function.getFilePath().toString() + " uploaded to bucket " + bucketName + " as " + objectName);
-            System.out.println("Blob: " + blob);
+            logger.info("File {} uploaded to bucket {} as {}", function.getFilePath(), bucketName, objectName);
 
             return "gs://" + bucketName + "/" + objectName;
 
