@@ -19,7 +19,8 @@ class DeployServiceTest {
         //  "provider": "AWS",
         //  "region": "US_WEST_1",
         //  "runtime": "JAVA_17",
-        //  "timeoutSecs": 3
+        //  "timeoutSecs": 3,
+        //  "user": "auth/stefan01/aws.properties"
         //}
 
         DeployFunction deployFunction = new DeployFunction();
@@ -31,6 +32,7 @@ class DeployServiceTest {
         deployFunction.setRegion("US_WEST_1"); // Exact enum!
         deployFunction.setRuntime("JAVA_17"); // Exact enum!
         deployFunction.setTimeoutSecs(3);
+        deployFunction.setUser("stefan01");
 
         DeployService deployService = new DeployService();
 
@@ -49,7 +51,8 @@ class DeployServiceTest {
         //  "provider": "GCP",
         //  "region": "US_WEST1",
         //  "runtime": "JAVA_17",
-        //  "timeoutSecs": 3
+        //  "timeoutSecs": 3,
+        //  "user": "auth/stefan01/gcp.json"
         //}
 
         DeployFunction deployFunction = new DeployFunction();
@@ -61,6 +64,7 @@ class DeployServiceTest {
         deployFunction.setRegion("US_WEST1"); // Exact enum!
         deployFunction.setRuntime("JAVA_17"); // Exact enum!
         deployFunction.setTimeoutSecs(3);
+        deployFunction.setUser("stefan01");
 
         DeployService deployService = new DeployService();
 

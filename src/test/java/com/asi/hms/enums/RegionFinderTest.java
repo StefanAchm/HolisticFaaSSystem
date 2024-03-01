@@ -1,6 +1,5 @@
 package com.asi.hms.enums;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
 import org.junit.jupiter.api.Disabled;
@@ -19,7 +18,7 @@ class RegionFinderTest {
     @Test
     void testGetAWSRegions() {
 
-        UserAWS user = UserAWS.fromResources("aws.properties");
+        UserAWS user = UserAWS.fromResources("auth/stefan01/aws.properties");
 
         List<Region> awsRegions = RegionAWS.findAllCloudFunctionRegions(user);
 
@@ -32,7 +31,7 @@ class RegionFinderTest {
     @Test
     void testGetGCPRegions() {
 
-        UserGCP user = UserGCP.fromResources("meedesoro.json");
+        UserGCP user = UserGCP.fromResources("auth/stefan01/meedesoro.json");
 
         List<String> gcpRegions = RegionGCP.findAllCloudFunctionRegions(user);
 

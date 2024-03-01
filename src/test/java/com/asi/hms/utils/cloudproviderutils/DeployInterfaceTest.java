@@ -30,7 +30,7 @@ class DeployInterfaceTest {
         function.setRegionInterface(RegionAWS.EU_WEST_1);
         function.setRuntimeInterface(RuntimeAWS.JAVA_17);
 
-        UserAWS user = UserAWS.fromResources("aws.properties");
+        UserAWS user = UserAWS.fromResources("auth/stefan01/aws.properties");
 
         Assertions.assertTrue(deployAws.deployFunction(function, user));
 
@@ -50,7 +50,7 @@ class DeployInterfaceTest {
         function.setRegionInterface(RegionGCP.EUROPE_WEST1);
         function.setRuntimeInterface(RuntimeGCP.JAVA_17);
 
-        UserGCP user = UserGCP.fromResources("meedesoro.json");
+        UserGCP user = UserGCP.fromResources("auth/stefan01/gcp.json");
 
         Assertions.assertTrue(deployGcp.deployFunction(function, user));
 

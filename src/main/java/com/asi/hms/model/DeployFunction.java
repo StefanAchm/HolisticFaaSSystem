@@ -15,6 +15,9 @@ public class DeployFunction {
     private String region;
     private String runtime;
 
+    // TODO: Currently just a path to the cloud provider's user file in the resources (e.g. AWS: auth/stefan01/aws.properties)
+    private String user;
+
     public DeployFunction() {
     }
 
@@ -81,4 +84,13 @@ public class DeployFunction {
     public void setRuntime(String runtime) {
         this.runtime = runtime;
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
 }

@@ -23,18 +23,22 @@ public class DeployService {
         RegionInterface regionInterface;
         RuntimeInterface runtimeInterface;
 
-        logger.info("Deploying function {} to provider {}", deployFunction.getName(), deployFunction.getProvider());
+        logger.info("Deploying function {} to provider {} at region {} for user {}",
+                deployFunction.getName(),
+                deployFunction.getProvider(),
+                deployFunction.getRegion(),
+                deployFunction.getUser());
 
         switch (deployFunction.getProvider()) {
             case AWS -> {
                 deployInterface = new DeployAWS();
-                user = UserAWS.fromResources("aws.properties"); // TODO: this has to come from the request in the future!
+                user = UserAWS.fromResources(deployFunction.getUser());
                 regionInterface = RegionAWS.valueOf(deployFunction.getRegion());
                 runtimeInterface = RuntimeAWS.valueOf(deployFunction.getRuntime());
             }
             case GCP -> {
                 deployInterface = new DeployGCP();
-                user = UserGCP.fromResources("meedesoro.json"); // TODO: this has to come from the request in the future!
+                user = UserGCP.fromResources(deployFunction.getUser());
                 regionInterface = RegionGCP.valueOf(deployFunction.getRegion());
                 runtimeInterface = RuntimeGCP.valueOf(deployFunction.getRuntime());
             } default -> throw new HolisticFaaSException("Provider not supported");
