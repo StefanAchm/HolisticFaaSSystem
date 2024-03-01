@@ -76,7 +76,7 @@ public enum RegionGCP implements RegionInterface {
         return regionString;
     }
 
-    public static List<String> findAllCloudFunctionRegions(UserGCP user) throws HolisticFaaSException {
+    public static List<String> findAllCloudFunctionRegions(UserGCP user) {
 
         List<String> regions = new ArrayList<>();
 

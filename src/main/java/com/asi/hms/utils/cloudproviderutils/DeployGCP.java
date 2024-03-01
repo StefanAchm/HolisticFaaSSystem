@@ -19,7 +19,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
     private static final Logger logger = LoggerFactory.getLogger(DeployGCP.class);
 
     @Override
-    public boolean deployFunction(Function function, UserGCP user) throws HolisticFaaSException {
+    public boolean deployFunction(Function function, UserGCP user) {
 
         String bucketName = getBucketName(function);
 
@@ -39,7 +39,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
     }
 
-    private static boolean createFunction(Function function, UserGCP user, String sourceZipFile) throws HolisticFaaSException {
+    private static boolean createFunction(Function function, UserGCP user, String sourceZipFile) {
 
         CloudFunctionsServiceSettings cloudFunctionsServiceSettings;
 
@@ -48,6 +48,8 @@ public class DeployGCP implements DeployInterface<UserGCP> {
             cloudFunctionsServiceSettings = CloudFunctionsServiceSettings.newBuilder()
                     .setCredentialsProvider(user::getGoogleCredentials)
                     .build();
+
+            logger.info("Created CloudFunctionsServiceSettings with credentials");
 
         } catch (IOException e) {
 
@@ -69,10 +71,16 @@ public class DeployGCP implements DeployInterface<UserGCP> {
                     .setTimeout(Duration.newBuilder().setSeconds(function.getTimeoutSecs()).build())
                     .build();
 
+            logger.info("Created CloudFunction object");
+
             CreateFunctionRequest request = CreateFunctionRequest.newBuilder()
                     .setLocation(parent)
                     .setFunction(cloudFunction)
                     .build();
+
+            logger.info("Created CreateFunctionRequest object");
+
+            logger.info("Creating function (this may take a while)");
 
             CloudFunction cloudFunction1 = client.createFunctionAsync(request).get();
 
@@ -108,7 +116,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
 
     // Assuming sourceZipFilePath is a path to a zip file in Google Cloud Storage (gs://bucket-name/path/to/function.zip)
-    private String uploadZipToBucket(Function function, UserGCP user, String bucketName) throws HolisticFaaSException {
+    private String uploadZipToBucket(Function function, UserGCP user, String bucketName) {
 
         Storage storage = StorageOptions.newBuilder()
                 .setCredentials(user.getGoogleCredentials())

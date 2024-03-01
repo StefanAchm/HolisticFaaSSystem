@@ -1,6 +1,6 @@
 package com.asi.hms.exceptions;
 
-public class HolisticFaaSException extends Exception {
+public class HolisticFaaSException extends RuntimeException {
 
     public HolisticFaaSException(String message) {
         super(message);

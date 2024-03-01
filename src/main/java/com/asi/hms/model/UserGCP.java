@@ -13,7 +13,7 @@ public class UserGCP implements UserInterface {
     private String projectName;
     private GoogleCredentials googleCredentials;
 
-    public static UserGCP fromResources(String filePath) throws HolisticFaaSException {
+    public static UserGCP fromResources(String filePath) {
 
         UserGCP user = new UserGCP();
 

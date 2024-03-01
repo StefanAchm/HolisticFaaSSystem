@@ -7,17 +7,23 @@ import com.asi.hms.utils.FileUtil;
 import com.asi.hms.utils.cloudproviderutils.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.DeployGCP;
 import com.asi.hms.utils.cloudproviderutils.DeployInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeployService {
 
-    public boolean deploy(DeployFunction deployFunction) throws HolisticFaaSException {
+    private static final Logger logger = LoggerFactory.getLogger(DeployService.class);
+
+    public boolean deploy(DeployFunction deployFunction) {
 
         DeployInterface deployInterface;
         UserInterface user;
         RegionInterface regionInterface;
         RuntimeInterface runtimeInterface;
+
+        logger.info("Deploying function {} to provider {}", deployFunction.getName(), deployFunction.getProvider());
 
         switch (deployFunction.getProvider()) {
             case AWS -> {

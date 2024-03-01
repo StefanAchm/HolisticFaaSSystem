@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class DeployServiceTest {
 
     @Test
-    void testDeployService() throws HolisticFaaSException {
+    void testDeployService() {
 
         // {
         //  "filePath": "zips/aws-helloworld-java-1.0-SNAPSHOT.zip",
@@ -39,7 +39,7 @@ class DeployServiceTest {
     }
 
     @Test
-    void testDeployGCP() throws HolisticFaaSException {
+    void testDeployGCP() {
 
         // {
         //  "filePath": "zips/gcp-helloworld-java-1.0-SNAPSHOT.zip",

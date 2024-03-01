@@ -21,7 +21,7 @@ public class FileUtil {
     /**
      * Returns the absolute path of a file in the resources folder (as URL)
      */
-    public static Path getFilePathFromResourcesFile(String fileName) throws HolisticFaaSException {
+    public static Path getFilePathFromResourcesFile(String fileName) {
 
         URL resource = FileUtil.class.getClassLoader().getResource(fileName);
 
@@ -43,7 +43,7 @@ public class FileUtil {
 
     }
 
-    public static JsonObject getJsonFromResourcesFile(String fileName) throws HolisticFaaSException {
+    public static JsonObject getJsonFromResourcesFile(String fileName) {
 
         try {
 
@@ -63,7 +63,7 @@ public class FileUtil {
 
     }
 
-    public static Properties getPropertiesFromResourcesFile(String fileName) throws HolisticFaaSException {
+    public static Properties getPropertiesFromResourcesFile(String fileName) {
 
         Properties properties = new Properties();
 
@@ -79,7 +79,7 @@ public class FileUtil {
 
     }
 
-    public static InputStream readFile(String fileName) throws HolisticFaaSException {
+    public static InputStream readFile(String fileName) {
         InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
         if (inputStream == null) {
             throw new HolisticFaaSException("File not found: " + fileName);

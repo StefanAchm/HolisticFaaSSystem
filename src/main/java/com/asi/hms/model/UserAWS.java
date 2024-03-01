@@ -12,7 +12,7 @@ public class UserAWS implements UserInterface {
 
     private String roleArn;
 
-    public static UserAWS fromResources(String filePath) throws HolisticFaaSException {
+    public static UserAWS fromResources(String filePath) {
 
         Properties properties = FileUtil.getPropertiesFromResourcesFile(filePath);
         UserAWS user = new UserAWS();

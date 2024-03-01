@@ -22,16 +22,9 @@ public class DeployController {
     @PostMapping(value = "/function")
     public ResponseEntity<String> deployFunction(@RequestBody DeployFunction deployFunction) {
 
-        try {
+        this.deployService.deploy(deployFunction);
 
-            this.deployService.deploy(deployFunction);
-
-            return ResponseEntity.ok("Function deployed");
-
-
-        } catch (HolisticFaaSException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok("Function deployed");
 
     }
 

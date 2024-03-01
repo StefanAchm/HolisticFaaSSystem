@@ -23,14 +23,18 @@ public class DeployAWS implements DeployInterface<UserAWS> {
     private static final Logger logger = LoggerFactory.getLogger(DeployAWS.class);
 
     @Override
-    public boolean deployFunction(Function function, UserAWS user) throws HolisticFaaSException {
+    public boolean deployFunction(Function function, UserAWS user) {
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
+
+        logger.info("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
                 .region(Region.of(function.getRegionInterface().getRegionName())) // TODO: validate?
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
+
+        logger.info("Created AWS Lambda client");
 
         try {
 
@@ -44,6 +48,8 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .zipFile(fileToUpload)
                     .build();
 
+            logger.info("Created function code");
+
             CreateFunctionRequest functionRequest = CreateFunctionRequest.builder()
                     .functionName(function.getName())
                     .handler(function.getHandler())
@@ -54,11 +60,18 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds
                     .build();
 
+            logger.info("Created function request");
+
+            logger.info("Creating function (this may take a while)");
+
             // Create a Lambda function using a waiter
             CreateFunctionResponse functionResponse = awsLambda.createFunction(functionRequest);
+
             GetFunctionRequest getFunctionRequest = GetFunctionRequest.builder()
                     .functionName(function.getName())
                     .build();
+
+            logger.info("Created function response");
 
             WaiterResponse<GetFunctionResponse> waiterResponse = waiter.waitUntilFunctionExists(getFunctionRequest);
             waiterResponse.matched().response()
@@ -69,6 +82,8 @@ public class DeployAWS implements DeployInterface<UserAWS> {
             throw new HolisticFaaSException(e.getMessage());
 
         }
+
+        logger.info("Closing AWS Lambda client");
 
         awsLambda.close();
 

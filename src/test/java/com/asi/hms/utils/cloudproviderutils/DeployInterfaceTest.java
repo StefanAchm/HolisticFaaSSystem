@@ -4,7 +4,6 @@ import com.asi.hms.enums.RegionAWS;
 import com.asi.hms.enums.RegionGCP;
 import com.asi.hms.enums.RuntimeAWS;
 import com.asi.hms.enums.RuntimeGCP;
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
@@ -15,10 +14,10 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 
-class DeployServiceTest {
+class DeployInterfaceTest {
 
     @Test
-    void testDeployFunctionToAWS() throws HolisticFaaSException {
+    void testDeployFunctionToAWS() {
 
         DeployAWS deployAws = new DeployAWS();
 
@@ -38,7 +37,7 @@ class DeployServiceTest {
     }
 
     @Test
-    void testDeployFunctionToGCP() throws HolisticFaaSException {
+    void testDeployFunctionToGCP() {
 
         DeployGCP deployGcp = new DeployGCP();
 

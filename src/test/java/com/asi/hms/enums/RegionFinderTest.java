@@ -17,7 +17,7 @@ class RegionFinderTest {
     private static final Logger logger = LoggerFactory.getLogger(RegionFinderTest.class);
 
     @Test
-    void testGetAWSRegions() throws HolisticFaaSException {
+    void testGetAWSRegions() {
 
         UserAWS user = UserAWS.fromResources("aws.properties");
 
@@ -30,7 +30,7 @@ class RegionFinderTest {
     }
 
     @Test
-    void testGetGCPRegions() throws HolisticFaaSException {
+    void testGetGCPRegions() {
 
         UserGCP user = UserGCP.fromResources("meedesoro.json");
 
