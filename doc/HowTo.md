@@ -10,3 +10,8 @@ https://docs.aws.amazon.com/code-library/latest/ug/lambda_example_lambda_CreateF
 https://github.com/googleapis/google-cloud-java/tree/main/java-deploy
 
 https://github.com/googleapis/google-cloud-java/tree/main/java-functions
+
+
+### Lambda functions
+
+https://cloud.google.com/functions/docs/create-deploy-http-java?hl=de#gradle

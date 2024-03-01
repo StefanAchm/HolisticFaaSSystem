@@ -57,10 +57,10 @@ public class DeployGcp implements DeployInterface {
             String parent = LocationName.format(function.getProjectName(), function.getRegion().toGcpRegion());
 
             CloudFunction cloudFunction = CloudFunction.newBuilder()
-                    .setName(function.getName())
+                    .setName(parent + "/functions/" + function.getName())
                     .setEntryPoint(function.getHandler())
                     .setRuntime(function.getRuntime())
-                    .setHttpsTrigger(CloudFunction.newBuilder().getHttpsTrigger().newBuilderForType().build()) // TODO: not sure about this
+                    .setHttpsTrigger(HttpsTrigger.newBuilder().build()) // Not sure if https trigger is needed
                     .setSourceArchiveUrl(sourceZipFile)
                     .setAvailableMemoryMb(function.getMemory())
                     .setTimeout(Duration.newBuilder().setSeconds(function.getTimeoutSecs()).build())
