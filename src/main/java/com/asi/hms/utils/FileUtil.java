@@ -1,8 +1,11 @@
 package com.asi.hms.utils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -40,17 +43,25 @@ public class FileUtil {
 
     }
 
-//    public static String getFilePathFromResourcesFileAsURI(String fileName) throws HolisticFaaSException {
-//
-//        URL resource = FileUtil.class.getClassLoader().getResource(fileName);
-//
-//        if (resource == null) {
-//            throw new HolisticFaaSException("File not found: " + fileName);
-//        } else {
-//            return resource.toURI();
-//        }
-//
-//    }
+    public static JsonObject getJsonFromResourcesFile(String fileName) throws HolisticFaaSException {
+
+        try {
+
+            InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
+            if (inputStream == null) {
+                throw new HolisticFaaSException("File not found: " + fileName);
+            } else {
+                return JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
+            }
+
+        } catch (Exception e) {
+
+            throw new HolisticFaaSException("Error reading file: " + fileName);
+
+        }
+
+
+    }
 
     public static Properties getPropertiesFromResourcesFile(String fileName) throws HolisticFaaSException {
 

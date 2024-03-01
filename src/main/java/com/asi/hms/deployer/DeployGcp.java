@@ -3,8 +3,7 @@ package com.asi.hms.deployer;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
-import com.asi.hms.model.Role;
-import com.asi.hms.model.User;
+import com.asi.hms.model.UserGCP;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;
 import com.google.protobuf.Duration;
@@ -13,14 +12,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
-public class DeployGcp implements DeployInterface {
+public class DeployGcp implements DeployInterface<UserGCP> {
 
     @Override
-    public boolean deployFunction(Function function, Role role, User user) throws HolisticFaaSException {
+    public boolean deployFunction(Function function, UserGCP user) throws HolisticFaaSException {
 
         String bucketName = getBucketName(function);
 
-        String bucketNameExt = createBucket(function, user, bucketName);
+        createBucket(user, bucketName);
 
         String sourceZipFile = uploadZipToBucket(function, user, bucketName); // or use the bucketNameExt
 
@@ -36,7 +35,7 @@ public class DeployGcp implements DeployInterface {
 
     }
 
-    private static boolean createFunction(Function function, User user, String sourceZipFile) throws HolisticFaaSException {
+    private static boolean createFunction(Function function, UserGCP user, String sourceZipFile) throws HolisticFaaSException {
 
         CloudFunctionsServiceSettings cloudFunctionsServiceSettings;
 
@@ -54,7 +53,7 @@ public class DeployGcp implements DeployInterface {
 
         try (CloudFunctionsServiceClient client = CloudFunctionsServiceClient.create(cloudFunctionsServiceSettings)) {
 
-            String parent = LocationName.format(function.getProjectName(), function.getRegion().toGcpRegion());
+            String parent = LocationName.format(user.getProjectName(), function.getRegion().toGcpRegion());
 
             CloudFunction cloudFunction = CloudFunction.newBuilder()
                     .setName(parent + "/functions/" + function.getName())
@@ -89,11 +88,11 @@ public class DeployGcp implements DeployInterface {
 
     }
 
-    private String createBucket(Function function, User user, String bucketName) {
+    private String createBucket(UserGCP user, String bucketName) {
 
         Storage storage = StorageOptions.newBuilder()
                 .setCredentials(user.getGoogleCredentials())
-                .setProjectId(function.getProjectName())
+                .setProjectId(user.getProjectName())
                 .build().getService();
 
         Bucket bucket = storage.create(BucketInfo.of(bucketName));
@@ -106,11 +105,11 @@ public class DeployGcp implements DeployInterface {
 
 
     // Assuming sourceZipFilePath is a path to a zip file in Google Cloud Storage (gs://bucket-name/path/to/function.zip)
-    private String uploadZipToBucket(Function function, User user, String bucketName) throws HolisticFaaSException {
+    private String uploadZipToBucket(Function function, UserGCP user, String bucketName) throws HolisticFaaSException {
 
         Storage storage = StorageOptions.newBuilder()
                 .setCredentials(user.getGoogleCredentials())
-                .setProjectId(function.getProjectName())
+                .setProjectId(user.getProjectName())
                 .build().getService();
 
 

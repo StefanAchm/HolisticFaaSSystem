@@ -2,7 +2,6 @@ package com.asi.hms.model;
 
 import com.asi.hms.enums.Region;
 
-import java.net.URI;
 import java.nio.file.Path;
 
 // functions:
@@ -77,12 +76,6 @@ public class Function {
      */
     private String runtime;
 
-    /**
-     * The name of the project, where the function is deployed. <br>
-     * (Currently only used for GCP)
-     */
-    private String projectName;
-
     public Path getFilePath() {
         return filePath;
     }
@@ -139,11 +132,4 @@ public class Function {
         this.runtime = runtime;
     }
 
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
 }

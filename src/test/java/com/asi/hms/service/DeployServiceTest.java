@@ -5,13 +5,12 @@ import com.asi.hms.deployer.DeployGcp;
 import com.asi.hms.enums.Region;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
-import com.asi.hms.model.Role;
-import com.asi.hms.model.User;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
 import com.asi.hms.utils.FileUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Properties;
 import java.util.UUID;
 
 
@@ -31,16 +30,9 @@ class DeployServiceTest {
         function.setRegion(Region.EU_WEST_1);
         function.setRuntime("java17");
 
-        Role role = new Role();
-        role.setArn("arn:aws:iam::546145315132:role/HF-test-role"); // todo
+        UserAWS user = UserAWS.fromResources("aws.properties");
 
-        Properties properties = FileUtil.getPropertiesFromResourcesFile("config.properties");
-
-        User user = new User();
-        user.setAccessKeyId(properties.getProperty("aws.accessKeyId"));
-        user.setSecretAccessKey(properties.getProperty("aws.secretAccessKey"));
-
-        Assertions.assertTrue(deployAws.deployFunction(function, role, user));
+        Assertions.assertTrue(deployAws.deployFunction(function, user));
 
     }
 
@@ -57,14 +49,10 @@ class DeployServiceTest {
         function.setHandler("com.asi.hsg.HelloWorldHandler");
         function.setRegion(Region.EU_WEST_1);
         function.setRuntime("java17");
-        function.setProjectName("meedesoro");
 
-        Properties properties = FileUtil.getPropertiesFromResourcesFile("config.properties");
+        UserGCP user = UserGCP.fromResources("meedesoro.json");
 
-        User user = new User();
-        user.setGoogleCredentialsFromInputStream(FileUtil.readFile("meedesoro.json"));
-
-        Assertions.assertTrue(deployGcp.deployFunction(function, null, user));
+        Assertions.assertTrue(deployGcp.deployFunction(function, user));
 
 
     }

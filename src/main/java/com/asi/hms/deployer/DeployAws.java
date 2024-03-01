@@ -2,8 +2,7 @@ package com.asi.hms.deployer;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
-import com.asi.hms.model.Role;
-import com.asi.hms.model.User;
+import com.asi.hms.model.UserAWS;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
@@ -12,17 +11,15 @@ import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.*;
 import software.amazon.awssdk.services.lambda.waiters.LambdaWaiter;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
 // TODO: use a logger
-public class DeployAws implements DeployInterface {
+public class DeployAws implements DeployInterface<UserAWS> {
 
     @Override
-    public boolean deployFunction(Function function, Role role, User user) throws HolisticFaaSException {
+    public boolean deployFunction(Function function, UserAWS user) throws HolisticFaaSException {
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
 
@@ -46,7 +43,7 @@ public class DeployAws implements DeployInterface {
             CreateFunctionRequest functionRequest = CreateFunctionRequest.builder()
                     .functionName(function.getName())
                     .handler(function.getHandler())
-                    .role(role.getArn()) // Get the ARN of the role
+                    .role(user.getRoleArn()) // The ARN of the role
                     .runtime(function.getRuntime())
                     .code(code)
                     .memorySize(function.getMemory())
