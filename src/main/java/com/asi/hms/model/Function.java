@@ -1,6 +1,6 @@
 package com.asi.hms.model;
 
-import com.asi.hms.enums.Region;
+import com.asi.hms.enums.RegionInterface;
 
 import java.nio.file.Path;
 
@@ -62,13 +62,9 @@ public class Function {
     private String handler;
 
     /**
-     * The regions, where the function is deployed.
-     * TODO: check which regions are available for all providers
-     *
-     *
-     * GCP: https://cloud.google.com/compute/docs/regions-zones/viewing-regions-zones?hl=de#rest
+     * The region, where the function will be deployed to.
      */
-    private Region region;
+    private RegionInterface regionInterface;
 
     /**
      * The runtime of the function.
@@ -116,12 +112,12 @@ public class Function {
         this.handler = handler;
     }
 
-    public Region getRegion() {
-        return region;
+    public RegionInterface getRegionInterface() {
+        return regionInterface;
     }
 
-    public void setRegion(Region region) {
-        this.region = region;
+    public void setRegionInterface(RegionInterface regionInterface) {
+        this.regionInterface = regionInterface;
     }
 
     public String getRuntime() {

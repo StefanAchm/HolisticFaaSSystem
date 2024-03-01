@@ -1,4 +1,4 @@
-package com.asi.hms.deployer;
+package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
@@ -9,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.*;
 import software.amazon.awssdk.services.lambda.waiters.LambdaWaiter;
@@ -27,7 +28,7 @@ public class DeployAws implements DeployInterface<UserAWS> {
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
 
         LambdaClient awsLambda = LambdaClient.builder()
-                .region(function.getRegion().toAwsRegion())
+                .region(Region.of(function.getRegionInterface().getRegionName())) // TODO: validate?
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 

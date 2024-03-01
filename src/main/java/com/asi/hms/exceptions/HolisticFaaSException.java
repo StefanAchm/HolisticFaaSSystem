@@ -6,4 +6,8 @@ public class HolisticFaaSException extends Exception {
         super(message);
     }
 
+    public HolisticFaaSException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

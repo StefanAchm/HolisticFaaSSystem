@@ -1,10 +1,7 @@
 package com.asi.hms.service;
 
-import com.asi.hms.deployer.DeployAws;
-import com.asi.hms.deployer.DeployInterface;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.DeployFunction;
-import com.asi.hms.model.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;

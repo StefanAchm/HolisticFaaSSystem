@@ -1,4 +1,4 @@
-package com.asi.hms.deployer;
+package com.asi.hms.utils.cloudproviderutils;
 
 
 import com.asi.hms.exceptions.HolisticFaaSException;
@@ -57,7 +57,7 @@ public class DeployGcp implements DeployInterface<UserGCP> {
 
         try (CloudFunctionsServiceClient client = CloudFunctionsServiceClient.create(cloudFunctionsServiceSettings)) {
 
-            String parent = LocationName.format(user.getProjectName(), function.getRegion().toGcpRegion());
+            String parent = LocationName.format(user.getProjectName(), function.getRegionInterface().getRegionName());
 
             CloudFunction cloudFunction = CloudFunction.newBuilder()
                     .setName(parent + "/functions/" + function.getName())

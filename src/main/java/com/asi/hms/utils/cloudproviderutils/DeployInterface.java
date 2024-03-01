@@ -1,4 +1,4 @@
-package com.asi.hms.deployer;
+package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
