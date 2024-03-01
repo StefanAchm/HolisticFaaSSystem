@@ -3,6 +3,7 @@ package com.asi.hms.service;
 import com.asi.hms.enums.*;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.*;
+import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.utils.FileUtil;
 import com.asi.hms.utils.cloudproviderutils.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.DeployGCP;
@@ -16,7 +17,7 @@ public class DeployService {
 
     private static final Logger logger = LoggerFactory.getLogger(DeployService.class);
 
-    public boolean deploy(DeployFunction deployFunction) {
+    public boolean deploy(APIFunction APIFunction) {
 
         DeployInterface deployInterface;
         UserInterface user;
@@ -24,35 +25,35 @@ public class DeployService {
         RuntimeInterface runtimeInterface;
 
         logger.info("Deploying function {} to provider {} at region {} for user {}",
-                deployFunction.getName(),
-                deployFunction.getProvider(),
-                deployFunction.getRegion(),
-                deployFunction.getUser());
+                APIFunction.getName(),
+                APIFunction.getProvider(),
+                APIFunction.getRegion(),
+                APIFunction.getUser());
 
-        switch (deployFunction.getProvider()) {
+        switch (APIFunction.getProvider()) {
             case AWS -> {
                 deployInterface = new DeployAWS();
-                user = UserAWS.fromResources(deployFunction.getUser());
-                regionInterface = RegionAWS.valueOf(deployFunction.getRegion());
-                runtimeInterface = RuntimeAWS.valueOf(deployFunction.getRuntime());
+                user = UserAWS.fromResources(APIFunction.getUser());
+                regionInterface = RegionAWS.valueOf(APIFunction.getRegion());
+                runtimeInterface = RuntimeAWS.valueOf(APIFunction.getRuntime());
             }
             case GCP -> {
                 deployInterface = new DeployGCP();
-                user = UserGCP.fromResources(deployFunction.getUser());
-                regionInterface = RegionGCP.valueOf(deployFunction.getRegion());
-                runtimeInterface = RuntimeGCP.valueOf(deployFunction.getRuntime());
+                user = UserGCP.fromResources(APIFunction.getUser());
+                regionInterface = RegionGCP.valueOf(APIFunction.getRegion());
+                runtimeInterface = RuntimeGCP.valueOf(APIFunction.getRuntime());
             } default -> throw new HolisticFaaSException("Provider not supported");
         }
 
         Function function = new Function();
 
         // TODO: support for other file paths (currently only resources)
-        function.setFilePath(FileUtil.getFilePathFromResourcesFile(deployFunction.getFilePath()));
+        function.setFilePath(FileUtil.getFilePathFromResourcesFile(APIFunction.getFilePath()));
 
-        function.setName(deployFunction.getName());
-        function.setMemory(deployFunction.getMemory());
-        function.setTimeoutSecs(deployFunction.getTimeoutSecs());
-        function.setHandler(deployFunction.getHandler());
+        function.setName(APIFunction.getName());
+        function.setMemory(APIFunction.getMemory());
+        function.setTimeoutSecs(APIFunction.getTimeoutSecs());
+        function.setHandler(APIFunction.getHandler());
         function.setRegionInterface(regionInterface);
         function.setRuntimeInterface(runtimeInterface);
 

@@ -1,8 +1,7 @@
 package com.asi.hms.service;
 
 import com.asi.hms.enums.Provider;
-import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.DeployFunction;
+import com.asi.hms.model.api.APIFunction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,20 +22,20 @@ class DeployServiceTest {
         //  "user": "auth/stefan01/aws.properties"
         //}
 
-        DeployFunction deployFunction = new DeployFunction();
-        deployFunction.setFilePath("zips/aws-helloworld-java-1.0-SNAPSHOT.zip");
-        deployFunction.setHandler("com.asi.hsg.HelloWorldHandler::handleRequest");
-        deployFunction.setMemory(128);
-        deployFunction.setName("HelloWorld-FromAPI-01");
-        deployFunction.setProvider(Provider.AWS);
-        deployFunction.setRegion("US_WEST_1"); // Exact enum!
-        deployFunction.setRuntime("JAVA_17"); // Exact enum!
-        deployFunction.setTimeoutSecs(3);
-        deployFunction.setUser("stefan01");
+        APIFunction APIFunction = new APIFunction();
+        APIFunction.setFilePath("zips/aws-helloworld-java-1.0-SNAPSHOT.zip");
+        APIFunction.setHandler("com.asi.hsg.HelloWorldHandler::handleRequest");
+        APIFunction.setMemory(128);
+        APIFunction.setName("HelloWorld-FromAPI-01");
+        APIFunction.setProvider(Provider.AWS);
+        APIFunction.setRegion("US_WEST_1"); // Exact enum!
+        APIFunction.setRuntime("JAVA_17"); // Exact enum!
+        APIFunction.setTimeoutSecs(3);
+        APIFunction.setUser("stefan01");
 
         DeployService deployService = new DeployService();
 
-        Assertions.assertTrue(deployService.deploy(deployFunction));
+        Assertions.assertTrue(deployService.deploy(APIFunction));
 
     }
 
@@ -55,20 +54,20 @@ class DeployServiceTest {
         //  "user": "auth/stefan01/gcp.json"
         //}
 
-        DeployFunction deployFunction = new DeployFunction();
-        deployFunction.setFilePath("zips/gcp-helloworld-java-1.0-SNAPSHOT.zip");
-        deployFunction.setHandler("com.asi.hsg.HelloWorldHandler");
-        deployFunction.setMemory(128);
-        deployFunction.setName("HelloWorld-FromAPI-01");
-        deployFunction.setProvider(Provider.GCP);
-        deployFunction.setRegion("US_WEST1"); // Exact enum!
-        deployFunction.setRuntime("JAVA_17"); // Exact enum!
-        deployFunction.setTimeoutSecs(3);
-        deployFunction.setUser("stefan01");
+        APIFunction APIFunction = new APIFunction();
+        APIFunction.setFilePath("zips/gcp-helloworld-java-1.0-SNAPSHOT.zip");
+        APIFunction.setHandler("com.asi.hsg.HelloWorldHandler");
+        APIFunction.setMemory(128);
+        APIFunction.setName("HelloWorld-FromAPI-01");
+        APIFunction.setProvider(Provider.GCP);
+        APIFunction.setRegion("US_WEST1"); // Exact enum!
+        APIFunction.setRuntime("JAVA_17"); // Exact enum!
+        APIFunction.setTimeoutSecs(3);
+        APIFunction.setUser("stefan01");
 
         DeployService deployService = new DeployService();
 
-        Assertions.assertTrue(deployService.deploy(deployFunction));
+        Assertions.assertTrue(deployService.deploy(APIFunction));
 
     }
 

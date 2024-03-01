@@ -1,7 +1,6 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.DeployFunction;
+import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +19,9 @@ public class DeployController {
     }
 
     @PostMapping(value = "/function")
-    public ResponseEntity<String> deployFunction(@RequestBody DeployFunction deployFunction) {
+    public ResponseEntity<String> deployFunction(@RequestBody APIFunction APIFunction) {
 
-        this.deployService.deploy(deployFunction);
+        this.deployService.deploy(APIFunction);
 
         return ResponseEntity.ok("Function deployed");
 

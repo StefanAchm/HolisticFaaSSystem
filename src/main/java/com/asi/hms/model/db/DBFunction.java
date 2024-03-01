@@ -1,12 +1,17 @@
-package com.asi.hms.model;
+package com.asi.hms.model.db;
 
+import javax.persistence.*;
+import java.util.UUID;
 
-import com.asi.hms.enums.Provider;
+@Entity
+@Table(name = "functions")
+public class DBFunction {
 
-public class DeployFunction {
+    @Id
+    @GeneratedValue
+    private UUID id;
 
-    private Provider provider;
-
+    private String provider;
     private String filePath;
     private String name;
     private Integer memory;
@@ -15,17 +20,22 @@ public class DeployFunction {
     private String region;
     private String runtime;
 
-    // TODO: Currently just a path to the cloud provider's user file in the resources (e.g. AWS: auth/stefan01/aws.properties)
-    private String user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private DBUser DBUser;
 
-    public DeployFunction() {
+    public DBFunction() {
     }
 
-    public Provider getProvider() {
+    public UUID getId() {
+        return id;
+    }
+
+    public String getProvider() {
         return provider;
     }
 
-    public void setProvider(Provider provider) {
+    public void setProvider(String provider) {
         this.provider = provider;
     }
 
@@ -85,12 +95,11 @@ public class DeployFunction {
         this.runtime = runtime;
     }
 
-    public String getUser() {
-        return user;
+    public DBUser getUser() {
+        return DBUser;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUser(DBUser DBUser) {
+        this.DBUser = DBUser;
     }
-
 }
