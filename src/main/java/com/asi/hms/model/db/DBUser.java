@@ -37,4 +37,5 @@ public class DBUser {
     public void setFunctions(List<DBFunction> functions) {
         this.functions = functions;
     }
+
 }

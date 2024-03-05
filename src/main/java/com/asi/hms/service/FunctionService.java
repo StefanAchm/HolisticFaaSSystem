@@ -50,21 +50,7 @@ public class FunctionService {
 
     public List<APIFunction> getAllFunction() {
 
-        return this.functionRepository.findAll().stream().map(dbFunction -> {
-
-            APIFunction apiFunction = new APIFunction();
-
-            apiFunction.setProvider(Provider.valueOf(dbFunction.getProvider()));
-            apiFunction.setFilePath(dbFunction.getFilePath());
-            apiFunction.setName(dbFunction.getName());
-            apiFunction.setMemory(dbFunction.getMemory());
-            apiFunction.setTimeoutSecs(dbFunction.getTimeoutSecs());
-            apiFunction.setHandler(dbFunction.getHandler());
-            apiFunction.setRegion(dbFunction.getRegion());
-
-            return apiFunction;
-
-        }).toList();
+        return this.functionRepository.findAll().stream().map(APIFunction::fromDBFunction).toList();
 
 
     }

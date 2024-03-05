@@ -31,7 +31,7 @@ class DeployServiceTest {
         APIFunction.setRegion("US_WEST_1"); // Exact enum!
         APIFunction.setRuntime("JAVA_17"); // Exact enum!
         APIFunction.setTimeoutSecs(3);
-        APIFunction.setUser("stefan01");
+        APIFunction.setCredentialsPath("stefan01");
 
         DeployService deployService = new DeployService();
 
@@ -63,7 +63,7 @@ class DeployServiceTest {
         APIFunction.setRegion("US_WEST1"); // Exact enum!
         APIFunction.setRuntime("JAVA_17"); // Exact enum!
         APIFunction.setTimeoutSecs(3);
-        APIFunction.setUser("stefan01");
+        APIFunction.setCredentialsPath("stefan01");
 
         DeployService deployService = new DeployService();
 

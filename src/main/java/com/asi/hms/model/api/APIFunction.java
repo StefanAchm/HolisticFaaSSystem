@@ -1,8 +1,13 @@
 package com.asi.hms.model.api;
 
 import com.asi.hms.enums.Provider;
+import com.asi.hms.model.db.DBFunction;
+
+import java.util.UUID;
 
 public class APIFunction {
+
+    private UUID id;
 
     private Provider provider;
 
@@ -15,11 +20,38 @@ public class APIFunction {
     private String runtime;
 
     // TODO: Currently just a path to the cloud provider's user file in the resources (e.g. AWS: auth/stefan01/aws.properties)
-    private String user;
+    private String credentialsPath;
 
     private String userName;
 
     public APIFunction() {
+    }
+
+    public static APIFunction fromDBFunction(DBFunction dbFunction) {
+
+        APIFunction apiFunction = new APIFunction();
+
+        apiFunction.setId(dbFunction.getId());
+        apiFunction.setProvider(Provider.valueOf(dbFunction.getProvider()));
+        apiFunction.setFilePath(dbFunction.getFilePath());
+        apiFunction.setName(dbFunction.getName());
+        apiFunction.setMemory(dbFunction.getMemory());
+        apiFunction.setTimeoutSecs(dbFunction.getTimeoutSecs());
+        apiFunction.setHandler(dbFunction.getHandler());
+        apiFunction.setRegion(dbFunction.getRegion());
+        apiFunction.setRuntime(dbFunction.getRuntime());
+        apiFunction.setUserName(dbFunction.getUser().getUsername());
+
+        return apiFunction;
+
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Provider getProvider() {
@@ -86,12 +118,12 @@ public class APIFunction {
         this.runtime = runtime;
     }
 
-    public String getUser() {
-        return user;
+    public String getCredentialsPath() {
+        return credentialsPath;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setCredentialsPath(String credentialsPath) {
+        this.credentialsPath = credentialsPath;
     }
 
     public String getUserName() {

@@ -1,6 +1,5 @@
 package com.asi.hms.model;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.FileUtil;
 
 import java.util.Properties;
