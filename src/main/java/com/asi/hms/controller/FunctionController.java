@@ -3,10 +3,9 @@ package com.asi.hms.controller;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.service.FunctionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/function")
@@ -27,5 +26,11 @@ public class FunctionController {
 
     }
 
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<APIFunction>> getAllFunction() {
+
+        return ResponseEntity.ok(this.functionService.getAllFunction());
+
+    }
 
 }
