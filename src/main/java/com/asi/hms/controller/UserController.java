@@ -16,9 +16,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> registerUserAccount(@RequestBody APIUser APIUser) {
+    public ResponseEntity<String> registerUserAccount(@RequestBody APIUser apiUser) {
 
-        return userService.registerUser(APIUser);
+        userService.registerUser(apiUser);
+
+        return ResponseEntity.ok("User registered");
 
     }
 

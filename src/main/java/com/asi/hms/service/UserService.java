@@ -17,10 +17,10 @@ public class UserService {
 
     public DBUser registerUser(APIUser apiUser) {
 
-        DBUser DBUser = new DBUser();
-        DBUser.setUsername(apiUser.getUsername());
+        DBUser dbUser = new DBUser();
+        dbUser.setUsername(apiUser.getUsername());
 
-        return userRepository.save(DBUser);
+        return userRepository.save(dbUser);
 
     }
     

@@ -17,6 +17,8 @@ public class APIFunction {
     // TODO: Currently just a path to the cloud provider's user file in the resources (e.g. AWS: auth/stefan01/aws.properties)
     private String user;
 
+    private String userName;
+
     public APIFunction() {
     }
 
@@ -90,6 +92,14 @@ public class APIFunction {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

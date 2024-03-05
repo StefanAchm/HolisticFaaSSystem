@@ -21,8 +21,8 @@ public class DBFunction {
     private String runtime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private DBUser DBUser;
+    @JoinColumn(name = "user_username")
+    private DBUser user;
 
     public DBFunction() {
     }
@@ -96,10 +96,10 @@ public class DBFunction {
     }
 
     public DBUser getUser() {
-        return DBUser;
+        return user;
     }
 
-    public void setUser(DBUser DBUser) {
-        this.DBUser = DBUser;
+    public void setUser(DBUser user) {
+        this.user = user;
     }
 }

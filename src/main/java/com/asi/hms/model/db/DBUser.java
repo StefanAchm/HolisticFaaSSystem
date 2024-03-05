@@ -17,7 +17,7 @@ public class DBUser {
 //    private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<DBFunction> DBFunctions;
+    private List<DBFunction> functions;
 
     public DBUser() {
     }
@@ -31,10 +31,10 @@ public class DBUser {
     }
 
     public List<DBFunction> getFunctions() {
-        return DBFunctions;
+        return functions;
     }
 
-    public void setFunctions(List<DBFunction> DBFunctions) {
-        this.DBFunctions = DBFunctions;
+    public void setFunctions(List<DBFunction> functions) {
+        this.functions = functions;
     }
 }

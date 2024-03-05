@@ -1,7 +1,9 @@
 package com.asi.hms.service;
 
+import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.db.DBFunction;
+import com.asi.hms.model.db.DBUser;
 import com.asi.hms.repository.FunctionRepository;
 import com.asi.hms.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -30,10 +32,15 @@ public class FunctionService {
         dbFunction.setHandler(apiFunction.getHandler());
         dbFunction.setRegion(apiFunction.getRegion());
 
-        dbFunction.setUser();
+        DBUser user = userRepository.findByUsername(apiFunction.getUserName()); // TODO:
+
+        if(user == null) {
+            throw new HolisticFaaSException("User '" + apiFunction.getUserName() + "' not found");
+        }
+
+        dbFunction.setUser(user);
 
         functionRepository.save(dbFunction);
-
 
     }
 

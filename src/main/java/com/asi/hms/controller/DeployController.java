@@ -19,9 +19,9 @@ public class DeployController {
     }
 
     @PostMapping(value = "/function")
-    public ResponseEntity<String> deployFunction(@RequestBody APIFunction APIFunction) {
+    public ResponseEntity<String> deployFunction(@RequestBody APIFunction apiFunction) {
 
-        this.deployService.deploy(APIFunction);
+        this.deployService.deploy(apiFunction);
 
         return ResponseEntity.ok("Function deployed");
 
