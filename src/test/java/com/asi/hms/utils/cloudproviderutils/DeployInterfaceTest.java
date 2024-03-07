@@ -11,6 +11,7 @@ import com.asi.hms.utils.FileUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.util.UUID;
 
 
@@ -30,7 +31,9 @@ class DeployInterfaceTest {
         function.setRegion(RegionAWS.EU_WEST_1);
         function.setRuntime(RuntimeAWS.JAVA_17);
 
-        UserAWS user = UserAWS.fromResources("auth/stefan01/aws.properties");
+        Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/aws.properties");
+
+        UserAWS user = UserAWS.fromFile(filePath);
 
         Assertions.assertTrue(deployAws.deployFunction(function, user));
 
@@ -50,7 +53,9 @@ class DeployInterfaceTest {
         function.setRegion(RegionGCP.EUROPE_WEST1);
         function.setRuntime(RuntimeGCP.JAVA_17);
 
-        UserGCP user = UserGCP.fromResources("auth/stefan01/gcp.json");
+        Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/gcp.json");
+
+        UserGCP user = UserGCP.fromFile(filePath);
 
         Assertions.assertTrue(deployGcp.deployFunction(function, user));
 

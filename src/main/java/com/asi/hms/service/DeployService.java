@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -104,11 +105,11 @@ public class DeployService {
         switch (provider) {
             case AWS -> {
                 deployer = new DeployAWS();
-                user = UserAWS.fromResources("auth/" + dbFunctionDeployment.getUser().getUsername() + "/aws.properties");
+                user = UserAWS.fromFile(Paths.get(dbFunctionDeployment.getUser().getCredentialsFilePath()));
             }
             case GCP -> {
                 deployer = new DeployGCP();
-                user = UserGCP.fromResources("auth/" + dbFunctionDeployment.getUser().getUsername() + "/gcp.json");
+                user = UserGCP.fromFile(Paths.get(dbFunctionDeployment.getUser().getCredentialsFilePath()));
 
             }
 

@@ -1,19 +1,12 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.components.FileStorageProperties;
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.service.FunctionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,32 +14,11 @@ import java.util.UUID;
 @RequestMapping("/api/function")
 public class FunctionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FunctionController.class);
-
-    private final Path rootLocation;
-
     private final FunctionService functionService;
 
-    public FunctionController(FunctionService functionService,
-                              FileStorageProperties fileStorageProperties) {
+    public FunctionController(FunctionService functionService) {
 
         this.functionService = functionService;
-
-        this.rootLocation = Paths.get(fileStorageProperties.getUploadDir());
-
-        try {
-
-            Path directories = Files.createDirectories(this.rootLocation);
-
-            String absolutePath = directories.toAbsolutePath().toString();
-
-            logger.info("Upload directory created: {}", absolutePath);
-
-        } catch (Exception e) {
-
-            throw new HolisticFaaSException("Could not create upload directory!");
-
-        }
 
     }
 
@@ -66,7 +38,7 @@ public class FunctionController {
 
         }
 
-        this.functionService.uploadFile(file, apiFunction, this.rootLocation);
+        this.functionService.uploadFile(file, apiFunction);
 
         return ResponseEntity.ok("File uploaded");
 

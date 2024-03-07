@@ -26,7 +26,9 @@ public class FileUtil {
         URL resource = FileUtil.class.getClassLoader().getResource(fileName);
 
         if (resource == null) {
+
             throw new HolisticFaaSException("File not found: " + fileName);
+
         } else {
 
             try {
@@ -43,11 +45,10 @@ public class FileUtil {
 
     }
 
-    public static JsonObject getJsonFromResourcesFile(String fileName) {
+    public static JsonObject getJsonFromFile(Path fileName) {
 
-        try {
+        try (InputStream inputStream = Paths.get(fileName.toString()).toUri().toURL().openStream()) {
 
-            InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
             if (inputStream == null) {
                 throw new HolisticFaaSException("File not found: " + fileName);
             } else {
@@ -63,29 +64,22 @@ public class FileUtil {
 
     }
 
-    public static Properties getPropertiesFromResourcesFile(String fileName) {
+    public static Properties getPropertiesFromFile(Path filePath) {
 
         Properties properties = new Properties();
 
-        try {
+        try (InputStream inputStream = Paths.get(filePath.toString()).toUri().toURL().openStream()) {
 
-            properties.load(FileUtil.class.getClassLoader().getResourceAsStream(fileName));
+            properties.load(inputStream);
 
         } catch (Exception e) {
-            throw new HolisticFaaSException("Error reading properties file: " + fileName);
+
+            throw new HolisticFaaSException("Error reading properties file: " + filePath);
+
         }
 
         return properties;
 
-    }
-
-    public static InputStream readFile(String fileName) {
-        InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
-        if (inputStream == null) {
-            throw new HolisticFaaSException("File not found: " + fileName);
-        } else {
-            return inputStream;
-        }
     }
 
 }

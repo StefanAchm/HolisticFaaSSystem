@@ -7,33 +7,33 @@ import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class UserGCP implements UserInterface {
 
     private String projectName;
     private GoogleCredentials googleCredentials;
 
-    public static UserGCP fromResources(String filePath) {
+    public static UserGCP fromFile(Path filePath) {
 
         UserGCP user = new UserGCP();
 
-        try {
-
-            InputStream inputStream = FileUtil.readFile(filePath);
+        try (InputStream reader = Paths.get(filePath.toString()).toUri().toURL().openStream()) {
 
             GoogleCredentials googleCredentials = GoogleCredentials
-                    .fromStream(inputStream)
+                    .fromStream(reader)
                     .createScoped("https://www.googleapis.com/auth/cloud-platform");
 
             user.setGoogleCredentials(googleCredentials);
 
         } catch (IOException e) {
 
-            throw new HolisticFaaSException(e.getMessage());
+            throw new HolisticFaaSException("Error reading file: " + filePath);
 
         }
 
-        JsonObject jsonFromResourcesFile = FileUtil.getJsonFromResourcesFile(filePath);
+        JsonObject jsonFromResourcesFile = FileUtil.getJsonFromFile(filePath);
 
         String projectId = jsonFromResourcesFile.get("project_id").getAsString(); // TODO: error handling
 

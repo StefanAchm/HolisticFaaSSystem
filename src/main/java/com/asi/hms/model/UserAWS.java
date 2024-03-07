@@ -2,6 +2,7 @@ package com.asi.hms.model;
 
 import com.asi.hms.utils.FileUtil;
 
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class UserAWS implements UserInterface {
@@ -11,9 +12,10 @@ public class UserAWS implements UserInterface {
 
     private String roleArn;
 
-    public static UserAWS fromResources(String filePath) {
+    public static UserAWS fromFile(Path filePath) {
 
-        Properties properties = FileUtil.getPropertiesFromResourcesFile(filePath);
+        Properties properties = FileUtil.getPropertiesFromFile(filePath);
+
         UserAWS user = new UserAWS();
         user.setAccessKeyId(properties.getProperty("aws.accessKeyId"));
         user.setSecretAccessKey(properties.getProperty("aws.secretAccessKey"));
@@ -46,4 +48,6 @@ public class UserAWS implements UserInterface {
     public void setRoleArn(String roleArn) {
         this.roleArn = roleArn;
     }
+
+
 }

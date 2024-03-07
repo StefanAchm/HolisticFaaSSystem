@@ -4,6 +4,9 @@ import com.asi.hms.model.api.APIUser;
 import com.asi.hms.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -15,16 +18,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<String> registerUserAccount(@RequestBody APIUser apiUser) {
+    @PostMapping(value = "/create")
+    public ResponseEntity<String> create(@RequestPart("file") MultipartFile file,
+                                         @RequestPart(value = "apiUser", required = false) APIUser apiUser ){
 
-        userService.registerUser(apiUser);
+        if(apiUser == null) {
 
-        return ResponseEntity.ok("User registered");
+            // Workaround, because Swagger does only show the file input, but not the apiFunction input
+
+            apiUser = new APIUser();
+
+            String randomName = UUID.randomUUID().toString();
+
+            apiUser.setUsername(randomName);
+            apiUser.setProvider("AWS"); // TODO
+
+
+        }
+
+        userService.create(file, apiUser);
+
+        return ResponseEntity.ok("Credentials added");
 
     }
-
-
-
 
 }

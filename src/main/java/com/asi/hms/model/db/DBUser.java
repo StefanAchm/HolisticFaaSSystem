@@ -13,8 +13,10 @@ public class DBUser {
     @Id
     private String username;
 
-    // TODO: add password
-//    private String password;
+    // TODO: security issue, should be stored in a secure way
+    private String credentialsFilePath;
+
+    private String provider;
 
     @OneToMany(mappedBy = "user")
     private List<DBFunctionDeployment> functionDeployments;
@@ -30,4 +32,19 @@ public class DBUser {
         this.username = username;
     }
 
+    public String getCredentialsFilePath() {
+        return credentialsFilePath;
+    }
+
+    public void setCredentialsFilePath(String credentialsFilePath) {
+        this.credentialsFilePath = credentialsFilePath;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 }
