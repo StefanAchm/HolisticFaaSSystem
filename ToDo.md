@@ -11,37 +11,34 @@
 ### 2. Upload Function to HMS
 
 - [ ] User uploads a function to the HMS
-  - [ ] With some metadata (name, description, region, etc.)
-    - [ ] ⚠️️TODO⚠️: Probably no metadata at this point, but at the deployment (step 3)
+  - [x] With some info (name, description)
   - [ ] Handle file types
-    - [ ] Zip file
+    - [x] Zip file for java functions
     - [ ] Other file types (jar, py, etc.)
   - [ ] Handle file sources
-    - [ ] Local file
+    - [x] File upload from local machine --> upload the file to the HMS
     - [ ] File from URL
     - [ ] Other sources (git, etc.)
-- [ ] HMS stores the metadata of the function in the database
+- [x] HMS stores the function in the database
 
 ### 3. Deployment of a function
 
 - [ ] User deploys the function
   - [ ] User selects the function
-    - [ ] Currently, each deployment will create a new function on the provider side and in the database
-  - [ ] User enters the metadata of the function
-    - [ ] Name
-    - [ ] Description
-    - [ ] Provider
-    - [ ] Region
+    - [x] Currently, each deployment will create a new function on the provider side and in the database
+  - [ ] User enters the metadata of the function (Name, Description, Provider, Region, etc.)
+    - [x] Basic metadata of the function 
     - [ ] Other metadata of the function
-  - [ ] HMS deploys the function to specified provider with the specified metadata
-  - [ ] HMS stores the metadata of the function in the database
-    - [ ] Create new entry for each deployment
+  - [x] HMS deploys the function to specified provider with the specified metadata
+  - [x] HMS stores the metadata of the function in the database
+    - [x] Create new entry for each deployment
 
 # Use Cases
 
 ### 1. Deployment of a single function from one to another region
 ### 2. Deployment of a single function from one to another provider
 ### 3. Deployment of a single function from one to another user
+### 4. Bulk deployment (from deployment file)
 
 ### Other Function handling
 
