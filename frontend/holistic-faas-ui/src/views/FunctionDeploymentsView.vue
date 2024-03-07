@@ -28,25 +28,51 @@
 
                   <v-col>
 
-                      <v-text-field v-model="editedItem.provider" label="Provider"></v-text-field>
-
-
-
-                    <!--                    TODO -->
-<!--                    <v-select-->
-<!--                        v-model="editedItem.provider"-->
-<!--                        :items="providers"-->
-<!--                        item-title="title"-->
-<!--                        item-value="value"-->
-<!--                        label="Provider"-->
-<!--                        persistent-hint-->
-<!--                        return-object-->
-<!--                        single-line-->
-<!--                        ></v-select>-->
+                    <v-select
+                        v-model="editedItem.provider"
+                        :items="providers"
+                        item-text="title"
+                        item-value="value"
+                        label="Provider"
+                    ></v-select>
 
                   </v-col>
 
                 </v-row>
+
+                <v-row>
+
+                  <v-col>
+
+                    <v-select
+                        v-model="editedItem.userName"
+                        :items="users"
+                        item-text="title"
+                        item-value="value"
+                        label="User"
+                    ></v-select>
+
+
+                  </v-col>
+
+                </v-row>
+
+                <v-row>
+
+                  <v-col>
+
+                    <v-select
+                        v-model="editedItem.functionId"
+                        :items="functions"
+                        item-text="title"
+                        item-value="value"
+                        label="Function"
+                    ></v-select>
+
+                  </v-col>
+
+                </v-row>
+
 
                 <v-row>
 
@@ -75,7 +101,16 @@
                 <v-row>
 
                   <v-col>
-                    <v-text-field v-model="editedItem.region" label="Region"></v-text-field>
+
+                  <v-select
+                      v-model="editedItem.region"
+                      :items="regions"
+                      item-text="title"
+                      item-value="value"
+                      label="Region"
+                  ></v-select>
+
+
                   </v-col>
 
                 </v-row>
@@ -83,26 +118,19 @@
                 <v-row>
 
                   <v-col>
-                    <v-text-field v-model="editedItem.runtime" label="Runtime"></v-text-field>
+
+                    <v-select
+                        v-model="editedItem.runtime"
+                        :items="runtimes"
+                        item-text="title"
+                        item-value="value"
+                        label="Runtime"
+                    ></v-select>
+
                   </v-col>
 
                 </v-row>
 
-                <v-row>
-
-                  <v-col>
-                    <v-text-field v-model="editedItem.userName" label="UserName"></v-text-field>
-                  </v-col>
-
-                </v-row>
-
-                <v-row>
-
-                  <v-col>
-                    <v-text-field v-model="editedItem.functionId" label="FunctionId"></v-text-field>
-                  </v-col>
-
-                </v-row>
 
               </v-container>
             </v-card-text>
@@ -183,28 +211,109 @@ export default {
         {text: 'Region', value: 'region', width: '100px'},
         {text: 'Runtime', value: 'runtime', width: '100px'},
 
-          // Linked:
+        // Linked:
         {text: 'UserName', value: 'userName', width: '100px'},
         {text: 'FunctionId', value: 'functionId', width: '100px'}
 
       ],
-      functionDeployments: []
+      functionDeployments: [],
+      users: [],
+      allUsers: [],
+      functions: [],
+      allFunctions: [],
+      providerOptions: [],
+      runtimes: [],
+      regions: []
     }
+  },
+
+  watch: {
+
+    editedItem: {
+      handler(newValue) {
+
+        console.log(newValue)
+
+        // Filter users by provider
+        // Create a new array with the filtered users for select
+        this.users = this.allUsers
+            .filter(user => user.provider === newValue.provider)
+            .map(user => {
+              return {
+                title: user.username,
+                value: user.username
+              }
+
+            })
+
+        this.functions = this.allFunctions
+            // .filter(func => func.provider === newValue.provider)
+            .map(func => {
+              return {
+                title: func.id,
+                value: func.id
+              }
+
+            })
+
+        this.runtimes = this.providerOptions
+            .filter(provider => provider.provider === newValue.provider)
+            .map(provider => provider.runtimes)
+            .flat()
+            .map(runtime => {
+              return {
+                title: runtime,
+                value: runtime
+              }
+            })
+
+        this.regions = this.providerOptions
+            .filter(provider => provider.provider === newValue.provider)
+            .map(provider => provider.regions)
+            .flat()
+            .map(region => {
+              return {
+                title: region,
+                value: region
+              }
+            })
+
+
+
+      },
+      deep: true
+
+    }
+
   },
 
   methods: {
 
     init() {
+
       axios
           .get(Properties.API_IP + '/deploy/getAll')
           .then(response => {
             this.functionDeployments = response.data;
           })
-    },
 
-    selectFile(file) {
+      axios
+          .get(Properties.API_IP + '/user/getAll')
+          .then(response => {
+            this.allUsers = response.data;
+          })
 
-      this.currentFile = file;
+      axios
+          .get(Properties.API_IP + '/function/getAll')
+          .then(response => {
+            this.allFunctions = response.data;
+          })
+
+      axios
+          .get(Properties.API_IP + '/provider/getProviderOptions')
+          .then(response => {
+            this.providerOptions = response.data;
+          })
 
     },
 
@@ -229,10 +338,6 @@ export default {
     },
 
     upload() {
-      //
-      // let formData = new FormData();
-      //
-      // formData.append('apiFunction', JSON.stringify(this.editedItem));
 
       axios.post(Properties.API_IP + "/deploy/add", JSON.stringify(this.editedItem), {headers: {'Content-Type': 'application/json'}})
           .then(response => {
