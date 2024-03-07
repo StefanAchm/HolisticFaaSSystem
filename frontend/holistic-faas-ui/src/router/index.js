@@ -16,6 +16,11 @@ const routes = [
         component: () => import('../views/FunctionView.vue')
     },
     {
+        path: '/function-deployments',
+        name: 'function-deployments',
+        component: () => import('../views/FunctionDeploymentsView.vue')
+    },
+    {
         path: '/users',
         name: 'users',
         component: () => import('../views/UserView.vue')

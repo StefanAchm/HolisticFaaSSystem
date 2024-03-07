@@ -142,36 +142,12 @@ export default {
 
     upload() {
 
-      if (!this.currentFile) {
-        console.log("Please select a file!");
-        return;
-      } else {
-        console.log("Uploading file: " + this.currentFile.name);
-        console.log(this.currentFile)
-      }
-
-      if(!this.editedItem) {
-        console.log("Please enter a name!");
-        return;
-      } else {
-        console.log("Uploading function: " + this.editedItem);
-        console.log(this.editedItem)
-      }
-
       let formData = new FormData();
 
       formData.append('file', this.currentFile);
 
       // Have to use Blob to send JSON as a file
       formData.append('apiFunction', new Blob([JSON.stringify(this.editedItem)], {type : 'application/json'}));
-
-      console.log(this.currentFile, event => {
-
-        let progress = Math.round((100 * event.loaded) / event.total);
-
-        console.log(progress)
-
-      });
 
       axios.post(Properties.API_IP + "/function/upload", formData)
           .then(response => {
@@ -195,11 +171,6 @@ export default {
   created() {
     this.init();
   },
-
-  // mounted() {
-  //   this.init();
-  // },
-
 
 }
 

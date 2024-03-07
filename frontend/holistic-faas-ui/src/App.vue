@@ -103,6 +103,7 @@ export default {
       items: [
         {title: 'Home', icon: 'mdi-bank', route: '/'},
         {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
+        {title: 'Function Deployments', icon: 'mdi-rocket', route: '/function-deployments'},
         {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
       ],
       right: null,
