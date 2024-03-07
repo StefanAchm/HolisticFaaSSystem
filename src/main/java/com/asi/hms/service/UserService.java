@@ -6,6 +6,8 @@ import com.asi.hms.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -31,4 +33,7 @@ public class UserService {
 
     }
 
+    public List<APIUser> getAllUser() {
+        return this.userRepository.findAll().stream().map(APIUser::fromDBUser).toList();
+    }
 }

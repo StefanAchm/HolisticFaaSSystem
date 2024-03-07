@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -39,6 +40,13 @@ public class UserController {
         userService.create(file, apiUser);
 
         return ResponseEntity.ok("Credentials added");
+
+    }
+
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<APIUser>> getAllUser() {
+
+        return ResponseEntity.ok(this.userService.getAllUser());
 
     }
 

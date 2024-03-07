@@ -1,5 +1,7 @@
 package com.asi.hms.model.api;
 
+import com.asi.hms.model.db.DBUser;
+
 public class APIUser {
 
     private String username;
@@ -7,6 +9,17 @@ public class APIUser {
     private String credentialsFilePath;
 
     private String provider;
+
+    public static APIUser fromDBUser(DBUser dbUser) {
+
+        APIUser apiUser = new APIUser();
+        apiUser.setUsername(dbUser.getUsername());
+        apiUser.setCredentialsFilePath(dbUser.getCredentialsFilePath());
+        apiUser.setProvider(dbUser.getProvider());
+
+        return apiUser;
+
+    }
 
     public String getUsername() {
         return username;
@@ -31,4 +44,5 @@ public class APIUser {
     public void setProvider(String provider) {
         this.provider = provider;
     }
+
 }
