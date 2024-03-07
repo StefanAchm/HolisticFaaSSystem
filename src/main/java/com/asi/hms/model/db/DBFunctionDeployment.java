@@ -1,48 +1,42 @@
-package com.asi.hms.model;
+package com.asi.hms.model.db;
 
+import javax.persistence.*;
+import java.util.UUID;
 
-import com.asi.hms.enums.Provider;
+@Entity
+@Table(name = "function_deployments")
+public class DBFunctionDeployment {
 
-public class DeployFunction {
+    @Id
+    @GeneratedValue
+    private UUID id;
 
-    private Provider provider;
+    private String provider;
 
-    private String filePath;
-    private String name;
     private Integer memory;
     private Integer timeoutSecs;
     private String handler;
     private String region;
     private String runtime;
 
-    // TODO: Currently just a path to the cloud provider's user file in the resources (e.g. AWS: auth/stefan01/aws.properties)
-    private String user;
+    @ManyToOne
+    @JoinColumn(name = "function_id")
+    private DBFunction function;
 
-    public DeployFunction() {
+    @ManyToOne
+    @JoinColumn(name = "user_username")
+    private DBUser user;
+
+    public UUID getId() {
+        return id;
     }
 
-    public Provider getProvider() {
+    public String getProvider() {
         return provider;
     }
 
-    public void setProvider(Provider provider) {
+    public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getMemory() {
@@ -85,11 +79,19 @@ public class DeployFunction {
         this.runtime = runtime;
     }
 
-    public String getUser() {
+    public DBFunction getFunction() {
+        return function;
+    }
+
+    public void setFunction(DBFunction function) {
+        this.function = function;
+    }
+
+    public DBUser getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(DBUser user) {
         this.user = user;
     }
 

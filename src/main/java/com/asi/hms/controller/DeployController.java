@@ -1,13 +1,12 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.DeployFunction;
+import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/deploy")
@@ -19,12 +18,25 @@ public class DeployController {
         this.deployService = deployService;
     }
 
-    @PostMapping(value = "/function")
-    public ResponseEntity<String> deployFunction(@RequestBody DeployFunction deployFunction) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<String> addFunctionDeployment(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        this.deployService.addFunctionDeployment(apiFunctionDeployment);
+        return ResponseEntity.ok("Deploy Function added");
+    }
 
-        this.deployService.deploy(deployFunction);
+    @PostMapping(value = "/deploy")
+    public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
+
+        this.deployService.deploy(functionId);
 
         return ResponseEntity.ok("Function deployed");
+
+    }
+
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<APIFunctionDeployment>> getAllFunctionDeployments() {
+
+        return ResponseEntity.ok(this.deployService.getAllFunctionDeployments());
 
     }
 

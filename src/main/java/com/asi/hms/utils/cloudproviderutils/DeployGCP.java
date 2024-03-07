@@ -59,12 +59,12 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
         try (CloudFunctionsServiceClient client = CloudFunctionsServiceClient.create(cloudFunctionsServiceSettings)) {
 
-            String parent = LocationName.format(user.getProjectName(), function.getRegionInterface().getRegionName());
+            String parent = LocationName.format(user.getProjectName(), function.getRegion().getRegionName());
 
             CloudFunction cloudFunction = CloudFunction.newBuilder()
                     .setName(parent + "/functions/" + function.getName())
                     .setEntryPoint(function.getHandler())
-                    .setRuntime(function.getRuntimeInterface().getRuntimeString())
+                    .setRuntime(function.getRuntime().getRuntimeString())
                     .setHttpsTrigger(HttpsTrigger.newBuilder().build()) // Not sure if https trigger is needed
                     .setSourceArchiveUrl(sourceZipFile)
                     .setAvailableMemoryMb(function.getMemory())

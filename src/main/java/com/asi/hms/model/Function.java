@@ -1,9 +1,16 @@
 package com.asi.hms.model;
 
-import com.asi.hms.enums.RegionInterface;
-import com.asi.hms.enums.RuntimeInterface;
+import com.asi.hms.enums.*;
+import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.db.DBFunction;
+import com.asi.hms.model.db.DBFunctionDeployment;
+import com.asi.hms.utils.FileUtil;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static com.asi.hms.enums.Provider.AWS;
+import static com.asi.hms.enums.Provider.GCP;
 
 public class Function {
 
@@ -44,12 +51,42 @@ public class Function {
     /**
      * The region, where the function will be deployed to.
      */
-    private RegionInterface regionInterface;
+    private RegionInterface region;
 
     /**
      * The runtime of the function.
      */
-    private RuntimeInterface runtimeInterface;
+    private RuntimeInterface runtime;
+
+    public static Function fromDbFunction(DBFunctionDeployment dbFunctionDeployment) {
+
+        DBFunction dbFunction = dbFunctionDeployment.getFunction();
+
+        Function function = new Function();
+
+        function.setFilePath(Paths.get(dbFunction.getFilePath()));
+
+        function.setName(dbFunction.getName());
+        function.setMemory(dbFunctionDeployment.getMemory());
+        function.setTimeoutSecs(dbFunctionDeployment.getTimeoutSecs());
+        function.setHandler(dbFunctionDeployment.getHandler());
+
+        Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
+
+        switch (provider) {
+            case AWS -> {
+                function.setRegion(RegionAWS.valueOf(dbFunctionDeployment.getRegion()));
+                function.setRuntime(RuntimeAWS.valueOf(dbFunctionDeployment.getRuntime()));
+            }
+            case GCP -> {
+                function.setRegion(RegionGCP.valueOf(dbFunctionDeployment.getRegion()));
+                function.setRuntime(RuntimeGCP.valueOf(dbFunctionDeployment.getRuntime()));
+            } default -> throw new HolisticFaaSException("Provider not supported");
+        }
+
+        return function;
+
+    }
 
     public Path getFilePath() {
         return filePath;
@@ -91,20 +128,20 @@ public class Function {
         this.handler = handler;
     }
 
-    public RegionInterface getRegionInterface() {
-        return regionInterface;
+    public RegionInterface getRegion() {
+        return region;
     }
 
-    public void setRegionInterface(RegionInterface regionInterface) {
-        this.regionInterface = regionInterface;
+    public void setRegion(RegionInterface region) {
+        this.region = region;
     }
 
-    public RuntimeInterface getRuntimeInterface() {
-        return runtimeInterface;
+    public RuntimeInterface getRuntime() {
+        return runtime;
     }
 
-    public void setRuntimeInterface(RuntimeInterface runtimeInterface) {
-        this.runtimeInterface = runtimeInterface;
+    public void setRuntime(RuntimeInterface runtime) {
+        this.runtime = runtime;
     }
 
 }

@@ -10,4 +10,8 @@ public class HolisticFaaSException extends RuntimeException {
         super(message, cause);
     }
 
+    public HolisticFaaSException(Exception e) {
+        super(e);
+    }
+
 }

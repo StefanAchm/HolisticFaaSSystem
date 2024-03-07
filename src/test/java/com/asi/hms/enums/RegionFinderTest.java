@@ -2,12 +2,14 @@ package com.asi.hms.enums;
 
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
+import com.asi.hms.utils.FileUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @Disabled
@@ -18,7 +20,9 @@ class RegionFinderTest {
     @Test
     void testGetAWSRegions() {
 
-        UserAWS user = UserAWS.fromResources("auth/stefan01/aws.properties");
+        Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/aws.properties");
+
+        UserAWS user = UserAWS.fromFile(filePath);
 
         List<Region> awsRegions = RegionAWS.findAllCloudFunctionRegions(user);
 
@@ -31,7 +35,9 @@ class RegionFinderTest {
     @Test
     void testGetGCPRegions() {
 
-        UserGCP user = UserGCP.fromResources("auth/stefan01/meedesoro.json");
+        Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/gcp.json");
+
+        UserGCP user = UserGCP.fromFile(filePath);
 
         List<String> gcpRegions = RegionGCP.findAllCloudFunctionRegions(user);
 
