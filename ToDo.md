@@ -5,8 +5,11 @@
 
 - [ ] User adds credentials to the HMS
   - [ ] AWS
+    - [ ] Check Role ARN (does this need to be created by the user or the HMS can create it?)
   - [ ] GCP
+    - [ ] Check Service Account (is this the right way to do it?)
   - [ ] Other
+- [ ] Credentials handling (where to store, so that this is secure)
 
 ### 2. Upload Function to HMS
 

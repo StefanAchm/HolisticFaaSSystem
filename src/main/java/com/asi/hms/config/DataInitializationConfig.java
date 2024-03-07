@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DataInitializationConfig {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public DataInitializationConfig(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -19,19 +19,13 @@ public class DataInitializationConfig {
     @Bean
     public void initDatabase() {
 
-        // TODO: Add data initialization code here
-
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-
-        // Empty the tables
 
         populator.addScript(new ClassPathResource("data-users.sql"));
         populator.addScript(new ClassPathResource("data-functions.sql"));
         populator.addScript(new ClassPathResource("data-function-deployments.sql"));
 
         populator.execute(dataSource);
-
-        // Connect new data (e.g. function1 with functionDeployment1)
 
     }
 

@@ -71,7 +71,6 @@ public class Function {
         function.setTimeoutSecs(dbFunctionDeployment.getTimeoutSecs());
         function.setHandler(dbFunctionDeployment.getHandler());
 
-        // TODO: error handling for provider
         Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
 
         switch (provider) {

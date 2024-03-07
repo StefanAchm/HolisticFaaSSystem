@@ -30,7 +30,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
         logger.info("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
-                .region(Region.of(function.getRegion().getRegionName())) // TODO: validate?
+                .region(Region.of(function.getRegion().getRegionName()))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 
@@ -40,7 +40,6 @@ public class DeployAWS implements DeployInterface<UserAWS> {
 
             LambdaWaiter waiter = awsLambda.waiter();
 
-            // TODO: What file paths are allowed and possible?
             InputStream is = Files.newInputStream(function.getFilePath());
             SdkBytes fileToUpload = SdkBytes.fromInputStream(is);
 

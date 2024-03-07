@@ -3,6 +3,7 @@ package com.asi.hms.model;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.FileUtil;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -35,9 +36,19 @@ public class UserGCP implements UserInterface {
 
         JsonObject jsonFromResourcesFile = FileUtil.getJsonFromFile(filePath);
 
-        String projectId = jsonFromResourcesFile.get("project_id").getAsString(); // TODO: error handling
+        JsonElement projectId = jsonFromResourcesFile.get("project_id");
 
-        user.setProjectName(projectId);
+        if (projectId == null) {
+            throw new HolisticFaaSException("project_id not found in file: " + filePath);
+        }
+
+        if (!projectId.isJsonPrimitive() || !projectId.getAsJsonPrimitive().isString()) {
+            throw new HolisticFaaSException("project_id is not a string in file: " + filePath);
+        }
+
+        String projectIdAsString = projectId.getAsString();
+
+        user.setProjectName(projectIdAsString);
 
         return user;
 
