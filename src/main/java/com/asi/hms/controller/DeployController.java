@@ -1,6 +1,5 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;

@@ -13,6 +13,7 @@ public class DBFunction {
     private UUID id;
 
     private String filePath;
+
     private String name;
 
     @OneToMany(mappedBy = "function")

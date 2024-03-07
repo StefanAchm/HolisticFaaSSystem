@@ -7,6 +7,7 @@ import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.utils.FileUtil;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static com.asi.hms.enums.Provider.AWS;
 import static com.asi.hms.enums.Provider.GCP;
@@ -63,8 +64,7 @@ public class Function {
 
         Function function = new Function();
 
-        // TODO: support for other file paths (currently only resources)
-        function.setFilePath(FileUtil.getFilePathFromResourcesFile(dbFunction.getFilePath()));
+        function.setFilePath(Paths.get(dbFunction.getFilePath()));
 
         function.setName(dbFunction.getName());
         function.setMemory(dbFunctionDeployment.getMemory());

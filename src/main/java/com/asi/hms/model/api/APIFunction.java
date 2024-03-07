@@ -9,6 +9,7 @@ public class APIFunction {
     private UUID id;
 
     private String filePath;
+
     private String name;
 
     public APIFunction() {

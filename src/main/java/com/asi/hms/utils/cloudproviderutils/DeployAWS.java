@@ -79,7 +79,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
 
         } catch (LambdaException | IOException e) {
 
-            throw new HolisticFaaSException(e.getMessage());
+            throw new HolisticFaaSException(e);
 
         }
 

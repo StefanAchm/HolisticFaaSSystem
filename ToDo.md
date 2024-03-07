@@ -48,6 +48,6 @@
 - [ ] List all functions
 - [ ] Delete a function
 - [ ] Update a function (redeploy)
-- [ ] Get the status of a function
+- [ ] Get the status of a function (and its relevant services, like buckets etc.)
 - [ ] GCP: handle bucket?
-
+- [ ] Upload to HMS: max file size?
