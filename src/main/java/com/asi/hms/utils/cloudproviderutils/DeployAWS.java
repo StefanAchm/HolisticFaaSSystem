@@ -30,7 +30,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
         logger.info("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
-                .region(Region.of(function.getRegionInterface().getRegionName())) // TODO: validate?
+                .region(Region.of(function.getRegion().getRegionName())) // TODO: validate?
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 
@@ -54,7 +54,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .functionName(function.getName())
                     .handler(function.getHandler())
                     .role(user.getRoleArn()) // The ARN of the role
-                    .runtime(function.getRuntimeInterface().getRuntimeString())
+                    .runtime(function.getRuntime().getRuntimeString())
                     .code(code)
                     .memorySize(function.getMemory())
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds

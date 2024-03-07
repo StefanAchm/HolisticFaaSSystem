@@ -1,10 +1,12 @@
 package com.asi.hms.controller;
 
 import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,21 +19,25 @@ public class DeployController {
         this.deployService = deployService;
     }
 
-    @PostMapping(value = "/function")
-    public ResponseEntity<String> deployFunction(@RequestBody APIFunction apiFunction) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<String> addFunctionDeployment(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        this.deployService.addFunctionDeployment(apiFunctionDeployment);
+        return ResponseEntity.ok("Deploy Function added");
+    }
 
-        this.deployService.deploy(apiFunction);
+    @PostMapping(value = "/deploy")
+    public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
+
+        this.deployService.deploy(functionId);
 
         return ResponseEntity.ok("Function deployed");
 
     }
 
-    @PostMapping(value = "/functionFromDB")
-    public ResponseEntity<String> deployFunctionFromDB(@RequestParam UUID functionId) {
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<APIFunctionDeployment>> getAllFunctionDeployments() {
 
-        this.deployService.deploy(functionId);
-
-        return ResponseEntity.ok("Function deployed");
+        return ResponseEntity.ok(this.deployService.getAllFunctionDeployments());
 
     }
 

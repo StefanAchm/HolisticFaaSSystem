@@ -27,8 +27,8 @@ class DeployInterfaceTest {
         function.setMemory(128);
         function.setTimeoutSecs(3);
         function.setHandler("com.asi.hsg.HelloWorldHandler::handleRequest");
-        function.setRegionInterface(RegionAWS.EU_WEST_1);
-        function.setRuntimeInterface(RuntimeAWS.JAVA_17);
+        function.setRegion(RegionAWS.EU_WEST_1);
+        function.setRuntime(RuntimeAWS.JAVA_17);
 
         UserAWS user = UserAWS.fromResources("auth/stefan01/aws.properties");
 
@@ -47,8 +47,8 @@ class DeployInterfaceTest {
         function.setMemory(128);
         function.setTimeoutSecs(3);
         function.setHandler("com.asi.hsg.HelloWorldHandler");
-        function.setRegionInterface(RegionGCP.EUROPE_WEST1);
-        function.setRuntimeInterface(RuntimeGCP.JAVA_17);
+        function.setRegion(RegionGCP.EUROPE_WEST1);
+        function.setRuntime(RuntimeGCP.JAVA_17);
 
         UserGCP user = UserGCP.fromResources("auth/stefan01/gcp.json");
 

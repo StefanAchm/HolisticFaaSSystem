@@ -17,7 +17,7 @@ public class DBUser {
 //    private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<DBFunction> functions;
+    private List<DBFunctionDeployment> functionDeployments;
 
     public DBUser() {
     }
@@ -28,14 +28,6 @@ public class DBUser {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public List<DBFunction> getFunctions() {
-        return functions;
-    }
-
-    public void setFunctions(List<DBFunction> functions) {
-        this.functions = functions;
     }
 
 }

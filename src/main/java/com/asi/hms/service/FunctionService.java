@@ -1,13 +1,8 @@
 package com.asi.hms.service;
 
-import com.asi.hms.enums.Provider;
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.db.DBFunction;
-import com.asi.hms.model.db.DBUser;
 import com.asi.hms.repository.FunctionRepository;
-import com.asi.hms.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +12,16 @@ public class FunctionService {
 
     private final FunctionRepository functionRepository;
 
-    private final UserRepository userRepository;
-
-    public FunctionService(FunctionRepository functionRepository, UserRepository userRepository) {
+    public FunctionService(FunctionRepository functionRepository) {
         this.functionRepository = functionRepository;
-        this.userRepository = userRepository;
     }
 
     public void addFunction(APIFunction apiFunction) {
 
         DBFunction dbFunction = new DBFunction();
 
-        dbFunction.setProvider(apiFunction.getProvider().toString());
         dbFunction.setFilePath(apiFunction.getFilePath());
         dbFunction.setName(apiFunction.getName());
-        dbFunction.setMemory(apiFunction.getMemory());
-        dbFunction.setTimeoutSecs(apiFunction.getTimeoutSecs());
-        dbFunction.setHandler(apiFunction.getHandler());
-        dbFunction.setRegion(apiFunction.getRegion());
-
-        DBUser user = userRepository.findByUsername(apiFunction.getUserName()); // TODO:
-
-        if(user == null) {
-            throw new HolisticFaaSException("User '" + apiFunction.getUserName() + "' not found");
-        }
-
-        dbFunction.setUser(user);
 
         functionRepository.save(dbFunction);
 
@@ -51,7 +30,6 @@ public class FunctionService {
     public List<APIFunction> getAllFunction() {
 
         return this.functionRepository.findAll().stream().map(APIFunction::fromDBFunction).toList();
-
 
     }
 

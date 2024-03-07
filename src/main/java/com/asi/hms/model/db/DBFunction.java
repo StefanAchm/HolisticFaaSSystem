@@ -1,6 +1,7 @@
 package com.asi.hms.model.db;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -11,32 +12,17 @@ public class DBFunction {
     @GeneratedValue
     private UUID id;
 
-    private String provider;
     private String filePath;
     private String name;
-    private Integer memory;
-    private Integer timeoutSecs;
-    private String handler;
-    private String region;
-    private String runtime;
 
-    @ManyToOne
-    @JoinColumn(name = "user_username")
-    private DBUser user;
+    @OneToMany(mappedBy = "function")
+    private List<DBFunctionDeployment> functionDeployments;
 
     public DBFunction() {
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 
     public String getFilePath() {
@@ -55,51 +41,12 @@ public class DBFunction {
         this.name = name;
     }
 
-    public Integer getMemory() {
-        return memory;
+    public List<DBFunctionDeployment> getFunctionDeployments() {
+        return functionDeployments;
     }
 
-    public void setMemory(Integer memory) {
-        this.memory = memory;
+    public void setFunctionDeployments(List<DBFunctionDeployment> functionDeployments) {
+        this.functionDeployments = functionDeployments;
     }
 
-    public Integer getTimeoutSecs() {
-        return timeoutSecs;
-    }
-
-    public void setTimeoutSecs(Integer timeoutSecs) {
-        this.timeoutSecs = timeoutSecs;
-    }
-
-    public String getHandler() {
-        return handler;
-    }
-
-    public void setHandler(String handler) {
-        this.handler = handler;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getRuntime() {
-        return runtime;
-    }
-
-    public void setRuntime(String runtime) {
-        this.runtime = runtime;
-    }
-
-    public DBUser getUser() {
-        return user;
-    }
-
-    public void setUser(DBUser user) {
-        this.user = user;
-    }
 }

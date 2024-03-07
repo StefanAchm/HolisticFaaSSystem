@@ -1,12 +1,18 @@
 package com.asi.hms.service;
 
-import com.asi.hms.enums.*;
+import com.asi.hms.enums.Provider;
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.*;
-import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.Function;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
+import com.asi.hms.model.UserInterface;
+import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.db.DBFunction;
+import com.asi.hms.model.db.DBFunctionDeployment;
+import com.asi.hms.model.db.DBUser;
+import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionRepository;
-import com.asi.hms.utils.FileUtil;
+import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.cloudproviderutils.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.DeployGCP;
 import com.asi.hms.utils.cloudproviderutils.DeployInterface;
@@ -14,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,75 +29,100 @@ public class DeployService {
 
     private static final Logger logger = LoggerFactory.getLogger(DeployService.class);
 
+    private final UserRepository userRepository;
     private final FunctionRepository functionRepository;
+    private final FunctionDeploymentRepository functionDeploymentRepository;
 
-    public DeployService(FunctionRepository functionRepository) {
+    public DeployService(UserRepository userRepository,
+                         FunctionRepository functionRepository,
+                         FunctionDeploymentRepository functionDeploymentRepository) {
+
+        this.userRepository = userRepository;
         this.functionRepository = functionRepository;
+        this.functionDeploymentRepository = functionDeploymentRepository;
+
     }
 
-    public boolean deploy(UUID functionId) {
+    public void addFunctionDeployment(APIFunctionDeployment apiFunctionDeployment) {
 
-        Optional<DBFunction> byId = functionRepository.findById(functionId);
+        DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
 
-        if(byId.isEmpty()) {
+        dbFunctionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
+        dbFunctionDeployment.setMemory(apiFunctionDeployment.getMemory());
+        dbFunctionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());
+        dbFunctionDeployment.setHandler(apiFunctionDeployment.getHandler());
+        dbFunctionDeployment.setRegion(apiFunctionDeployment.getRegion());
+        dbFunctionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
+
+        DBUser user = userRepository.findByUsername(apiFunctionDeployment.getUserName());
+
+        if (user == null) {
+            throw new HolisticFaaSException("User '" + apiFunctionDeployment.getUserName() + "' not found");
+        }
+
+        dbFunctionDeployment.setUser(user);
+
+        DBFunction function = functionRepository
+                .findById(apiFunctionDeployment.getFunctionId())
+                .orElseThrow(() -> new HolisticFaaSException("Function not found"));
+
+        dbFunctionDeployment.setFunction(function);
+
+        this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+    }
+
+    public boolean deploy(UUID functionDeploymentId) {
+
+        Optional<DBFunctionDeployment> byId = this.functionDeploymentRepository.findById(functionDeploymentId);
+
+        if (byId.isEmpty()) {
             throw new HolisticFaaSException("Function not found");
         }
 
-        DBFunction dbFunction = byId.get();
+        DBFunctionDeployment dbFunctionDeployment = byId.get();
 
-        APIFunction apiFunction = APIFunction.fromDBFunction(dbFunction);
+        Function function = Function.fromDbFunction(dbFunctionDeployment);
 
-        switch (apiFunction.getProvider()) {
-            case AWS -> apiFunction.setCredentialsPath("auth/" + apiFunction.getUserName() + "/aws.properties");
-            case GCP -> apiFunction.setCredentialsPath("auth/" + apiFunction.getUserName() + "/gcp.json");
-            default -> throw new HolisticFaaSException("Provider not supported");
-        }
-
-        return deploy(apiFunction);
+        return deploy(dbFunctionDeployment, function);
 
     }
 
-    public boolean deploy(APIFunction apiFunction) {
+    public List<APIFunctionDeployment> getAllFunctionDeployments() {
 
-        DeployInterface deployInterface;
+        return this.functionDeploymentRepository.findAll().stream().map(APIFunctionDeployment::fromDBFunctionDeployment).toList();
+
+    }
+
+    protected static boolean deploy(DBFunctionDeployment dbFunctionDeployment, Function function) {
+
+        DeployInterface deployer;
         UserInterface user;
-        RegionInterface regionInterface;
-        RuntimeInterface runtimeInterface;
 
-        logger.info("Deploying function {} to provider {} at region {} for user {}",
-                apiFunction.getName(),
-                apiFunction.getProvider(),
-                apiFunction.getRegion(),
-                apiFunction.getCredentialsPath());
+        Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
 
-        switch (apiFunction.getProvider()) {
+        switch (provider) {
             case AWS -> {
-                deployInterface = new DeployAWS();
-                user = UserAWS.fromResources(apiFunction.getCredentialsPath());
-                regionInterface = RegionAWS.valueOf(apiFunction.getRegion());
-                runtimeInterface = RuntimeAWS.valueOf(apiFunction.getRuntime());
+                deployer = new DeployAWS();
+                user = UserAWS.fromResources("auth/" + dbFunctionDeployment.getUser().getUsername() + "/aws.properties");
             }
             case GCP -> {
-                deployInterface = new DeployGCP();
-                user = UserGCP.fromResources(apiFunction.getCredentialsPath());
-                regionInterface = RegionGCP.valueOf(apiFunction.getRegion());
-                runtimeInterface = RuntimeGCP.valueOf(apiFunction.getRuntime());
-            } default -> throw new HolisticFaaSException("Provider not supported");
+                deployer = new DeployGCP();
+                user = UserGCP.fromResources("auth/" + dbFunctionDeployment.getUser().getUsername() + "/gcp.json");
+
+            }
+
+            default -> throw new HolisticFaaSException("Provider not supported");
+
         }
 
-        Function function = new Function();
+        logger.info("Deploying function {} to provider {} at region {} for user {}",
+                function.getName(),
+                provider,
+                function.getRegion(),
+                dbFunctionDeployment.getUser().getUsername());
 
-        // TODO: support for other file paths (currently only resources)
-        function.setFilePath(FileUtil.getFilePathFromResourcesFile(apiFunction.getFilePath()));
-
-        function.setName(apiFunction.getName());
-        function.setMemory(apiFunction.getMemory());
-        function.setTimeoutSecs(apiFunction.getTimeoutSecs());
-        function.setHandler(apiFunction.getHandler());
-        function.setRegionInterface(regionInterface);
-        function.setRuntimeInterface(runtimeInterface);
-
-        return deployInterface.deployFunction(function, user);
+        return deployer.deployFunction(function, user);
 
     }
 
