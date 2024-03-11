@@ -25,13 +25,24 @@
               <v-container>
                 <v-row>
 
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col>
                     <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
                   </v-col>
 
+                </v-row>
 
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.provider" label="Provider"></v-text-field>
+                <v-row>
+
+                  <v-col>
+
+                    <v-select
+                        v-model="editedItem.provider"
+                        :items="providers"
+                        item-text="title"
+                        item-value="value"
+                        label="Provider"
+                    ></v-select>
+
                   </v-col>
 
                 </v-row>
@@ -39,7 +50,7 @@
                 <v-row>
 
                   <v-file-input
-                      truncate-length="15"
+                      truncate-length="60"
                       @change="selectFile"
                   ></v-file-input>
 
@@ -79,8 +90,11 @@
 
 import axios from "axios";
 import {Properties} from "@/config";
+import common from "@/common";
 
 export default {
+
+  mixins: [common],
 
   data() {
     return {

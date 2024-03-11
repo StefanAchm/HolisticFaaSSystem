@@ -158,6 +158,14 @@
       </v-toolbar>
     </template>
 
+    <template v-slot:[`item.deploy`]="{ item }">
+      <v-icon small class="mr-2" @click="deployItem(item)">mdi-rocket-launch</v-icon>
+    </template>
+
+    <template v-slot:[`item.copy`]="{ item }">
+      <v-icon small @click="copyItem(item)">mdi-content-duplicate</v-icon>
+    </template>
+
   </v-data-table>
 
 </template>
@@ -202,7 +210,7 @@ export default {
       menu: false,
       activePicker: null,
       headers: [
-        {text: 'Id', value: 'id', width: '150px'},
+        // {text: 'Id', value: 'id', width: '150px'},
         // {text: 'Name', value: 'name', width: '150px'},
         {text: 'Provider', value: 'provider', width: '100px'},
         {text: 'Memory', value: 'memory', width: '100px'},
@@ -213,7 +221,10 @@ export default {
 
         // Linked:
         {text: 'UserName', value: 'userName', width: '100px'},
-        {text: 'FunctionId', value: 'functionId', width: '100px'}
+        {text: 'FunctionId', value: 'functionId', width: '100px'},
+
+        {text: 'Deploy', value: 'deploy', width: '50px', sortable: false},
+        {text: 'Copy', value: 'copy', width: '50px', sortable: false}
 
       ],
       functionDeployments: [],
@@ -335,6 +346,21 @@ export default {
     },
 
     deleteItemConfirm() {
+    },
+
+    deployItem(item) {
+      axios.post(Properties.API_IP + "/deploy/deploy", null, {headers: {'Content-Type': 'application/json'}, params: {functionId: item.id}})
+          .then(response => {
+            console.log(response)
+          })
+          .finally(() => {
+            this.close();
+          });
+    },
+
+    copyItem(item) {
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
     },
 
     upload() {

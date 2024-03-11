@@ -25,7 +25,7 @@
               <v-container>
                 <v-row>
 
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col>
                     <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                   </v-col>
 
@@ -34,7 +34,7 @@
                 <v-row>
 
                   <v-file-input
-                      truncate-length="15"
+                      truncate-length="60"
                       @change="selectFile"
                   ></v-file-input>
 
