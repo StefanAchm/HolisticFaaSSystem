@@ -81,13 +81,10 @@ export default {
       this.currentFile = file;
     },
 
-    close() {
+    close(f) {
+
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.init()
-      })
+      this.$emit('dialog-closed', f)
     },
 
     upload() {

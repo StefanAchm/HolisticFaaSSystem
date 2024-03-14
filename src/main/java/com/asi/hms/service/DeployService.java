@@ -1,5 +1,6 @@
 package com.asi.hms.service;
 
+import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.enums.Provider;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
@@ -73,7 +74,7 @@ public class DeployService {
 
     }
 
-    public boolean deploy(UUID functionDeploymentId) {
+    public boolean deploy(UUID functionDeploymentId, boolean localOnly) {
 
         Optional<DBFunctionDeployment> byId = this.functionDeploymentRepository.findById(functionDeploymentId);
 
@@ -85,7 +86,42 @@ public class DeployService {
 
         Function function = Function.fromDbFunction(dbFunctionDeployment);
 
-        return deploy(dbFunctionDeployment, function);
+        dbFunctionDeployment.setStatus(DeployStatus.STARTED);
+        this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+        boolean success = false;
+
+        try {
+
+            if(!localOnly) {
+
+                success = deploy(dbFunctionDeployment, function);
+
+            } else {
+
+                // Wait for 3 seconds and then return random success or failure
+
+                logger.warn("Local deployment only, returning random success or failure");
+
+                Thread.sleep(3000);
+
+                success = Math.random() > 0.5;
+
+            }
+
+        } catch (HolisticFaaSException e) {
+
+            dbFunctionDeployment.setStatus(DeployStatus.FAILED);
+            this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
+        this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+        return success;
 
     }
 

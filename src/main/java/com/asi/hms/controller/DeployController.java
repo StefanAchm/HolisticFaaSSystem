@@ -25,9 +25,9 @@ public class DeployController {
     }
 
     @PostMapping(value = "/deploy")
-    public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
+    public ResponseEntity<String> deploy(@RequestParam UUID functionId, @RequestParam boolean localOnly) {
 
-        this.deployService.deploy(functionId);
+        this.deployService.deploy(functionId, localOnly);
 
         return ResponseEntity.ok("Function deployed");
 

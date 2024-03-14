@@ -1,5 +1,6 @@
 package com.asi.hms.model.api;
 
+import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.enums.Provider;
 import com.asi.hms.model.db.DBFunctionDeployment;
 
@@ -16,6 +17,7 @@ public class APIFunctionDeployment {
     private String handler;
     private String region;
     private String runtime;
+    private DeployStatus status;
 
     private String userName;
     private UUID functionId;
@@ -31,6 +33,7 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setHandler(dbFunctionDeployment.getHandler());
         apiFunctionDeployment.setRegion(dbFunctionDeployment.getRegion());
         apiFunctionDeployment.setRuntime(dbFunctionDeployment.getRuntime());
+        apiFunctionDeployment.setStatus(dbFunctionDeployment.getStatus());
 
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionId(dbFunctionDeployment.getFunction().getId());
@@ -110,5 +113,13 @@ public class APIFunctionDeployment {
 
     public void setFunctionId(UUID functionId) {
         this.functionId = functionId;
+    }
+
+    public DeployStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeployStatus status) {
+        this.status = status;
     }
 }

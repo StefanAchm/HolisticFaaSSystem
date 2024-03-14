@@ -1,8 +1,9 @@
 
 export class CloudFunction {
 
-    constructor({provider, memory, timeoutSecs, handler, region, runtime, userName, functionId, functionName} = {}) {
+    constructor({status, provider, memory, timeoutSecs, handler, region, runtime, userName, functionId, functionName} = {}) {
 
+        this.status = status;
         this.provider = provider;
         this.memory = memory;
         this.timeoutSecs = timeoutSecs;
