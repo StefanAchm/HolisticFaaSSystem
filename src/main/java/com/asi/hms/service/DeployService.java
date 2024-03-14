@@ -116,6 +116,7 @@ public class DeployService {
             }
 
             dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
+            dbFunctionDeployment.setStatusMessage(success ? "Deployed successfully" : "Failed to deploy");
 
 
         } catch (HolisticFaaSException e) {

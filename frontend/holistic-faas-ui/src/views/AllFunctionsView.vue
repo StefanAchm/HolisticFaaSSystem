@@ -42,11 +42,19 @@
     <template v-slot:[`item.status`]="{ item }">
 
       <v-tooltip
-          :disabled="!item.statusMessage"
           bottom
       >
         <template v-slot:activator="{ on, attrs }">
-          <v-chip v-bind="attrs" v-on="on" v-if="item.id" :color="getColor(item.status)">{{ item.status }}</v-chip>
+
+          <v-icon
+              :color="getColor(item.status)"
+              v-on="on"
+              v-bind="attrs"
+              v-if="item.id"
+          >
+            {{ getIcon(item.status) }}
+          </v-icon>
+
         </template>
 
         <span>{{ item.statusMessage }}</span>
@@ -56,6 +64,7 @@
     </template>
 
     <template v-slot:[`item.deploy`]="{ item }">
+
       <v-progress-circular
           :value="item.isLoadingValue"
           :rotate="-90"
@@ -148,9 +157,11 @@ export default {
         // {text: 'Id', value: 'id', width: '150px'},
         // {text: 'Name', value: 'name', width: '150px'},
 
-        {text: 'Deploy', value: 'deploy', width: '50px', sortable: false},
 
-        {text: 'Status', value: 'status', width: '150px'},
+        {text: 'Status', value: 'status', width: '20px'},
+
+        {text: 'Deploy', value: 'deploy', width: '20px', sortable: false},
+
         {text: 'Provider', value: 'provider', width: '100px'},
         {text: 'Memory', value: 'memory', width: '100px'},
         {text: 'TimeoutSecs', value: 'timeoutSecs', width: '100px'},
@@ -253,16 +264,25 @@ export default {
       this.dialogVisible = true
     },
 
+    getIcon(status) {
+
+      if (status === 'DEPLOYED') {
+        return 'mdi-check-circle-outline'
+      } else if (status === 'FAILED') {
+        return 'mdi-alert-octagon-outline'
+      } else {
+        return ''
+      }
+    },
+
     getColor(status) {
 
       if (status === 'DEPLOYED') {
         return 'green'
-      } else if (status === 'STARTED') {
-        return 'yellow'
       } else if (status === 'FAILED') {
         return 'red'
       } else {
-        return 'grey'
+        return ''
       }
     },
 
@@ -299,7 +319,9 @@ export default {
 
             if (status) {
               this.$set(fd, 'status', status)
+              console.log('status: ', status)
               this.$set(fd, 'statusMessage', statusMessage)
+              console.log('statusMessage: ', statusMessage)
             }
 
           })
