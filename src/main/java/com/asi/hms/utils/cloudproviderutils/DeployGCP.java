@@ -1,11 +1,9 @@
 package com.asi.hms.utils.cloudproviderutils;
 
-
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
 import com.asi.hms.model.UserGCP;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import com.asi.hms.utils.ProgressHandler;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;
 import com.google.protobuf.Duration;
@@ -16,18 +14,28 @@ import java.util.concurrent.ExecutionException;
 
 public class DeployGCP implements DeployInterface<UserGCP> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeployGCP.class);
+    public static final int STEPS = 6;
 
     @Override
-    public boolean deployFunction(Function function, UserGCP user, MessageInterface messageInterface) {
+    public boolean deployFunction(Function function, UserGCP user, ProgressHandler progressHandler) {
 
-        String bucketName = getBucketName(function);
+        try {
 
-        createBucket(user, bucketName);
+            String bucketName = getBucketName(function);
 
-        String sourceZipFile = uploadZipToBucket(function, user, bucketName); // or use the bucketNameExt
+            createBucket(user, bucketName, progressHandler);
 
-        return createFunction(function, user, sourceZipFile);
+            String sourceZipFile = uploadZipToBucket(function, user, bucketName, progressHandler); // or use the bucketNameExt
+
+            return createFunction(function, user, sourceZipFile, progressHandler);
+
+        } catch (Exception e) {
+
+            // TODO: reinterruped exception
+
+            throw new HolisticFaaSException(e);
+
+        }
 
     }
 
@@ -39,23 +47,16 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
     }
 
-    private static boolean createFunction(Function function, UserGCP user, String sourceZipFile) {
+    private static boolean createFunction(Function function, UserGCP user, String sourceZipFile, ProgressHandler progressHandler) throws IOException, ExecutionException, InterruptedException {
 
         CloudFunctionsServiceSettings cloudFunctionsServiceSettings;
 
-        try {
 
-            cloudFunctionsServiceSettings = CloudFunctionsServiceSettings.newBuilder()
-                    .setCredentialsProvider(user::getGoogleCredentials)
-                    .build();
+        cloudFunctionsServiceSettings = CloudFunctionsServiceSettings.newBuilder()
+                .setCredentialsProvider(user::getGoogleCredentials)
+                .build();
 
-            logger.info("Created CloudFunctionsServiceSettings with credentials");
-
-        } catch (IOException e) {
-
-            throw new HolisticFaaSException(e.getMessage());
-
-        }
+        progressHandler.update("Created CloudFunctionsServiceSettings with credentials");
 
         try (CloudFunctionsServiceClient client = CloudFunctionsServiceClient.create(cloudFunctionsServiceSettings)) {
 
@@ -71,35 +72,27 @@ public class DeployGCP implements DeployInterface<UserGCP> {
                     .setTimeout(Duration.newBuilder().setSeconds(function.getTimeoutSecs()).build())
                     .build();
 
-            logger.info("Created CloudFunction object");
+            progressHandler.update("Created CloudFunction object");
 
             CreateFunctionRequest request = CreateFunctionRequest.newBuilder()
                     .setLocation(parent)
                     .setFunction(cloudFunction)
                     .build();
 
-            logger.info("Created CreateFunctionRequest object");
 
-            logger.info("Creating function (this may take a while)");
+            progressHandler.update("Creating function (this may take a while)");
 
             CloudFunction cloudFunction1 = client.createFunctionAsync(request).get();
 
-            logger.info("Function created: {}", cloudFunction1);
+            progressHandler.update("Function created: " + cloudFunction1.getName());
 
-
-        } catch (IOException | ExecutionException e) {
-
-            throw new HolisticFaaSException(e.getMessage());
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // ????
         }
 
         return true;
 
     }
 
-    private String createBucket(UserGCP user, String bucketName) {
+    private String createBucket(UserGCP user, String bucketName, ProgressHandler progressHandler) {
 
         Storage storage = StorageOptions.newBuilder()
                 .setCredentials(user.getGoogleCredentials())
@@ -108,7 +101,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
         Bucket bucket = storage.create(BucketInfo.of(bucketName));
 
-        logger.info("Bucket {} created.", bucket.getName());
+        progressHandler.update("Bucket " + bucket.getName() + " created");
 
         return "gs://" + bucketName;
 
@@ -116,7 +109,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
 
     // Assuming sourceZipFilePath is a path to a zip file in Google Cloud Storage (gs://bucket-name/path/to/function.zip)
-    private String uploadZipToBucket(Function function, UserGCP user, String bucketName) {
+    private String uploadZipToBucket(Function function, UserGCP user, String bucketName, ProgressHandler progressHandler) throws IOException {
 
         Storage storage = StorageOptions.newBuilder()
                 .setCredentials(user.getGoogleCredentials())
@@ -130,19 +123,13 @@ public class DeployGCP implements DeployInterface<UserGCP> {
         BlobId blobId = BlobId.of(bucketName, objectName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
 
+        byte[] bytes = Files.readAllBytes(function.getFilePath());
+        storage.create(blobInfo, bytes);
 
-        try {
+        progressHandler.update("File " + function.getFilePath() + " uploaded to bucket " + bucketName + " as " + objectName);
 
-            byte[] bytes = Files.readAllBytes(function.getFilePath());
-            storage.create(blobInfo, bytes);
+        return "gs://" + bucketName + "/" + objectName;
 
-            logger.info("File {} uploaded to bucket {} as {}", function.getFilePath(), bucketName, objectName);
-
-            return "gs://" + bucketName + "/" + objectName;
-
-        } catch (IOException e) {
-            throw new HolisticFaaSException(e.getMessage());
-        }
 
     }
 

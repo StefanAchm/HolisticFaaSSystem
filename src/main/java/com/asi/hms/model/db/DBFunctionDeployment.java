@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "function_deployments")
-public class DBFunctionDeployment {
+public class DBFunctionDeployment implements ProgressObjectInterface {
 
     @Id
     @GeneratedValue

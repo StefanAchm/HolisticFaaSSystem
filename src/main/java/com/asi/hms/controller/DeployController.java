@@ -35,6 +35,13 @@ public class DeployController {
 
     }
 
+    @GetMapping(value = "/get")
+    public ResponseEntity<APIFunctionDeployment> getFunctionDeployment(@RequestParam UUID functionId) {
+
+        return ResponseEntity.ok(this.deployService.getFunctionDeployment(functionId));
+
+    }
+
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIFunctionDeployment>> getAllFunctionDeployments() {
 

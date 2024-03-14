@@ -2,10 +2,8 @@ package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
-import com.asi.hms.model.Message;
 import com.asi.hms.model.UserAWS;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import com.asi.hms.utils.ProgressHandler;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
@@ -21,23 +19,21 @@ import java.nio.file.Files;
 
 public class DeployAWS implements DeployInterface<UserAWS> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeployAWS.class);
-
-    private static final int STEPS = 7;
+    public static final int STEPS = 6;
 
     @Override
-    public boolean deployFunction(Function function, UserAWS user, MessageInterface messageInterface) {
+    public boolean deployFunction(Function function, UserAWS user, ProgressHandler progressHandler) {
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
 
-        messageInterface.sendMessage(new Message(function.getId(), 1, STEPS, "Created AWS credentials"));
+        progressHandler.update("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
                 .region(Region.of(function.getRegion().getRegionName()))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 
-        messageInterface.sendMessage(new Message(function.getId(), 2, STEPS, "Created AWS Lambda client"));
+        progressHandler.update("Created AWS Lambda client");
 
         try {
 
@@ -50,7 +46,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .zipFile(fileToUpload)
                     .build();
 
-            messageInterface.sendMessage(new Message(function.getId(), 3, STEPS, "Created function code"));
+            progressHandler.update("Created function code");
 
             CreateFunctionRequest functionRequest = CreateFunctionRequest.builder()
                     .functionName(function.getName())
@@ -62,7 +58,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds
                     .build();
 
-            messageInterface.sendMessage(new Message(function.getId(), 4, STEPS, "Created function request, creating function now (this may take a while)"));
+            progressHandler.update("Created function request, creating function now (this may take a while)");
 
             // Create a Lambda function using a waiter
             CreateFunctionResponse functionResponse = awsLambda.createFunction(functionRequest);
@@ -71,21 +67,17 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .functionName(function.getName())
                     .build();
 
-            messageInterface.sendMessage(new Message(function.getId(), 5, STEPS, "Created function response"));
+            progressHandler.update("Function created, waiting for function to exist");
 
             WaiterResponse<GetFunctionResponse> waiterResponse = waiter.waitUntilFunctionExists(getFunctionRequest);
             waiterResponse
                     .matched()
                     .response()
-                    .ifPresent(l -> messageInterface.sendMessage(new Message(function.getId(), 6, STEPS, "Function created with arn:" + functionResponse.functionArn())));
-
-            messageInterface.sendMessage(new Message(function.getId(), 7, STEPS, "Function created"));
+                    .ifPresent(l -> progressHandler.update("Function created with arn:" + functionResponse.functionArn()));
 
             awsLambda.close();
 
         } catch (LambdaException | IOException e) {
-
-            messageInterface.sendMessage(new Message(function.getId(), STEPS, STEPS, "Failed to create function: " + e.getMessage()));
 
             throw new HolisticFaaSException(e);
 

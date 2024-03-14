@@ -3,7 +3,10 @@ package com.asi.hms.service;
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.enums.Provider;
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.*;
+import com.asi.hms.model.Function;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
+import com.asi.hms.model.UserInterface;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.db.DBFunction;
 import com.asi.hms.model.db.DBFunctionDeployment;
@@ -11,10 +14,10 @@ import com.asi.hms.model.db.DBUser;
 import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionRepository;
 import com.asi.hms.repository.UserRepository;
+import com.asi.hms.utils.ProgressHandler;
 import com.asi.hms.utils.cloudproviderutils.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.DeployGCP;
 import com.asi.hms.utils.cloudproviderutils.DeployInterface;
-import com.asi.hms.utils.cloudproviderutils.MessageInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -94,17 +97,21 @@ public class DeployService {
         dbFunctionDeployment.setStatus(DeployStatus.STARTED);
         this.functionDeploymentRepository.save(dbFunctionDeployment);
 
+        // TODO: Define steps dynamically
+        ProgressHandler progressHandler = new ProgressHandler(dbFunctionDeployment, 6, this.sessionService);
+        progressHandler.start();
+
         boolean success = false;
 
         try {
 
             if(!localOnly) {
 
-                success = deploy(dbFunctionDeployment, function, this.sessionService);
+                success = deploy(dbFunctionDeployment, function, progressHandler);
 
             } else {
 
-                success = localDeployTesting(dbFunctionDeployment, this.sessionService);
+                success = localDeployTesting(progressHandler);
 
             }
 
@@ -117,6 +124,7 @@ public class DeployService {
 
         dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
         this.functionDeploymentRepository.save(dbFunctionDeployment);
+        progressHandler.finish();
 
     }
 
@@ -128,7 +136,7 @@ public class DeployService {
 
     protected static boolean deploy(DBFunctionDeployment dbFunctionDeployment,
                                     Function function,
-                                    MessageInterface messageInterface) {
+                                    ProgressHandler progressHandler) {
 
         DeployInterface deployer;
         UserInterface user;
@@ -156,18 +164,19 @@ public class DeployService {
                 function.getRegion(),
                 dbFunctionDeployment.getUser().getUsername());
 
-        return deployer.deployFunction(function, user, messageInterface);
+        return deployer.deployFunction(function, user, progressHandler);
 
     }
 
-    private boolean localDeployTesting(DBFunctionDeployment dbFunctionDeployment, WebSocketSessionService sessionService) {
+    @Deprecated
+    private boolean localDeployTesting(ProgressHandler progressHandler) {
 
         for(int i = 1; i <= 7; i++) {
 
-            sessionService.sendMessage(new Message(dbFunctionDeployment.getId(), i, 7, "Step " + i));
+            progressHandler.update("Step " + i);
 
             try {
-                TimeUnit.SECONDS.sleep(4);
+                TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -175,6 +184,12 @@ public class DeployService {
         }
 
         return Math.random() > 0.5;
+
+    }
+
+    public APIFunctionDeployment getFunctionDeployment(UUID functionId) {
+
+        return APIFunctionDeployment.fromDBFunctionDeployment(this.functionDeploymentRepository.findById(functionId).orElseThrow());
 
     }
 

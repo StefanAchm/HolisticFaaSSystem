@@ -148,7 +148,6 @@ export default {
       };
 
       this.socket.onmessage = (event) => {
-        console.log('WebSocket message: ', event.data);
         this.updateProgress(event.data)
 
       };
@@ -191,8 +190,6 @@ export default {
 
             })
 
-            console.log(this.functionDeployments)
-
           })
 
     },
@@ -203,15 +200,8 @@ export default {
           Properties.API_IP + "/deploy/deploy", null,
           {
             headers: {'Content-Type': 'application/json'},
-            params: {functionId: item.id, localOnly: true} // TODO: set localOnly to false
+            params: {functionId: item.id, localOnly: false} // TODO: set localOnly to false
           })
-          .then(response => {
-            console.log(response)
-          })
-          .finally(() => {
-            // item.loading = false
-            // this.init()
-          });
 
     },
 
@@ -257,6 +247,7 @@ export default {
       let id = message.id;
       let step = message.step;
       let steps = message.steps;
+      let status = message.status;
       // let messageText = message.message;
 
       let value = step / steps * 100
@@ -271,6 +262,11 @@ export default {
               // this.init()
               this.$set(fd, 'isLoadingValue', null)
             }
+
+            if(status){
+              this.$set(fd, 'status', status)
+            }
+
           })
 
     }

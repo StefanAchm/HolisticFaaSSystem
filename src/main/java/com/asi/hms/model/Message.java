@@ -11,11 +11,14 @@ public class Message {
 
     private final String text;
 
-    public Message(UUID id, int step, int steps, String text) {
+    private final String status;
+
+    public Message(UUID id, int step, int steps, String text, String status) {
         this.id = id;
         this.step = step;
         this.steps = steps;
         this.text = text;
+        this.status = status;
     }
 
     @Override
@@ -25,6 +28,7 @@ public class Message {
                 ", step=" + step +
                 ", steps=" + steps +
                 ", message='" + text + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
