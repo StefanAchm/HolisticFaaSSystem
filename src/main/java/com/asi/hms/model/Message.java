@@ -13,12 +13,15 @@ public class Message {
 
     private final String status;
 
-    public Message(UUID id, int step, int steps, String text, String status) {
+    private final String statusMessage;
+
+    public Message(UUID id, int step, int steps, String text, String status, String statusMessage) {
         this.id = id;
         this.step = step;
         this.steps = steps;
         this.text = text;
         this.status = status;
+        this.statusMessage = statusMessage;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class Message {
                 ", steps=" + steps +
                 ", message='" + text + '\'' +
                 ", status='" + status + '\'' +
+                ", statusMessage='" + statusMessage + '\'' +
                 '}';
     }
 }

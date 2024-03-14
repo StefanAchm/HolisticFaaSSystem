@@ -101,9 +101,9 @@ public class DeployService {
         ProgressHandler progressHandler = new ProgressHandler(dbFunctionDeployment, 6, this.sessionService);
         progressHandler.start();
 
-        boolean success = false;
-
         try {
+
+            boolean success;
 
             if(!localOnly) {
 
@@ -115,14 +115,18 @@ public class DeployService {
 
             }
 
+            dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
+
+
         } catch (HolisticFaaSException e) {
 
+            dbFunctionDeployment.setStatusMessage(e.getMessage());
             dbFunctionDeployment.setStatus(DeployStatus.FAILED);
-            this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+            logger.error("Error deploying function", e);
 
         }
 
-        dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
         this.functionDeploymentRepository.save(dbFunctionDeployment);
         progressHandler.finish();
 

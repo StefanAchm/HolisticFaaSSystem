@@ -18,6 +18,7 @@ public class APIFunctionDeployment {
     private String region;
     private String runtime;
     private DeployStatus status;
+    private String statusMessage;
 
     private String userName;
     private UUID functionId;
@@ -34,6 +35,7 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setRegion(dbFunctionDeployment.getRegion());
         apiFunctionDeployment.setRuntime(dbFunctionDeployment.getRuntime());
         apiFunctionDeployment.setStatus(dbFunctionDeployment.getStatus());
+        apiFunctionDeployment.setStatusMessage(dbFunctionDeployment.getStatusMessage());
 
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionId(dbFunctionDeployment.getFunction().getId());
@@ -121,5 +123,13 @@ public class APIFunctionDeployment {
 
     public void setStatus(DeployStatus status) {
         this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
     }
 }

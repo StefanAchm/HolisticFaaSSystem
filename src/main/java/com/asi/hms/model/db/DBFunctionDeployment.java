@@ -5,6 +5,9 @@ import com.asi.hms.enums.DeployStatus;
 import javax.persistence.*;
 import java.util.UUID;
 
+/**
+ * TODO: Add time of deployment
+ */
 @Entity
 @Table(name = "function_deployments")
 public class DBFunctionDeployment implements ProgressObjectInterface {
@@ -23,6 +26,8 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
     @Enumerated(EnumType.STRING)
     private DeployStatus status;
+
+    private String statusMessage;
 
     @ManyToOne
     @JoinColumn(name = "function_id")
@@ -110,5 +115,13 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
     public void setStatus(DeployStatus status) {
         this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
     }
 }

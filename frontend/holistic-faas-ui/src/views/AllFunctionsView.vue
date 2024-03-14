@@ -40,7 +40,19 @@
     </template>
 
     <template v-slot:[`item.status`]="{ item }">
-      <v-chip v-if="item.id" :color="getColor(item.status)">{{ item.status }}</v-chip>
+
+      <v-tooltip
+          :disabled="!item.statusMessage"
+          bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-chip v-bind="attrs" v-on="on" v-if="item.id" :color="getColor(item.status)">{{ item.status }}</v-chip>
+        </template>
+
+        <span>{{ item.statusMessage }}</span>
+
+      </v-tooltip>
+
     </template>
 
     <template v-slot:[`item.deploy`]="{ item }">
@@ -53,15 +65,35 @@
 
       </v-progress-circular>
 
-      <v-icon v-if="item.id && !item.isLoadingValue" small class="mr-2" @click="deployItem(item)">mdi-rocket-launch</v-icon>
+      <v-icon
+          :disabled="item.status && item.status==='DEPLOYED'"
+          v-if="item.id && !item.isLoadingValue"
+          class="mr-2"
+          @click="deployItem(item)"
+      >
+        mdi-rocket-launch
+      </v-icon>
+
     </template>
 
     <template v-slot:[`item.copy`]="{ item }">
-      <v-icon v-if="item.id" small @click="copyItem(item)">mdi-content-duplicate</v-icon>
-      <v-icon v-if="!item.id" small @click="createItem(item)">mdi-plus</v-icon>
+      <v-icon v-if="item.id" @click="copyItem(item)">mdi-content-duplicate</v-icon>
+      <v-icon v-if="!item.id" @click="createItem(item)">mdi-plus</v-icon>
+    </template>
+
+    <template v-slot:[`item.info`]="{ item }">
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon v-if="item.id" v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
+        </template>
+        <span>{{ item.id }}</span>
+      </v-tooltip>
+
     </template>
 
     <template v-slot:[`group.header`]="{items, isOpen, toggle}">
+
       <td :colspan="headers.length">
 
         <v-btn text @click="toggle">
@@ -113,7 +145,7 @@ export default {
       activePicker: null,
       headers: [
 
-        {text: 'Id', value: 'id', width: '150px'},
+        // {text: 'Id', value: 'id', width: '150px'},
         // {text: 'Name', value: 'name', width: '150px'},
 
         {text: 'Deploy', value: 'deploy', width: '50px', sortable: false},
@@ -131,6 +163,8 @@ export default {
         {text: 'FunctionId', value: 'functionId', width: '100px'},
 
         {text: 'Create', value: 'copy', width: '50px', sortable: false},
+
+        {text: 'Info', value: 'info', width: '50px', sortable: false},
 
       ],
 
@@ -248,7 +282,7 @@ export default {
       let step = message.step;
       let steps = message.steps;
       let status = message.status;
-      // let messageText = message.message;
+      let statusMessage = message.statusMessage;
 
       let value = step / steps * 100
 
@@ -258,13 +292,14 @@ export default {
           .filter(fd => fd.id === id)
           .forEach(fd => {
             this.$set(fd, 'isLoadingValue', value)
-            if(value === 100){
+            if (value === 100) {
               // this.init()
               this.$set(fd, 'isLoadingValue', null)
             }
 
-            if(status){
+            if (status) {
               this.$set(fd, 'status', status)
+              this.$set(fd, 'statusMessage', statusMessage)
             }
 
           })

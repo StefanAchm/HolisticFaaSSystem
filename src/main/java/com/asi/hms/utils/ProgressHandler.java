@@ -51,7 +51,18 @@ public class ProgressHandler {
     }
 
     private void send(String message, int step) {
-        sessionService.sendMessage(new Message(this.progressObject.getId(), step, this.steps, message, this.progressObject.getStatus().toString()));
+
+        sessionService.sendMessage(
+                new Message(
+                        this.progressObject.getId(),
+                        step,
+                        this.steps,
+                        message,
+                        this.progressObject.getStatus().toString(),
+                        this.progressObject.getStatusMessage()
+                )
+        );
+
     }
 
 }

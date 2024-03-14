@@ -10,4 +10,6 @@ public interface ProgressObjectInterface {
 
     DeployStatus getStatus();
 
+    String getStatusMessage();
+
 }
