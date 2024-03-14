@@ -71,7 +71,9 @@ public class Function {
 
         function.setFilePath(Paths.get(dbFunction.getFilePath()));
 
-        function.setName(dbFunction.getName());
+        // TODO: setting a unique name for now, not sure if that is wanted!
+        function.setName(dbFunction.getName() + "-" + dbFunctionDeployment.getId());
+
         function.setMemory(dbFunctionDeployment.getMemory());
         function.setTimeoutSecs(dbFunctionDeployment.getTimeoutSecs());
         function.setHandler(dbFunctionDeployment.getHandler());
