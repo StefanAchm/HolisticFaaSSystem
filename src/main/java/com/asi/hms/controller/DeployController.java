@@ -3,6 +3,8 @@ package com.asi.hms.controller;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class DeployController {
 
         this.deployService.deploy(functionId, localOnly);
 
-        return ResponseEntity.ok("Function deployed");
+        return ResponseEntity.ok("Deploying function now");
 
     }
 

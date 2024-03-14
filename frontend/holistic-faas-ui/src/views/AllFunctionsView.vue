@@ -44,8 +44,16 @@
     </template>
 
     <template v-slot:[`item.deploy`]="{ item }">
-      <v-progress-circular v-if="item.isLoading" color="primary" indeterminate size="24"></v-progress-circular>
-      <v-icon v-if="item.id && !item.isLoading" small class="mr-2" @click="deployItem(item)">mdi-rocket-launch</v-icon>
+      <v-progress-circular
+          :value="item.isLoadingValue"
+          :rotate="-90"
+          v-if="item.isLoadingValue" color="primary"
+          size="24"
+      >
+
+      </v-progress-circular>
+
+      <v-icon v-if="item.id && !item.isLoadingValue" small class="mr-2" @click="deployItem(item)">mdi-rocket-launch</v-icon>
     </template>
 
     <template v-slot:[`item.copy`]="{ item }">
@@ -93,6 +101,8 @@ export default {
   data() {
     return {
 
+      socket: null,
+
       functionDeployments: [],
 
       editItem: new CloudFunction(),
@@ -103,7 +113,7 @@ export default {
       activePicker: null,
       headers: [
 
-          // {text: 'Id', value: 'id', width: '150px'},
+        {text: 'Id', value: 'id', width: '150px'},
         // {text: 'Name', value: 'name', width: '150px'},
 
         {text: 'Deploy', value: 'deploy', width: '50px', sortable: false},
@@ -128,6 +138,30 @@ export default {
   },
 
   methods: {
+
+    connectToWebSocket() {
+
+      this.socket = new WebSocket('ws://localhost:8080/hf/websocket');
+
+      this.socket.onopen = function (event) {
+        console.log('WebSocket is open now, event: ', event);
+      };
+
+      this.socket.onmessage = (event) => {
+        console.log('WebSocket message: ', event.data);
+        this.updateProgress(event.data)
+
+      };
+
+      this.socket.onerror = function (event) {
+        console.log('WebSocket error: ', event);
+      };
+
+      this.socket.onclose = function (event) {
+        console.log('WebSocket is closed now, event: ', event);
+      };
+
+    },
 
     init() {
 
@@ -165,8 +199,6 @@ export default {
 
     deployItem(item) {
 
-      this.$set(item, 'isLoading', true)
-
       axios.post(
           Properties.API_IP + "/deploy/deploy", null,
           {
@@ -178,7 +210,7 @@ export default {
           })
           .finally(() => {
             // item.loading = false
-            this.init()
+            // this.init()
           });
 
     },
@@ -198,16 +230,6 @@ export default {
     },
 
     getColor(status) {
-      /**
-       *
-       *     NONE,
-       *
-       *     STARTED,
-       *
-       *     FAILED,
-       *
-       *     DEPLOYED,
-       */
 
       if (status === 'DEPLOYED') {
         return 'green'
@@ -218,8 +240,40 @@ export default {
       } else {
         return 'grey'
       }
-    }
+    },
 
+
+    updateProgress(data) {
+
+      // Update progress of process component, depending on the message
+
+      let message = null
+      try {
+        message = JSON.parse(data);
+      } catch (e) {
+        return
+      }
+
+      let id = message.id;
+      let step = message.step;
+      let steps = message.steps;
+      // let messageText = message.message;
+
+      let value = step / steps * 100
+
+      console.log(message)
+
+      this.functionDeployments
+          .filter(fd => fd.id === id)
+          .forEach(fd => {
+            this.$set(fd, 'isLoadingValue', value)
+            if(value === 100){
+              // this.init()
+              this.$set(fd, 'isLoadingValue', null)
+            }
+          })
+
+    }
 
   },
 
@@ -227,7 +281,15 @@ export default {
 
   created() {
     this.init();
+    this.connectToWebSocket()
   },
+
+  beforeDestroy() {
+    if (this.socket) {
+      this.socket.close();
+    }
+
+  }
 
 }
 

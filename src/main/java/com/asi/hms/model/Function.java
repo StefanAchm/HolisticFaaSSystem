@@ -8,11 +8,14 @@ import com.asi.hms.utils.FileUtil;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import static com.asi.hms.enums.Provider.AWS;
 import static com.asi.hms.enums.Provider.GCP;
 
 public class Function {
+
+    private UUID id;
 
     /**
      * The source of the function. <br>
@@ -64,6 +67,8 @@ public class Function {
 
         Function function = new Function();
 
+        function.setId(dbFunction.getId());
+
         function.setFilePath(Paths.get(dbFunction.getFilePath()));
 
         function.setName(dbFunction.getName());
@@ -86,6 +91,14 @@ public class Function {
 
         return function;
 
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Path getFilePath() {

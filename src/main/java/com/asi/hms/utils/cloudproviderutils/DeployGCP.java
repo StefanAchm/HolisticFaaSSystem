@@ -19,7 +19,7 @@ public class DeployGCP implements DeployInterface<UserGCP> {
     private static final Logger logger = LoggerFactory.getLogger(DeployGCP.class);
 
     @Override
-    public boolean deployFunction(Function function, UserGCP user) {
+    public boolean deployFunction(Function function, UserGCP user, MessageInterface messageInterface) {
 
         String bucketName = getBucketName(function);
 

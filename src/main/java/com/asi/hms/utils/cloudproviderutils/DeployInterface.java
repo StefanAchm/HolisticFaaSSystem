@@ -5,6 +5,6 @@ import com.asi.hms.model.UserInterface;
 
 public interface DeployInterface<U extends UserInterface> {
 
-    boolean deployFunction(Function function, U user);
+    boolean deployFunction(Function function, U user, MessageInterface messageInterface);
 
 }

@@ -2,6 +2,7 @@ package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.Function;
+import com.asi.hms.model.Message;
 import com.asi.hms.model.UserAWS;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -22,19 +23,21 @@ public class DeployAWS implements DeployInterface<UserAWS> {
 
     private static final Logger logger = LoggerFactory.getLogger(DeployAWS.class);
 
+    private static final int STEPS = 7;
+
     @Override
-    public boolean deployFunction(Function function, UserAWS user) {
+    public boolean deployFunction(Function function, UserAWS user, MessageInterface messageInterface) {
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
 
-        logger.info("Created AWS credentials");
+        messageInterface.sendMessage(new Message(function.getId(), 1, STEPS, "Created AWS credentials"));
 
         LambdaClient awsLambda = LambdaClient.builder()
                 .region(Region.of(function.getRegion().getRegionName()))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 
-        logger.info("Created AWS Lambda client");
+        messageInterface.sendMessage(new Message(function.getId(), 2, STEPS, "Created AWS Lambda client"));
 
         try {
 
@@ -47,7 +50,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .zipFile(fileToUpload)
                     .build();
 
-            logger.info("Created function code");
+            messageInterface.sendMessage(new Message(function.getId(), 3, STEPS, "Created function code"));
 
             CreateFunctionRequest functionRequest = CreateFunctionRequest.builder()
                     .functionName(function.getName())
@@ -59,9 +62,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds
                     .build();
 
-            logger.info("Created function request");
-
-            logger.info("Creating function (this may take a while)");
+            messageInterface.sendMessage(new Message(function.getId(), 4, STEPS, "Created function request, creating function now (this may take a while)"));
 
             // Create a Lambda function using a waiter
             CreateFunctionResponse functionResponse = awsLambda.createFunction(functionRequest);
@@ -70,21 +71,25 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .functionName(function.getName())
                     .build();
 
-            logger.info("Created function response");
+            messageInterface.sendMessage(new Message(function.getId(), 5, STEPS, "Created function response"));
 
             WaiterResponse<GetFunctionResponse> waiterResponse = waiter.waitUntilFunctionExists(getFunctionRequest);
-            waiterResponse.matched().response()
-                    .ifPresent(l -> logger.info("Function created with arn: {}", functionResponse.functionArn()));
+            waiterResponse
+                    .matched()
+                    .response()
+                    .ifPresent(l -> messageInterface.sendMessage(new Message(function.getId(), 6, STEPS, "Function created with arn:" + functionResponse.functionArn())));
+
+            messageInterface.sendMessage(new Message(function.getId(), 7, STEPS, "Function created"));
+
+            awsLambda.close();
 
         } catch (LambdaException | IOException e) {
+
+            messageInterface.sendMessage(new Message(function.getId(), STEPS, STEPS, "Failed to create function: " + e.getMessage()));
 
             throw new HolisticFaaSException(e);
 
         }
-
-        logger.info("Closing AWS Lambda client");
-
-        awsLambda.close();
 
         return true;
 
