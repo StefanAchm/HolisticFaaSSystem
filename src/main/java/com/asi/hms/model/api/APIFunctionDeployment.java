@@ -11,7 +11,6 @@ public class APIFunctionDeployment {
 
     private Provider provider;
 
-    private String name;
     private Integer memory;
     private Integer timeoutSecs;
     private String handler;
@@ -55,14 +54,6 @@ public class APIFunctionDeployment {
 
     public void setProvider(Provider provider) {
         this.provider = provider;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getMemory() {

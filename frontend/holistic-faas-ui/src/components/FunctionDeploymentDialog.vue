@@ -1,16 +1,20 @@
 <template>
 
 
-  <v-dialog v-model="dialog" max-width="500px">
-
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Add Function Deployment</v-btn>
-    </template>
+  <v-dialog v-model="dialogVisible" max-width="500px">
 
     <v-card>
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
       </v-card-title>
+
+<!--      Add some spacing between the two titles-->
+
+      <v-spacer></v-spacer>
+
+      <v-card-subtitle>
+        <span class="text-h7">{{ formSubtitle }}</span>
+      </v-card-subtitle>
 
       <v-card-text>
         <v-container>
@@ -20,7 +24,7 @@
             <v-col>
 
               <v-select
-                  v-model="editedItem.provider"
+                  v-model="editItem.provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
@@ -36,7 +40,7 @@
             <v-col>
 
               <v-select
-                  v-model="editedItem.userName"
+                  v-model="editItem.userName"
                   :items="users"
                   item-text="title"
                   item-value="value"
@@ -48,53 +52,54 @@
 
           </v-row>
 
+<!--          <v-row>-->
+
+<!--            <v-col>-->
+
+<!--              <v-select-->
+<!--                  v-model="editItem.functionId"-->
+<!--                  :items="functions"-->
+<!--                  :disabled=true-->
+<!--                  item-text="title"-->
+<!--                  item-value="value"-->
+<!--                  label="Function"-->
+<!--              ></v-select>-->
+
+<!--            </v-col>-->
+
+<!--          </v-row>-->
+
+
+          <v-row>
+
+            <v-col>
+              <v-text-field v-model="editItem.memory" label="Memory"></v-text-field>
+            </v-col>
+
+          </v-row>
+
+          <v-row>
+
+            <v-col>
+              <v-text-field v-model="editItem.timeoutSecs" label="TimeoutSecs"></v-text-field>
+            </v-col>
+
+          </v-row>
+
+          <v-row>
+
+            <v-col>
+              <v-text-field v-model="editItem.handler" label="Handler"></v-text-field>
+            </v-col>
+
+          </v-row>
+
           <v-row>
 
             <v-col>
 
               <v-select
-                  v-model="editedItem.functionId"
-                  :items="functions"
-                  item-text="title"
-                  item-value="value"
-                  label="Function"
-              ></v-select>
-
-            </v-col>
-
-          </v-row>
-
-
-          <v-row>
-
-            <v-col>
-              <v-text-field v-model="editedItem.memory" label="Memory"></v-text-field>
-            </v-col>
-
-          </v-row>
-
-          <v-row>
-
-            <v-col>
-              <v-text-field v-model="editedItem.timeoutSecs" label="TimeoutSecs"></v-text-field>
-            </v-col>
-
-          </v-row>
-
-          <v-row>
-
-            <v-col>
-              <v-text-field v-model="editedItem.handler" label="Handler"></v-text-field>
-            </v-col>
-
-          </v-row>
-
-          <v-row>
-
-            <v-col>
-
-              <v-select
-                  v-model="editedItem.region"
+                  v-model="editItem.region"
                   :items="regions"
                   item-text="title"
                   item-value="value"
@@ -111,7 +116,7 @@
             <v-col>
 
               <v-select
-                  v-model="editedItem.runtime"
+                  v-model="editItem.runtime"
                   :items="runtimes"
                   item-text="title"
                   item-value="value"
@@ -145,72 +150,46 @@ import {Properties} from "@/config";
 
 import common from '../common'
 
+import {CloudFunction} from "@/models/CloudFunction";
+
 export default {
 
   mixins: [common],
 
+  props: {
+    dialog: Boolean,
+    itemprop: CloudFunction,
+  },
+
   data() {
+
     return {
-      dialog: false,
+
       dialogDelete: false,
-      editedIndex: -1,
       currentFile: null,
-      editedItem: {
-        provider: '',
-        memory: '',
-        timeoutSecs: '',
-        handler: '',
-        region: '',
-        runtime: '',
-        userName: '',
-        functionId: ''
-      },
-      defaultItem: {
-        provider: '',
-        memory: '',
-        timeoutSecs: '',
-        handler: '',
-        region: '',
-        runtime: '',
-        userName: '',
-        functionId: ''
-      },
+
       menu: false,
       activePicker: null,
-      headers: [
-        // {text: 'Id', value: 'id', width: '150px'},
-        // {text: 'Name', value: 'name', width: '150px'},
-        {text: 'Provider', value: 'provider', width: '100px'},
-        {text: 'Memory', value: 'memory', width: '100px'},
-        {text: 'TimeoutSecs', value: 'timeoutSecs', width: '100px'},
-        {text: 'Handler', value: 'handler', width: '100px'},
-        {text: 'Region', value: 'region', width: '100px'},
-        {text: 'Runtime', value: 'runtime', width: '100px'},
 
-        // Linked:
-        {text: 'UserName', value: 'userName', width: '100px'},
-        {text: 'FunctionId', value: 'functionId', width: '100px'},
-
-        {text: 'Deploy', value: 'deploy', width: '50px', sortable: false},
-        {text: 'Copy', value: 'copy', width: '50px', sortable: false}
-
-      ],
       users: [],
       allUsers: [],
+
       functions: [],
       allFunctions: [],
+
       providerOptions: [],
+
       runtimes: [],
+
       regions: []
+
     }
   },
 
   watch: {
 
-    editedItem: {
+    editItem: {
       handler(newValue) {
-
-        // console.log(newValue)
 
         // Filter users by provider
         // Create a new array with the filtered users for select
@@ -257,7 +236,6 @@ export default {
             })
 
 
-
       },
       deep: true
 
@@ -290,19 +268,16 @@ export default {
     },
 
     close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.init()
-      })
+      this.dialogVisible = false
     },
-
 
 
     upload() {
 
-      axios.post(Properties.API_IP + "/deploy/add", JSON.stringify(this.editedItem), {headers: {'Content-Type': 'application/json'}})
+      axios.post(
+          Properties.API_IP + "/deploy/add",
+          JSON.stringify(this.editItem),
+          {headers: {'Content-Type': 'application/json'}})
           .then(response => {
             console.log(response)
           })
@@ -312,13 +287,36 @@ export default {
 
     }
 
-
   },
 
   computed: {
+
     formTitle() {
-      return this.editedIndex === -1 ? 'New' : 'Edit'
+      return 'Create Deployment'
     },
+
+    formSubtitle() {
+      return 'Function: ' +  this.editItem.functionName
+    },
+
+    dialogVisible: {
+      get() {
+        return this.dialog
+      },
+      set(value) {
+        this.$emit('update:dialog', value)
+      }
+    },
+
+    editItem: {
+      get() {
+        return this.itemprop ? this.itemprop : new CloudFunction()
+      },
+      set(value) {
+        this.$emit('update:itemProp', value)
+      }
+    }
+
   },
 
   created() {
