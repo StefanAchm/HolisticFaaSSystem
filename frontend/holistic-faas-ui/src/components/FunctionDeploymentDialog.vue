@@ -267,8 +267,9 @@ export default {
 
     },
 
-    close() {
+    close(cf) {
       this.dialogVisible = false
+      this.$emit('dialog-closed', cf)
     },
 
 
@@ -282,7 +283,7 @@ export default {
             console.log(response)
           })
           .finally(() => {
-            this.close();
+            this.close(this.editItem);
           });
 
     }

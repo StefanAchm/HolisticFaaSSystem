@@ -17,6 +17,7 @@
         <FunctionDialog/>
         <FunctionDeploymentDialog
             :dialog.sync="dialogVisible"
+            @dialog-closed="init()"
             :itemprop="editItem"/>
 
 <!--        <v-dialog v-model="dialogDelete" max-width="500px">-->
