@@ -1,12 +1,6 @@
 
 # Holistic FaaS Management System
 
-## Urls
-
-- [Server](http://localhost:8080/hf)
-- [Swagger](http://localhost:8080/hf/swagger-ui/#/)
-- [Client](http://localhost:8081)
-
 
 ## Setup
 
@@ -25,7 +19,3 @@
 4. Open the project in your favorite IDE (e.g. IntelliJ IDEA, Eclipse, etc.)
 5. Run the gradle project with the `bootRun` task
 6. The server will start on [http://localhost:8080/hf](http://localhost:8080/hf)
-
-### Client
-
-See [README.md](frontend/holistic-faas-ui/README.md)

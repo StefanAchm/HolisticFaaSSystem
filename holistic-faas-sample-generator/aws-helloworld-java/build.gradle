@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.asi'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+/**
+ * This build configuration produces a deployment package in the build/distributions directory.
+ * https://docs.aws.amazon.com/lambda/latest/dg/java-package.html#java-package-gradle
+ */
+task buildZip(type: Zip) {
+    into('lib') {
+        from jar
+        from configurations.runtimeClasspath
+    }
+}
+
+dependencies {
+
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+//    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.468'
+
+    runtimeOnly 'software.amazon.awssdk:bom:2.20.65'
+
+    implementation 'software.amazon.awssdk:dynamodb-enhanced:2.20.65'
+
+    implementation 'software.amazon.awssdk:auth:2.20.65'
+
+    implementation 'software.amazon.awssdk:http-client-spi:2.20.65'
+    implementation 'software.amazon.awssdk:url-connection-client:2.0.1'
+    implementation 'software.amazon.awssdk:lambda:2.20.65'
+
+
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+}
+
+test {
+    useJUnitPlatform()
+}

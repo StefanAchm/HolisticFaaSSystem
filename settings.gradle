@@ -3,3 +3,11 @@ rootProject.name = 'HolisticFaaS'
 
 include 'holistic-faas-management-system'
 project(':holistic-faas-management-system').projectDir = file('holistic-faas-management-system')
+
+
+include 'gcp-helloworld-java'
+project(':gcp-helloworld-java').projectDir = file('holistic-faas-sample-generator/gcp-helloworld-java')
+
+include 'aws-helloworld-java'
+project(':aws-helloworld-java').projectDir = file('holistic-faas-sample-generator/aws-helloworld-java')
+
