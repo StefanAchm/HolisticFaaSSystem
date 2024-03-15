@@ -1,5 +1,6 @@
 package com.asi.hms.model.api;
 
+import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.enums.Provider;
 import com.asi.hms.model.db.DBFunctionDeployment;
 
@@ -11,12 +12,13 @@ public class APIFunctionDeployment {
 
     private Provider provider;
 
-    private String name;
     private Integer memory;
     private Integer timeoutSecs;
     private String handler;
     private String region;
     private String runtime;
+    private DeployStatus status;
+    private String statusMessage;
 
     private String userName;
     private UUID functionId;
@@ -32,6 +34,8 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setHandler(dbFunctionDeployment.getHandler());
         apiFunctionDeployment.setRegion(dbFunctionDeployment.getRegion());
         apiFunctionDeployment.setRuntime(dbFunctionDeployment.getRuntime());
+        apiFunctionDeployment.setStatus(dbFunctionDeployment.getStatus());
+        apiFunctionDeployment.setStatusMessage(dbFunctionDeployment.getStatusMessage());
 
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionId(dbFunctionDeployment.getFunction().getId());
@@ -55,14 +59,6 @@ public class APIFunctionDeployment {
 
     public void setProvider(Provider provider) {
         this.provider = provider;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getMemory() {
@@ -119,5 +115,21 @@ public class APIFunctionDeployment {
 
     public void setFunctionId(UUID functionId) {
         this.functionId = functionId;
+    }
+
+    public DeployStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeployStatus status) {
+        this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
     }
 }

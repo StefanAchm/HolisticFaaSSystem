@@ -3,6 +3,8 @@ package com.asi.hms.controller;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.service.DeployService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +27,18 @@ public class DeployController {
     }
 
     @PostMapping(value = "/deploy")
-    public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
+    public ResponseEntity<String> deploy(@RequestParam UUID functionId, @RequestParam boolean localOnly) {
 
-        this.deployService.deploy(functionId);
+        this.deployService.deploy(functionId, localOnly);
 
-        return ResponseEntity.ok("Function deployed");
+        return ResponseEntity.ok("Deploying function now");
+
+    }
+
+    @GetMapping(value = "/get")
+    public ResponseEntity<APIFunctionDeployment> getFunctionDeployment(@RequestParam UUID functionId) {
+
+        return ResponseEntity.ok(this.deployService.getFunctionDeployment(functionId));
 
     }
 

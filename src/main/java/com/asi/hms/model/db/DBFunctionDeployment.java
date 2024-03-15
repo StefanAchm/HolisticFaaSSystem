@@ -1,11 +1,16 @@
 package com.asi.hms.model.db;
 
+import com.asi.hms.enums.DeployStatus;
+
 import javax.persistence.*;
 import java.util.UUID;
 
+/**
+ * TODO: Add time of deployment
+ */
 @Entity
 @Table(name = "function_deployments")
-public class DBFunctionDeployment {
+public class DBFunctionDeployment implements ProgressObjectInterface {
 
     @Id
     @GeneratedValue
@@ -19,6 +24,11 @@ public class DBFunctionDeployment {
     private String region;
     private String runtime;
 
+    @Enumerated(EnumType.STRING)
+    private DeployStatus status;
+
+    private String statusMessage;
+
     @ManyToOne
     @JoinColumn(name = "function_id")
     private DBFunction function;
@@ -26,6 +36,10 @@ public class DBFunctionDeployment {
     @ManyToOne
     @JoinColumn(name = "user_username")
     private DBUser user;
+
+    public DBFunctionDeployment() {
+        this.status = DeployStatus.CREATED;
+    }
 
     public UUID getId() {
         return id;
@@ -95,4 +109,19 @@ public class DBFunctionDeployment {
         this.user = user;
     }
 
+    public DeployStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeployStatus status) {
+        this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
 }

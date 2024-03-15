@@ -1,6 +1,5 @@
 package com.asi.hms.components;
 
-import com.asi.hms.controller.FunctionController;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
