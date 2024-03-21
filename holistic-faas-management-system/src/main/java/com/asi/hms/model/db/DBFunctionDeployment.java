@@ -27,6 +27,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     @Enumerated(EnumType.STRING)
     private DeployStatus status;
 
+    @Column(columnDefinition = "TEXT")
     private String statusMessage;
 
     @ManyToOne
