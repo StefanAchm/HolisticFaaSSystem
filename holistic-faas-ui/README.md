@@ -1,4 +1,4 @@
-# holistic-faas-ui
+# Holistic FaaS User Interface
 
 ## Project setup
 ```

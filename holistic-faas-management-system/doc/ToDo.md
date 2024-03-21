@@ -5,8 +5,10 @@
 
 - [ ] User adds credentials to the HMS
   - [ ] AWS
+    - [x] Basic functionality 
     - [ ] Check Role ARN (does this need to be created by the user or the HMS can create it?)
   - [ ] GCP
+    - [x] Basic functionality
     - [ ] Check Service Account (is this the right way to do it?)
   - [ ] Other
 - [ ] Credentials handling (where to store, so that this is secure)
