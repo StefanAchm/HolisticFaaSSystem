@@ -14,25 +14,24 @@
 
     <v-navigation-drawer
         app
-        :mini-variant.sync="mini"
         permanent
     >
 
-      <template v-slot:append>
-        <v-list-item class="px-2">
+<!--      <template v-slot:append>-->
+<!--        <v-list-item class="px-2">-->
 
-          <v-btn
-              icon
-              @click.stop="mini = !mini"
-          >
-            <v-icon v-if="!mini">mdi-chevron-left</v-icon>
-            <v-icon v-if="mini">mdi-chevron-right</v-icon>
+<!--          <v-btn-->
+<!--              icon-->
+<!--              @click.stop="mini = !mini"-->
+<!--          >-->
+<!--            <v-icon v-if="!mini">mdi-chevron-left</v-icon>-->
+<!--            <v-icon v-if="mini">mdi-chevron-right</v-icon>-->
 
-          </v-btn>
+<!--          </v-btn>-->
 
-        </v-list-item>
+<!--        </v-list-item>-->
 
-      </template>
+<!--      </template>-->
 
       <v-list-item>
         <v-list-item-content>
@@ -40,7 +39,7 @@
             Holistic FaaS
           </v-list-item-title>
           <v-list-item-subtitle>
-            by UIBK
+            Management System
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

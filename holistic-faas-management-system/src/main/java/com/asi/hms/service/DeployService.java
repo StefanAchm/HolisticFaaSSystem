@@ -92,9 +92,8 @@ public class DeployService {
 
         DBFunctionDeployment dbFunctionDeployment = byId.get();
 
-        Function function = Function.fromDbFunction(dbFunctionDeployment);
-
         dbFunctionDeployment.setStatus(DeployStatus.STARTED);
+        dbFunctionDeployment.setStatusMessage("Deployment started");
         this.functionDeploymentRepository.save(dbFunctionDeployment);
 
         // TODO: Define steps dynamically
@@ -107,6 +106,7 @@ public class DeployService {
 
             if(!localOnly) {
 
+                Function function = Function.fromDbFunction(dbFunctionDeployment);
                 success = deploy(dbFunctionDeployment, function, progressHandler);
 
             } else {

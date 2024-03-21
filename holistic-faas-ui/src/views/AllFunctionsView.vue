@@ -39,11 +39,18 @@
 
     </template>
 
+
+    <!--        <template v-slot:[`item`]="{ item }">-->
+    <!--          <tr v-if="!item.id">-->
+    <!--            <td colspan="100%">No data</td> &lt;!&ndash; Adjust the colspan as needed &ndash;&gt;-->
+    <!--          </tr>-->
+    <!--      -->
+    <!--        </template>-->
+
     <template v-slot:[`item.status`]="{ item }">
 
-      <v-tooltip
-          bottom
-      >
+      <v-tooltip bottom>
+
         <template v-slot:activator="{ on, attrs }">
 
           <v-icon
@@ -65,14 +72,15 @@
 
     <template v-slot:[`item.deploy`]="{ item }">
 
+
       <v-progress-circular
           :value="item.isLoadingValue"
+          v-bind="props"
           :rotate="-90"
-          v-if="item.isLoadingValue" color="primary"
+          v-if="item.isLoadingValue"
+          color="primary"
           size="24"
-      >
-
-      </v-progress-circular>
+      />
 
       <v-icon
           :disabled="item.status && item.status==='DEPLOYED'"
@@ -87,8 +95,8 @@
 
     <template v-slot:[`item.copy`]="{ item }">
       <v-icon v-if="item.id" @click="copyItem(item)">mdi-content-duplicate</v-icon>
-      <v-icon v-if="!item.id" @click="createItem(item)">mdi-plus</v-icon>
     </template>
+
 
     <template v-slot:[`item.info`]="{ item }">
 
@@ -108,6 +116,17 @@
         <v-btn text @click="toggle">
           <v-icon>{{ isOpen ? 'mdi-menu-down' : 'mdi-menu-up' }}</v-icon>
           Function:<span style="font-weight: normal "> {{ items[0].functionName }} </span>
+        </v-btn>
+
+        <!--        <v-spacer></v-spacer>-->
+
+        <v-btn
+            color="primary"
+            class="mx-2"
+            v-if="!items[0].id"
+            @click="createItem(items[0])"
+        >
+          Add Function deployment
         </v-btn>
 
       </td>
@@ -173,7 +192,7 @@ export default {
         {text: 'UserName', value: 'userName', width: '100px'},
         {text: 'FunctionId', value: 'functionId', width: '100px'},
 
-        {text: 'Create', value: 'copy', width: '50px', sortable: false},
+        {text: 'Copy', value: 'copy', width: '50px', sortable: false},
 
         {text: 'Info', value: 'info', width: '50px', sortable: false},
 
@@ -269,7 +288,10 @@ export default {
       if (status === 'DEPLOYED') {
         return 'mdi-check-circle-outline'
       } else if (status === 'FAILED') {
-        return 'mdi-alert-octagon-outline'
+        // return 'mdi-alert-octagon-outline'
+        return 'mdi-alert-circle-outline'
+      } else if (status === 'STARTED') {
+        return 'mdi-progress-upload'
       } else {
         return ''
       }
@@ -281,6 +303,8 @@ export default {
         return 'green'
       } else if (status === 'FAILED') {
         return 'red'
+      } else if (status === 'STARTED') {
+        return 'blue'
       } else {
         return ''
       }
@@ -303,6 +327,7 @@ export default {
       let steps = message.steps;
       let status = message.status;
       let statusMessage = message.statusMessage;
+      let text = message.text;
 
       let value = step / steps * 100
 
@@ -319,9 +344,12 @@ export default {
 
             if (status) {
               this.$set(fd, 'status', status)
-              console.log('status: ', status)
-              this.$set(fd, 'statusMessage', statusMessage)
-              console.log('statusMessage: ', statusMessage)
+
+              if (status === 'STARTED') {
+                this.$set(fd, 'statusMessage', text)
+              } else {
+                this.$set(fd, 'statusMessage', statusMessage)
+              }
             }
 
           })
