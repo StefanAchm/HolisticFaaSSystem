@@ -19,3 +19,9 @@ VALUES ('69818a72-6c51-4502-9c1a-1052135a115e', 'holistic-faas-management-system
 
 INSERT INTO hf.public.functions (id, file_path, name)
 VALUES ('f69d7424-0390-477c-93d8-6250881166fc', 'holistic-faas-management-system\src\main\resources\zips\gcp-helloworld-java-1.0-SNAPSHOT.zip', 'HelloWorld-gcp');
+
+---------------------------------------
+-- MULTI
+
+INSERT INTO hf.public.functions (id, file_path, name)
+VALUES ('4799c5aa-53ac-49ef-a8e6-112d953e31cd', 'holistic-faas-management-system\src\main\resources\zips\multi-helloworld-java-1.0-SNAPSHOT.zip', 'HelloWorld-multi');

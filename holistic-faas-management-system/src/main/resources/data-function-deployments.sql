@@ -49,3 +49,16 @@ INSERT INTO hf.public.function_deployments (id, status, handler, memory, provide
                                             function_id)
 VALUES ('3a850814-053a-4cb7-8310-3ae1b1d6af21', 'CREATED', 'com.asi.hsg.HelloWorldHandler', 128, 'GCP', 'US_WEST1', 'JAVA_17', 3,
         'Stefan GCP', 'f69d7424-0390-477c-93d8-6250881166fc');
+
+---------------------------------------
+-- Multi
+
+INSERT INTO hf.public.function_deployments (id, status, handler, memory, provider, region, runtime, timeout_secs, user_username,
+                                            function_id)
+VALUES ('e4975216-ea14-4c77-9771-f656294801c7', 'CREATED', 'com.asi.hsg.HelloWorldHandler', 128, 'GCP', 'US_WEST1', 'JAVA_17', 3,
+        'Stefan GCP', '4799c5aa-53ac-49ef-a8e6-112d953e31cd');
+
+INSERT INTO hf.public.function_deployments (id, status, handler, memory, provider, region, runtime, timeout_secs, user_username,
+                                            function_id)
+VALUES ('ca562d0f-26d2-4821-83e4-e8deeb92eba4', 'CREATED', 'com.asi.hsg.HelloWorldHandler::handleRequest', 128, 'AWS', 'US_WEST_1', 'JAVA_17', 3,
+        'Stefan AWS', '4799c5aa-53ac-49ef-a8e6-112d953e31cd');
