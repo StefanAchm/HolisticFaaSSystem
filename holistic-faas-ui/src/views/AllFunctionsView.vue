@@ -139,15 +139,14 @@
 
 <script>
 
-import axios from "axios";
-import {Properties} from "@/config";
-
-import common from '../common'
+import common from '../utils/common'
 
 import FunctionDialog from "@/components/FunctionDialog";
 import FunctionDeploymentDialog from "@/components/FunctionDeploymentDialog";
 
 import {CloudFunction} from "@/models/CloudFunction";
+
+import HfApi from "@/utils/hf-api";
 
 export default {
 
@@ -228,8 +227,7 @@ export default {
 
     init() {
 
-      axios
-          .get(Properties.API_IP + '/function/getAll')
+      HfApi.getAllFunctions()
           .then(response => {
 
             this.functionDeployments = []
@@ -260,12 +258,7 @@ export default {
 
     deployItem(item) {
 
-      axios.post(
-          Properties.API_IP + "/deploy/deploy", null,
-          {
-            headers: {'Content-Type': 'application/json'},
-            params: {functionId: item.id, localOnly: false} // TODO: set localOnly to false
-          })
+      HfApi.deployFunctionDeploy(item.id)
 
     },
 

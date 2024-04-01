@@ -8,7 +8,7 @@
         <span class="text-h5">{{ formTitle }}</span>
       </v-card-title>
 
-<!--      Add some spacing between the two titles-->
+      <!--      Add some spacing between the two titles-->
 
       <v-spacer></v-spacer>
 
@@ -52,22 +52,22 @@
 
           </v-row>
 
-<!--          <v-row>-->
+          <!--          <v-row>-->
 
-<!--            <v-col>-->
+          <!--            <v-col>-->
 
-<!--              <v-select-->
-<!--                  v-model="editItem.functionId"-->
-<!--                  :items="functions"-->
-<!--                  :disabled=true-->
-<!--                  item-text="title"-->
-<!--                  item-value="value"-->
-<!--                  label="Function"-->
-<!--              ></v-select>-->
+          <!--              <v-select-->
+          <!--                  v-model="editItem.functionId"-->
+          <!--                  :items="functions"-->
+          <!--                  :disabled=true-->
+          <!--                  item-text="title"-->
+          <!--                  item-value="value"-->
+          <!--                  label="Function"-->
+          <!--              ></v-select>-->
 
-<!--            </v-col>-->
+          <!--            </v-col>-->
 
-<!--          </v-row>-->
+          <!--          </v-row>-->
 
 
           <v-row>
@@ -144,13 +144,11 @@
 
 <script>
 
-
-import axios from "axios";
-import {Properties} from "@/config";
-
-import common from '../common'
+import common from '../utils/common'
 
 import {CloudFunction} from "@/models/CloudFunction";
+
+import HfApi from "@/utils/hf-api";
 
 export default {
 
@@ -247,20 +245,17 @@ export default {
 
     init() {
 
-      axios
-          .get(Properties.API_IP + '/user/getAll')
+      HfApi.getAllUsers()
           .then(response => {
             this.allUsers = response.data;
           })
 
-      axios
-          .get(Properties.API_IP + '/function/getAll')
+      HfApi.getAllFunctions()
           .then(response => {
             this.allFunctions = response.data;
           })
 
-      axios
-          .get(Properties.API_IP + '/provider/getProviderOptions')
+      HfApi.getProviderOptions()
           .then(response => {
             this.providerOptions = response.data;
           })
@@ -275,13 +270,7 @@ export default {
 
     upload() {
 
-      axios.post(
-          Properties.API_IP + "/deploy/add",
-          JSON.stringify(this.editItem),
-          {headers: {'Content-Type': 'application/json'}})
-          .then(response => {
-            console.log(response)
-          })
+      HfApi.deployFunction(this.editItem)
           .finally(() => {
             this.close(this.editItem);
           });
@@ -297,7 +286,7 @@ export default {
     },
 
     formSubtitle() {
-      return 'Function: ' +  this.editItem.functionName
+      return 'Function: ' + this.editItem.functionName
     },
 
     dialogVisible: {

@@ -74,8 +74,7 @@
 
 <script>
 
-import axios from "axios";
-import {Properties} from "@/config";
+import HfApi from "@/utils/hf-api";
 
 export default {
 
@@ -105,15 +104,12 @@ export default {
   methods: {
 
     init() {
-      axios
-          .get(Properties.API_IP + '/function/getAll')
+
+      HfApi.getAllFunctions()
           .then(response => {
-
             this.functions = response.data;
-
-            console.log(this.functions)
-
           })
+
     },
 
     selectFile(file) {
@@ -144,23 +140,12 @@ export default {
 
     upload() {
 
-      let formData = new FormData();
-
-      formData.append('file', this.currentFile);
-
-      // Have to use Blob to send JSON as a file
-      formData.append('apiFunction', new Blob([JSON.stringify(this.editedItem)], {type : 'application/json'}));
-
-      axios.post(Properties.API_IP + "/function/upload", formData)
-          .then(response => {
-            console.log(response)
-          })
+      HfApi.uploadFunction(this.currentFile, this.editedItem)
           .finally(() => {
             this.close();
           });
 
     }
-
 
   },
 

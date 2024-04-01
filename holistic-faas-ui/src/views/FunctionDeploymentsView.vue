@@ -102,13 +102,13 @@
 
                   <v-col>
 
-                  <v-select
-                      v-model="editedItem.region"
-                      :items="regions"
-                      item-text="title"
-                      item-value="value"
-                      label="Region"
-                  ></v-select>
+                    <v-select
+                        v-model="editedItem.region"
+                        :items="regions"
+                        item-text="title"
+                        item-value="value"
+                        label="Region"
+                    ></v-select>
 
 
                   </v-col>
@@ -172,10 +172,9 @@
 
 <script>
 
-import axios from "axios";
-import {Properties} from "@/config";
+import common from '../utils/common'
 
-import common from '../common'
+import HfApi from "@/utils/hf-api";
 
 export default {
 
@@ -290,7 +289,6 @@ export default {
             })
 
 
-
       },
       deep: true
 
@@ -302,26 +300,23 @@ export default {
 
     init() {
 
-      axios
-          .get(Properties.API_IP + '/deploy/getAll')
+      HfApi.getAllDeployments()
           .then(response => {
             this.functionDeployments = response.data;
           })
 
-      axios
-          .get(Properties.API_IP + '/user/getAll')
+
+      HfApi.getAllUsers()
           .then(response => {
             this.allUsers = response.data;
           })
 
-      axios
-          .get(Properties.API_IP + '/function/getAll')
+      HfApi.getAllFunctions()
           .then(response => {
             this.allFunctions = response.data;
           })
 
-      axios
-          .get(Properties.API_IP + '/provider/getProviderOptions')
+      HfApi.getProviderOptions()
           .then(response => {
             this.providerOptions = response.data;
           })
@@ -349,13 +344,12 @@ export default {
     },
 
     deployItem(item) {
-      axios.post(Properties.API_IP + "/deploy/deploy", null, {headers: {'Content-Type': 'application/json'}, params: {functionId: item.id}})
-          .then(response => {
-            console.log(response)
-          })
+
+      HfApi.deployFunctionDeploy(item.id)
           .finally(() => {
             this.close();
           });
+
     },
 
     copyItem(item) {
@@ -365,16 +359,12 @@ export default {
 
     upload() {
 
-      axios.post(Properties.API_IP + "/deploy/add", JSON.stringify(this.editedItem), {headers: {'Content-Type': 'application/json'}})
-          .then(response => {
-            console.log(response)
-          })
+      HfApi.deployFunction(this.editedItem)
           .finally(() => {
             this.close();
           });
 
     }
-
 
   },
 
