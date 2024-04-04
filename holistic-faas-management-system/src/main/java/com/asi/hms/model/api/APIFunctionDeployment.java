@@ -21,7 +21,7 @@ public class APIFunctionDeployment {
     private String statusMessage;
 
     private String userName;
-    private UUID functionId;
+    private UUID functionImplementationId;
 
     public static APIFunctionDeployment fromDBFunctionDeployment(DBFunctionDeployment dbFunctionDeployment) {
 
@@ -38,7 +38,7 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setStatusMessage(dbFunctionDeployment.getStatusMessage());
 
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
-        apiFunctionDeployment.setFunctionId(dbFunctionDeployment.getFunction().getId());
+        apiFunctionDeployment.setFunctionImplementationId(dbFunctionDeployment.getFunctionImplementation().getId());
 
         return apiFunctionDeployment;
 
@@ -109,12 +109,12 @@ public class APIFunctionDeployment {
         this.userName = userName;
     }
 
-    public UUID getFunctionId() {
-        return functionId;
+    public UUID getFunctionImplementationId() {
+        return functionImplementationId;
     }
 
-    public void setFunctionId(UUID functionId) {
-        this.functionId = functionId;
+    public void setFunctionImplementationId(UUID functionImplementationId) {
+        this.functionImplementationId = functionImplementationId;
     }
 
     public DeployStatus getStatus() {

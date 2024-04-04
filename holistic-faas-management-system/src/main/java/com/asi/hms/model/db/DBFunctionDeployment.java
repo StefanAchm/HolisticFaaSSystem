@@ -31,8 +31,8 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     private String statusMessage;
 
     @ManyToOne
-    @JoinColumn(name = "function_id")
-    private DBFunction function;
+    @JoinColumn(name = "function_implementation_id")
+    private DBFunctionImplementation functionImplementation;
 
     @ManyToOne
     @JoinColumn(name = "user_username")
@@ -94,12 +94,12 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
         this.runtime = runtime;
     }
 
-    public DBFunction getFunction() {
-        return function;
+    public DBFunctionImplementation getFunctionImplementation() {
+        return functionImplementation;
     }
 
-    public void setFunction(DBFunction function) {
-        this.function = function;
+    public void setFunctionImplementation(DBFunctionImplementation function) {
+        this.functionImplementation = function;
     }
 
     public DBUser getUser() {

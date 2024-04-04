@@ -11,31 +11,23 @@ const apiClient = axios.create({
 
 export default {
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Function type
 
-
-    getAllUsers() {
-        return apiClient.get('/user/getAll');
+    getAllFunctionTypes() {
+        return apiClient.get('/function_type/getAll');
     },
 
-    getAllFunctions() {
-        return apiClient.get('/function/getAll');
+    addFunctionType(functionType) {
+        return apiClient.post('/function_type/add', functionType);
     },
 
-    getProviderOptions() {
-        return apiClient.get('/provider/getProviderOptions');
-    },
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Function implementation
 
-    deployFunction(data) {
-        return apiClient.post('/deploy/add', data);
-    },
 
-    deployFunctionDeploy(id) {
-        // Properties.API_IP + "/deploy/deploy", null,
-        //           {
-        //             headers: {'Content-Type': 'application/json'},
-        //             params: {functionId: item.id, localOnly: false} // TODO: set localOnly to false
-        //           })
-        return apiClient.get('/deploy/deploy/' + id);
+    getAllFunctionImplementations() {
+        return apiClient.get('/function_implementation/getAll');
     },
 
     uploadFunction(file, data) {
@@ -45,12 +37,36 @@ export default {
         formData.append('file', file);
         formData.append('apiFunction', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
-        return apiClient.post('/function/upload', formData, {
+        return apiClient.post('/function_implementation/add', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
 
+    },
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Function deployment
+
+    deployFunction(data) {
+        return apiClient.post('/function_deployment/add', data);
+    },
+
+    deployFunctionDeploy(id) {
+        // Properties.API_IP + "/deploy/deploy", null,
+        //           {
+        //             headers: {'Content-Type': 'application/json'},
+        //             params: {functionId: item.id, localOnly: false} // TODO: set localOnly to false
+        //           })
+        return apiClient.get('/function_deployment/deploy/' + id);
+    },
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // User
+
+    getAllUsers() {
+        return apiClient.get('/user/getAll');
     },
 
     uploadUserCredentials(file, data) {
@@ -66,9 +82,21 @@ export default {
         });
     },
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Other
+
+    getProviderOptions() {
+        return apiClient.get('/provider/getProviderOptions');
+    },
+
+    getAllFunctions() {
+        return apiClient.get('/function/getAll');
+    },
+
+    // TODO: still needed?
     getAllDeployments() {
         return apiClient.get('/deploy/getAll');
     },
-
 
 }

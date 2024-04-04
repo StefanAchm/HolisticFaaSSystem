@@ -2,16 +2,13 @@ package com.asi.hms.model;
 
 import com.asi.hms.enums.*;
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.db.DBFunction;
+import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
-import com.asi.hms.utils.FileUtil;
+import com.asi.hms.model.db.DBFunctionType;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-
-import static com.asi.hms.enums.Provider.AWS;
-import static com.asi.hms.enums.Provider.GCP;
 
 public class Function {
 
@@ -63,16 +60,17 @@ public class Function {
 
     public static Function fromDbFunction(DBFunctionDeployment dbFunctionDeployment) {
 
-        DBFunction dbFunction = dbFunctionDeployment.getFunction();
+        DBFunctionImplementation dbFunctionImplementation = dbFunctionDeployment.getFunctionImplementation();
+        DBFunctionType dbFunctionType = dbFunctionImplementation.getFunctionType();
 
         Function function = new Function();
 
-        function.setId(dbFunction.getId());
+        function.setId(dbFunctionImplementation.getId());
 
-        function.setFilePath(Paths.get(dbFunction.getFilePath()));
+        function.setFilePath(Paths.get(dbFunctionImplementation.getFilePath()));
 
         // TODO: setting a unique name for now, not sure if that is wanted!
-        function.setName(dbFunction.getName() + "-" + dbFunctionDeployment.getId());
+        function.setName(dbFunctionType.getName() + "-" + dbFunctionDeployment.getId());
 
         function.setMemory(dbFunctionDeployment.getMemory());
         function.setTimeoutSecs(dbFunctionDeployment.getTimeoutSecs());

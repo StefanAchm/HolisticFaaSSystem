@@ -8,11 +8,11 @@ import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
 import com.asi.hms.model.UserInterface;
 import com.asi.hms.model.api.APIFunctionDeployment;
-import com.asi.hms.model.db.DBFunction;
+import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBUser;
 import com.asi.hms.repository.FunctionDeploymentRepository;
-import com.asi.hms.repository.FunctionRepository;
+import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.ProgressHandler;
 import com.asi.hms.utils.cloudproviderutils.DeployAWS;
@@ -30,23 +30,23 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class DeployService {
+public class FunctionDeploymentService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DeployService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FunctionDeploymentService.class);
 
     private final UserRepository userRepository;
-    private final FunctionRepository functionRepository;
+    private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionDeploymentRepository functionDeploymentRepository;
 
     private final WebSocketSessionService sessionService;
 
-    public DeployService(UserRepository userRepository,
-                         FunctionRepository functionRepository,
-                         FunctionDeploymentRepository functionDeploymentRepository,
-                         WebSocketSessionService sessionService) {
+    public FunctionDeploymentService(UserRepository userRepository,
+                                     FunctionImplementationRepository functionImplementationRepository,
+                                     FunctionDeploymentRepository functionDeploymentRepository,
+                                     WebSocketSessionService sessionService) {
 
         this.userRepository = userRepository;
-        this.functionRepository = functionRepository;
+        this.functionImplementationRepository = functionImplementationRepository;
         this.functionDeploymentRepository = functionDeploymentRepository;
         this.sessionService = sessionService;
 
@@ -63,7 +63,7 @@ public class DeployService {
         dbFunctionDeployment.setRegion(apiFunctionDeployment.getRegion());
         dbFunctionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
 
-        DBUser user = userRepository.findByUsername(apiFunctionDeployment.getUserName());
+        DBUser user = this.userRepository.findByUsername(apiFunctionDeployment.getUserName());
 
         if (user == null) {
             throw new HolisticFaaSException("User '" + apiFunctionDeployment.getUserName() + "' not found");
@@ -71,11 +71,11 @@ public class DeployService {
 
         dbFunctionDeployment.setUser(user);
 
-        DBFunction function = functionRepository
-                .findById(apiFunctionDeployment.getFunctionId())
+        DBFunctionImplementation functionImplementation = this.functionImplementationRepository
+                .findById(apiFunctionDeployment.getFunctionImplementationId())
                 .orElseThrow(() -> new HolisticFaaSException("Function not found"));
 
-        dbFunctionDeployment.setFunction(function);
+        dbFunctionDeployment.setFunctionImplementation(functionImplementation);
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);
 

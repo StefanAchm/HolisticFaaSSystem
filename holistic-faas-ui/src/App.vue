@@ -101,9 +101,7 @@ export default {
     return {
       items: [
         {title: 'Home', icon: 'mdi-bank', route: '/'},
-        // {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
-        {title: 'Functions', icon: 'mdi-lambda', route: '/functionsV2'},
-        // {title: 'Function Deployments', icon: 'mdi-rocket', route: '/function-deployments'},
+        {title: 'Functions', icon: 'mdi-lambda', route: '/functionsV3'},
         {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
       ],
       right: null,

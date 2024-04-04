@@ -22,8 +22,8 @@ public class DataInitializationConfig {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 
         populator.addScript(new ClassPathResource("data-users.sql"));
-        populator.addScript(new ClassPathResource("data-functions.sql"));
-        populator.addScript(new ClassPathResource("data-function-deployments.sql"));
+//        populator.addScript(new ClassPathResource("data-functions.sql"));
+//        populator.addScript(new ClassPathResource("data-function-deployments.sql"));
 
         populator.execute(dataSource);
 

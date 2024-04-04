@@ -82,4 +82,10 @@ public class FileUtil {
 
     }
 
+    public static String getFileNameFromPath(String filePath) {
+
+        return filePath.substring(filePath.lastIndexOf("\\") + 1);
+
+    }
+
 }

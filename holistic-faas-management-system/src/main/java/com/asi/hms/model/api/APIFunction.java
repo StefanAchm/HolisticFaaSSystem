@@ -1,71 +1,32 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.model.db.DBFunction;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class APIFunction {
 
-    private UUID id;
+    private APIFunctionType functionType;
+    private APIFunctionImplementation functionImplementation;
+    private APIFunctionDeployment functionDeployment;
 
-    private String filePath;
-
-    private String name;
-
-    private List<APIFunctionDeployment> functionDeployments;
-
-    public APIFunction() {
+    public APIFunctionType getFunctionType() {
+        return functionType;
     }
 
-    public UUID getId() {
-        return id;
+    public void setFunctionType(APIFunctionType functionType) {
+        this.functionType = functionType;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public APIFunctionImplementation getFunctionImplementation() {
+        return functionImplementation;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public void setFunctionImplementation(APIFunctionImplementation functionImplementation) {
+        this.functionImplementation = functionImplementation;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public APIFunctionDeployment getFunctionDeployment() {
+        return functionDeployment;
     }
 
-    public String getName() {
-        return name;
+    public void setFunctionDeployment(APIFunctionDeployment functionDeployment) {
+        this.functionDeployment = functionDeployment;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<APIFunctionDeployment> getFunctionDeployments() {
-        return functionDeployments;
-    }
-
-    public void setFunctionDeployments(List<APIFunctionDeployment> functionDeployments) {
-        this.functionDeployments = functionDeployments;
-    }
-
-    public static APIFunction fromDBFunction(DBFunction dbFunction) {
-
-        APIFunction apiFunction = new APIFunction();
-
-        apiFunction.setId(dbFunction.getId());
-        apiFunction.setFilePath(dbFunction.getFilePath());
-        apiFunction.setName(dbFunction.getName());
-
-        apiFunction.setFunctionDeployments(new ArrayList<>());
-        dbFunction.getFunctionDeployments().stream()
-                .map(APIFunctionDeployment::fromDBFunctionDeployment)
-                .forEach(apiFunction.getFunctionDeployments()::add);
-
-        return apiFunction;
-
-    }
-
 }

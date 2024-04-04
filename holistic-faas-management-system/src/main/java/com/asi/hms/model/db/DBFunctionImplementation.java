@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "functions")
-public class DBFunction {
+@Table(name = "function_implementations")
+public class DBFunctionImplementation {
 
     @Id
     @GeneratedValue
@@ -14,12 +14,14 @@ public class DBFunction {
 
     private String filePath;
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "function_type_id")
+    private DBFunctionType functionType;
 
-    @OneToMany(mappedBy = "function")
+    @OneToMany(mappedBy = "functionImplementation")
     private List<DBFunctionDeployment> functionDeployments;
 
-    public DBFunction() {
+    public DBFunctionImplementation() {
     }
 
     public UUID getId() {
@@ -34,14 +36,6 @@ public class DBFunction {
         this.filePath = filePath;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<DBFunctionDeployment> getFunctionDeployments() {
         return functionDeployments;
     }
@@ -50,4 +44,11 @@ public class DBFunction {
         this.functionDeployments = functionDeployments;
     }
 
+    public DBFunctionType getFunctionType() {
+        return functionType;
+    }
+
+    public void setFunctionType(DBFunctionType functionType) {
+        this.functionType = functionType;
+    }
 }

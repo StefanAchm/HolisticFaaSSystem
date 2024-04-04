@@ -1,14 +1,12 @@
 <template>
 
 
-  <v-dialog v-model="dialogVisible" max-width="500px">
+  <v-dialog v-model="dialogLocal" max-width="500px">
 
     <v-card>
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
       </v-card-title>
-
-      <!--      Add some spacing between the two titles-->
 
       <v-spacer></v-spacer>
 
@@ -24,7 +22,7 @@
             <v-col>
 
               <v-select
-                  v-model="editItem.provider"
+                  v-model="editItemLocal.provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
@@ -40,7 +38,7 @@
             <v-col>
 
               <v-select
-                  v-model="editItem.userName"
+                  v-model="editItemLocal.userName"
                   :items="users"
                   item-text="title"
                   item-value="value"
@@ -57,7 +55,7 @@
           <!--            <v-col>-->
 
           <!--              <v-select-->
-          <!--                  v-model="editItem.functionId"-->
+          <!--                  v-model="editItemLocal.functionId"-->
           <!--                  :items="functions"-->
           <!--                  :disabled=true-->
           <!--                  item-text="title"-->
@@ -73,7 +71,7 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItem.memory" label="Memory"></v-text-field>
+              <v-text-field v-model="editItemLocal.memory" label="Memory"></v-text-field>
             </v-col>
 
           </v-row>
@@ -81,7 +79,7 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItem.timeoutSecs" label="TimeoutSecs"></v-text-field>
+              <v-text-field v-model="editItemLocal.timeoutSecs" label="TimeoutSecs"></v-text-field>
             </v-col>
 
           </v-row>
@@ -89,7 +87,7 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItem.handler" label="Handler"></v-text-field>
+              <v-text-field v-model="editItemLocal.handler" label="Handler"></v-text-field>
             </v-col>
 
           </v-row>
@@ -99,7 +97,7 @@
             <v-col>
 
               <v-select
-                  v-model="editItem.region"
+                  v-model="editItemLocal.region"
                   :items="regions"
                   item-text="title"
                   item-value="value"
@@ -116,7 +114,7 @@
             <v-col>
 
               <v-select
-                  v-model="editItem.runtime"
+                  v-model="editItemLocal.runtime"
                   :items="runtimes"
                   item-text="title"
                   item-value="value"
@@ -156,7 +154,8 @@ export default {
 
   props: {
     dialog: Boolean,
-    itemprop: CloudFunction,
+    editItem: CloudFunction,
+    functionImplementation: {type: Object, default: null}
   },
 
   data() {
@@ -179,14 +178,33 @@ export default {
 
       runtimes: [],
 
-      regions: []
+      regions: [],
+      
+      editItemLocal: {}
 
     }
   },
 
   watch: {
+    
+    dialog(val) {
+      if(val) {
 
-    editItem: {
+        if(this.editItem?.id) {
+          this.editItemLocal = this.editItem
+        } else {
+          this.editItemLocal = {
+            functionImplementationId: this.functionImplementation.id
+          }
+        }
+
+        this.init()
+
+      }
+
+    },
+
+    editItemLocal: {
       handler(newValue) {
 
         // Filter users by provider
@@ -262,17 +280,19 @@ export default {
 
     },
 
-    close(cf) {
-      this.dialogVisible = false
-      this.$emit('dialog-closed', cf)
+    close() {
+      console.log('close before')
+      this.dialogLocal = false
+      this.$emit('dialog-closed')
+      console.log('close after')
     },
 
 
     upload() {
 
-      HfApi.deployFunction(this.editItem)
+      HfApi.deployFunction(this.editItemLocal)
           .finally(() => {
-            this.close(this.editItem);
+            this.close();
           });
 
     }
@@ -286,10 +306,10 @@ export default {
     },
 
     formSubtitle() {
-      return 'Function: ' + this.editItem.functionName
+      return 'Function: ' + this.editItemLocal.functionImplementationId
     },
 
-    dialogVisible: {
+    dialogLocal: {
       get() {
         return this.dialog
       },
@@ -298,19 +318,6 @@ export default {
       }
     },
 
-    editItem: {
-      get() {
-        return this.itemprop ? this.itemprop : new CloudFunction()
-      },
-      set(value) {
-        this.$emit('update:itemProp', value)
-      }
-    }
-
-  },
-
-  created() {
-    this.init();
   },
 
 }
