@@ -1,6 +1,8 @@
 package com.asi.hms.model.db;
 
 import com.asi.hms.enums.DeployStatus;
+import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.api.APIFunctionDeployment;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -40,6 +42,30 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
     public DBFunctionDeployment() {
         this.status = DeployStatus.CREATED;
+    }
+
+    public static DBFunctionDeployment fromAPIFunctionDeployment(
+            APIFunctionDeployment apiFunctionDeployment,
+            DBUser dbUser,
+            DBFunctionImplementation dbFunctionImplementation
+
+    ) {
+
+        DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
+
+        dbFunctionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
+        dbFunctionDeployment.setMemory(apiFunctionDeployment.getMemory());
+        dbFunctionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());
+        dbFunctionDeployment.setHandler(apiFunctionDeployment.getHandler());
+        dbFunctionDeployment.setRegion(apiFunctionDeployment.getRegion());
+        dbFunctionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
+
+        dbFunctionDeployment.setUser(dbUser);
+        dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
+
+        return dbFunctionDeployment;
+
+
     }
 
     public UUID getId() {

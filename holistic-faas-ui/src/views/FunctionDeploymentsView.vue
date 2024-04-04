@@ -305,7 +305,6 @@ export default {
             this.functionDeployments = response.data;
           })
 
-
       HfApi.getAllUsers()
           .then(response => {
             this.allUsers = response.data;

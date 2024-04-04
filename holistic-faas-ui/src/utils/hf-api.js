@@ -53,12 +53,7 @@ export default {
     },
 
     deployFunctionDeploy(id) {
-        // Properties.API_IP + "/deploy/deploy", null,
-        //           {
-        //             headers: {'Content-Type': 'application/json'},
-        //             params: {functionId: item.id, localOnly: false} // TODO: set localOnly to false
-        //           })
-        return apiClient.get('/function_deployment/deploy/' + id);
+        return apiClient.post('/function_deployment/deploy/?' + new URLSearchParams({functionId: id, localOnly: false}));
     },
 
 
@@ -99,4 +94,14 @@ export default {
         return apiClient.get('/deploy/getAll');
     },
 
+    migrateFunctions(items, migrationSettings) {
+
+        let migrationRequest = {
+            functions: items,
+            provider: migrationSettings.provider
+        }
+
+
+        return apiClient.post('/function/migrate', migrationRequest);
+    }
 }

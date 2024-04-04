@@ -3,6 +3,10 @@
   <v-data-table
       :headers="headers"
       :items="functions"
+      v-model="selected"
+      :single-select="false"
+      item-key="id"
+      show-select
   >
 
     <template v-slot:top>
@@ -10,8 +14,6 @@
       <v-toolbar flat>
 
         <v-toolbar-title>Functions</v-toolbar-title>
-
-        <!--        <v-divider class="mx-4" inset vertical></v-divider>-->
 
         <v-spacer></v-spacer>
 
@@ -24,24 +26,43 @@
 
         </v-btn>
 
+<!--        <v-btn-->
+<!--            color="primary"-->
+<!--            class="mx-2"-->
+<!--            :disabled="selected.length === 0"-->
+<!--            @click="functionMigrationDialogVisible = true">-->
+
+<!--          Migrate-->
+
+<!--        </v-btn>-->
+<!--        -->
+<!--        <FunctionMigrationDialog-->
+<!--            :dialog.sync="functionMigrationDialogVisible"-->
+<!--            :items="selected"-->
+<!--            @dialog-closed="init"-->
+<!--        />-->
+
+        <FunctionsEditMenu
+            :items="selected"
+            :disabled="selected.length === 0"
+        />
+
         <FunctionTypeDialog
             :dialog.sync="functionDialogVisible"
-            @dialog-closed="loadFunctions"
-            :edit-item="{}"
-        />
+            @dialog-closed="init"
+            :edit-item="{}"/>
 
         <FunctionDeploymentDialog
             :dialog.sync="functionDeploymentDialogVisible"
-            @dialog-closed="loadFunctions"
+            @dialog-closed="init"
             :edit-item="{}"
             :function-implementation="editItem.functionImplementation"/>
 
         <FunctionImplementationDialog
             :dialog.sync="functionImplementationDialogVisible"
-            @dialog-closed="loadFunctions"
+            @dialog-closed="init"
             :edit-item="{}"
-            :function-type="editItem.functionType"
-        />
+            :function-type="editItem.functionType"/>
 
       </v-toolbar>
 
@@ -61,7 +82,7 @@
 
           No Implementation
 
-<!--          <v-icon @click="functionImplementationDialogVisible = true;">mdi-plus</v-icon>-->
+          <!--          <v-icon @click="functionImplementationDialogVisible = true;">mdi-plus</v-icon>-->
 
         </span>
 
@@ -79,7 +100,7 @@
           <span>{{ item.functionImplementation.filePath }}</span>
         </v-tooltip>
 
-<!--        <v-icon @click="functionImplementationDialogVisible = true;">mdi-plus</v-icon>-->
+        <!--        <v-icon @click="functionImplementationDialogVisible = true;">mdi-plus</v-icon>-->
 
 
       </div>
@@ -94,7 +115,7 @@
 
         No Deployment
 
-<!--          <v-icon @click="functionDeploymentDialogVisible = true;">mdi-plus</v-icon>-->
+          <!--          <v-icon @click="functionDeploymentDialogVisible = true;">mdi-plus</v-icon>-->
 
         </span>
 
@@ -114,26 +135,94 @@
 
         </span>
 
-<!--        <v-icon @click="functionDeploymentDialogVisible = true;">mdi-plus</v-icon>-->
+        <!--        <v-icon @click="functionDeploymentDialogVisible = true;">mdi-plus</v-icon>-->
 
 
       </div>
 
     </template>
 
-    <template v-slot:[`item.actionsI`]="{ item }">
+    <template v-slot:[`item.edit`]="{ item }">
 
-      <v-icon @click="openImplementationDialog(item)">mdi-cogs</v-icon>
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              icon
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+          >
+
+            <v-icon>mdi-dots-vertical</v-icon>
+
+          </v-btn>
+        </template>
+        <v-list>
+
+          <v-list-item-group
+              v-model="selectedMenuItem"
+          >
+
+            <v-list-item>
+              <v-list-item-title @click="openImplementationDialog(item)">Add Implementation</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="item.functionImplementation">
+              <v-list-item-title @click="openDeploymentDialog(item)">Add Deployment</v-list-item-title>
+            </v-list-item>
+
+          </v-list-item-group>
+
+        </v-list>
+      </v-menu>
 
     </template>
 
-    <template v-slot:[`item.actionsD`]="{ item }">
+    <template v-slot:[`item.status`]="{ item }">
 
-      <v-icon @click="openDeploymentDialog(item)">mdi-rocket</v-icon>
+      <v-tooltip bottom>
+
+        <template v-slot:activator="{ on, attrs }">
+
+          <v-icon
+              :color="getColor(item)"
+              v-on="on"
+              v-bind="attrs"
+          >
+            {{ getIcon(item) }}
+          </v-icon>
+
+        </template>
+
+        <span>{{ getToolTipMessage(item) }}</span>
+
+      </v-tooltip>
 
     </template>
 
+    <!--    <template v-slot:[`item.deploy`]="{ item }">-->
 
+    <!--      <v-progress-circular-->
+    <!--          :value="item.isLoadingValue"-->
+    <!--          v-bind="props"-->
+    <!--          :rotate="-90"-->
+    <!--          v-if="item.isLoadingValue"-->
+    <!--          color="primary"-->
+    <!--          size="24"-->
+    <!--      />-->
+
+    <!--      <v-icon-->
+    <!--          :disabled="item.status && item.status==='DEPLOYED'"-->
+    <!--          v-if="item.functionDeployment?.id && !item.isLoadingValue"-->
+    <!--          class="mr-2"-->
+    <!--          @click="deployItem(item)"-->
+    <!--      >-->
+    <!--        mdi-rocket-launch-->
+    <!--      </v-icon>-->
+
+    <!--    </template>-->
 
   </v-data-table>
 
@@ -147,29 +236,41 @@ import HfApi from "@/utils/hf-api";
 import FunctionTypeDialog from "@/components/FunctionTypeDialog.vue";
 import FunctionImplementationDialog from "@/components/FunctionImplementationDialog.vue";
 import FunctionDeploymentDialog from "@/components/FunctionDeploymentDialog.vue";
+import FunctionsEditMenu from "@/components/FunctionsEditMenu.vue";
 
 export default {
 
-  components: {FunctionDeploymentDialog, FunctionImplementationDialog, FunctionTypeDialog},
+  components: {
+    FunctionsEditMenu,
+    FunctionDeploymentDialog,
+    FunctionImplementationDialog,
+    FunctionTypeDialog
+  },
 
   data: () => ({
 
+    selectedMenuItem: {},
+
     functions: [],
+    selected: [],
     headers: [
 
       {text: 'Name', value: 'type', sortable: true},
       {text: 'Implementation', value: 'implementation', sortable: true},
       {text: 'Deployment', value: 'deployment', sortable: true},
-      {text: 'Add Implementation', value: 'actionsI', sortable: true},
-      {text: 'Add Deployment', value: 'actionsD', sortable: true},
+      {text: 'Edit', value: 'edit', sortable: true},
+      // {text: 'Add Deployment', value: 'actionsD', sortable: true},
+      {text: 'Status', value: 'status', sortable: false},
+      // {text: 'Deploy', value: 'deploy', sortable: false},
 
     ],
 
+    functionMigrationDialogVisible: false,
     functionDialogVisible: false,
     functionImplementationDialogVisible: false,
     functionDeploymentDialogVisible: false,
 
-    editItem : {
+    editItem: {
       functionType: {},
       functionImplementation: {},
       functionDeployment: {}
@@ -184,11 +285,20 @@ export default {
 
   methods: {
 
+    init() {
+      this.loadFunctions();
+      this.selectedMenuItem = {};
+    },
+
     loadFunctions() {
-      console.log('loadFunctions')
       HfApi.getAllFunctions()
           .then(response => {
             this.functions = response.data;
+
+            for (let i = 0; i < this.functions.length; i++) {
+              this.functions[i].id = i;
+            }
+
           })
     },
 
@@ -201,6 +311,115 @@ export default {
       this.functionDeploymentDialogVisible = true;
       this.editItem = item;
     },
+
+    getIcon(item) {
+
+      if(item.functionDeployment === null) {
+        return 'mdi-progress-helper'
+      }
+
+      let status = item.functionDeployment.status
+
+      if (status === 'DEPLOYED') {
+        return 'mdi-progress-check'
+      } else if (status === 'FAILED') {
+        return 'mdi-progress-alert'
+      } else if (status === 'STARTED') {
+        return 'mdi-progress-upload'
+      } else if (status === 'CREATED') {
+        return 'mdi-progress-clock'
+      } else {
+        return ''
+      }
+    },
+
+    getColor(item) {
+
+      if(item.functionDeployment === null) {
+        return 'grey'
+      }
+
+      let status = item.functionDeployment.status
+
+      if (status === 'DEPLOYED') {
+        return 'green'
+      } else if (status === 'FAILED') {
+        return 'red'
+      } else if (status === 'STARTED') {
+        return 'blue'
+      } else if (status === 'CREATED') {
+        return 'orange'
+      } else {
+        return ''
+      }
+
+    },
+
+    deployFunction(item) {
+
+      HfApi.deployFunctionDeploy(item.functionDeployment.id)
+
+    },
+
+    getToolTipMessage(item) {
+
+      if(item.functionDeployment === null) {
+        return 'No Deployment'
+      }
+
+      let status = item.functionDeployment.status
+
+      if (status === 'CREATED') {
+        return 'Deployment not started'
+      } else {
+        return item.functionDeployment?.statusMessage
+      }
+
+    },
+
+
+    updateProgress(data) {
+
+      // Update progress of process component, depending on the message
+
+      let message = null
+      try {
+        message = JSON.parse(data);
+      } catch (e) {
+        return
+      }
+
+      let id = message.id;
+      let step = message.step;
+      let steps = message.steps;
+      let status = message.status;
+      let statusMessage = message.statusMessage;
+      let text = message.text;
+
+      let value = step / steps * 100
+
+      this.functionDeployments
+          .filter(fd => fd.id === id)
+          .forEach(fd => {
+            this.$set(fd, 'isLoadingValue', value)
+            if (value === 100) {
+              // this.init()
+              this.$set(fd, 'isLoadingValue', null)
+            }
+
+            if (status) {
+              this.$set(fd, 'status', status)
+
+              if (status === 'STARTED') {
+                this.$set(fd, 'statusMessage', text)
+              } else {
+                this.$set(fd, 'statusMessage', statusMessage)
+              }
+            }
+
+          })
+
+    }
 
   },
 

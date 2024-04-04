@@ -54,32 +54,27 @@ public class FunctionDeploymentService {
 
     public void addFunctionDeployment(APIFunctionDeployment apiFunctionDeployment) {
 
-        DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
-
-        dbFunctionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
-        dbFunctionDeployment.setMemory(apiFunctionDeployment.getMemory());
-        dbFunctionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());
-        dbFunctionDeployment.setHandler(apiFunctionDeployment.getHandler());
-        dbFunctionDeployment.setRegion(apiFunctionDeployment.getRegion());
-        dbFunctionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
-
         DBUser user = this.userRepository.findByUsername(apiFunctionDeployment.getUserName());
 
         if (user == null) {
             throw new HolisticFaaSException("User '" + apiFunctionDeployment.getUserName() + "' not found");
         }
 
-        dbFunctionDeployment.setUser(user);
-
         DBFunctionImplementation functionImplementation = this.functionImplementationRepository
                 .findById(apiFunctionDeployment.getFunctionImplementationId())
                 .orElseThrow(() -> new HolisticFaaSException("Function not found"));
 
-        dbFunctionDeployment.setFunctionImplementation(functionImplementation);
+        DBFunctionDeployment dbFunctionDeployment = DBFunctionDeployment.fromAPIFunctionDeployment(
+                apiFunctionDeployment,
+                user,
+                functionImplementation
+        );
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);
 
     }
+
+
 
     @Async
     public void deploy(UUID functionDeploymentId, boolean localOnly) {
