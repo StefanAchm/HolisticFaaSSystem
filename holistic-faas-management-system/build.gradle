@@ -15,9 +15,9 @@ repositories {
     mavenCentral()
 }
 
-task prepareKotlinBuildScriptModel {
-
-}
+//task prepareKotlinBuildScriptModel {
+//
+//}
 
 dependencies {
 

@@ -1,10 +1,9 @@
 package com.asi.hms.service;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.Message;
+import com.asi.hms.utils.cloudproviderutils.model.Message;
 import com.asi.hms.utils.cloudproviderutils.MessageInterface;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.asi.hms.model;
+package com.asi.hms.utils.cloudproviderutils.model;
 
 import java.util.UUID;
 

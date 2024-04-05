@@ -1,7 +1,6 @@
 package com.asi.hms.model.db;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunctionDeployment;
 
 import javax.persistence.*;

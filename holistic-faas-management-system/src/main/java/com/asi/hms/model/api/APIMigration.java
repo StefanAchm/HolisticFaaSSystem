@@ -1,21 +1,34 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.enums.Provider;
+import com.asi.hms.utils.cloudproviderutils.enums.MigrationType;
 
 import java.util.List;
 
 public class APIMigration {
 
-    private Provider provider;
+    private MigrationType migrationType;
+    private String target;
+
+//    private Provider provider;
+
     private List<APIFunction> functions;
 
-    public Provider getProvider() {
-        return provider;
+    public MigrationType getMigrationType() {
+        return migrationType;
     }
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
+    public void setMigrationType(MigrationType migrationType) {
+        this.migrationType = migrationType;
     }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
 
     public List<APIFunction> getFunctions() {
         return functions;

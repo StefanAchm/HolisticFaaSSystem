@@ -6,6 +6,7 @@ import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionType;
 import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
+import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -82,21 +83,10 @@ public class FunctionService {
 
     }
 
-    public void migrateFunction(APIMigration migration) {
+    public APIPreparedMigration prepareMigration(APIMigration apiMigration) {
 
-        // TODO: think about migration!
-
-        migration.getFunctions().forEach(apiFunction -> {
-
-            // Create a copy of the functionDeployment and set the correct migration property
-
-            APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
-            functionDeployment.setProvider(migration.getProvider());
-
-            this.functionDeploymentService.addFunctionDeployment(functionDeployment);
-
-
-        });
+        return MigrationRunner.getMigrationRunner(apiMigration.getMigrationType())
+                .prepareMigration(apiMigration);
 
     }
 

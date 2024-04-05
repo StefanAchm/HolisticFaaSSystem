@@ -1,4 +1,4 @@
-package com.asi.hms.enums;
+package com.asi.hms.utils.cloudproviderutils.enums;
 
 /**
  * AWS Lambda Runtimes,
@@ -45,8 +45,27 @@ public enum RuntimeAWS implements RuntimeInterface {
 
 
     @Override
-    public String getRuntimeString() {
+    public String getRuntimeCode() {
         return runtimeString;
+    }
+
+    @Override
+    public RuntimeGlobal getRuntimeGlobal() {
+
+        // Create a new RuntimeGlobal object and set the language and version
+        // E.g. for java11, set java as language and 11 as version
+
+        String language = runtimeString.split("\\d")[0];
+        String version = runtimeString.split("\\D")[1];
+
+        RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
+
+        runtimeGlobal.setLanguage(language);
+        runtimeGlobal.setVersion(version);
+
+
+        return runtimeGlobal;
+
     }
 
 }

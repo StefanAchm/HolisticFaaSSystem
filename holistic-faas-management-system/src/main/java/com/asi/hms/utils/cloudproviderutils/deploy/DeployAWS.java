@@ -1,8 +1,8 @@
-package com.asi.hms.utils.cloudproviderutils;
+package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.Function;
-import com.asi.hms.model.UserAWS;
+import com.asi.hms.utils.cloudproviderutils.model.Function;
+import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
 import com.asi.hms.utils.ProgressHandler;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -29,7 +29,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
         progressHandler.update("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
-                .region(Region.of(function.getRegion().getRegionName()))
+                .region(Region.of(function.getRegion().getRegionCode()))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
 
@@ -52,7 +52,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
                     .functionName(function.getName())
                     .handler(function.getHandler())
                     .role(user.getRoleArn()) // The ARN of the role
-                    .runtime(function.getRuntime().getRuntimeString())
+                    .runtime(function.getRuntime().getRuntimeCode())
                     .code(code)
                     .memorySize(function.getMemory())
                     .timeout(function.getTimeoutSecs()) // Timeout in seconds

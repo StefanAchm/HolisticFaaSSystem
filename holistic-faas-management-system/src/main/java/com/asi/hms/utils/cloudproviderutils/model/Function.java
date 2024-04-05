@@ -1,10 +1,10 @@
-package com.asi.hms.model;
+package com.asi.hms.utils.cloudproviderutils.model;
 
-import com.asi.hms.enums.*;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionType;
+import com.asi.hms.utils.cloudproviderutils.enums.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
