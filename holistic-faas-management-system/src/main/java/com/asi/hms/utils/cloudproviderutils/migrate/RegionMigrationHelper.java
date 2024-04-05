@@ -1,6 +1,7 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
 import com.asi.hms.model.api.APIMigrationObject;
+import com.asi.hms.utils.cloudproviderutils.enums.RegionGlobal;
 import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
 
 public class RegionMigrationHelper {
@@ -11,10 +12,10 @@ public class RegionMigrationHelper {
 
     public static APIMigrationObject fromTo(RegionInterface source, Class<? extends RegionInterface> target) {
 
-        String city = source.getRegionGlobal().getCity();
+        RegionGlobal sourceRegionGlobal = source.getRegionGlobal();
 
         for (RegionInterface targetRegion : target.getEnumConstants()) {
-            if(targetRegion.getRegionGlobal().getCity().equals(city)) {
+            if(targetRegion.getRegionGlobal().getCity().equals(sourceRegionGlobal.getCity())) {
                 return new APIMigrationObject(source.getRegionCode(), targetRegion.getRegionCode());
             }
         }

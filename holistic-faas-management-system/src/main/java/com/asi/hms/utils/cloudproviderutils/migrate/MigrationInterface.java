@@ -1,12 +1,12 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
+import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
-import com.asi.hms.model.api.APIPreparedMigration;
 
 public interface MigrationInterface {
 
-    APIPreparedMigration prepareMigration(APIMigration migration);
+    APIMigration prepareMigration(APIMigrationPreparation migration);
 
-    void migrate(APIPreparedMigration preparedMigration);
+    void migrate(APIMigration preparedMigration);
 
 }

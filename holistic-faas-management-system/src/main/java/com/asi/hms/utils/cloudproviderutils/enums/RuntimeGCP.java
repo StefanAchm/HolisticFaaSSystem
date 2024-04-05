@@ -76,7 +76,7 @@ public enum RuntimeGCP implements RuntimeInterface {
         // E.g. for java11, set java as language and 11 as version
 
         String language = runtimeCode.split("\\d")[0];
-        String version = runtimeCode.split("\\D")[1];
+        String version = runtimeCode.substring(language.length());
 
         RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
         runtimeGlobal.setLanguage(language);

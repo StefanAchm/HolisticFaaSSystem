@@ -7,7 +7,7 @@ import com.asi.hms.utils.cloudproviderutils.enums.*;
 public class MigrationProvider implements MigrationInterface {
 
     @Override
-    public APIPreparedMigration prepareMigration(APIMigration migration) {
+    public APIMigration prepareMigration(APIMigrationPreparation migration) {
 
         Provider targetProvider;
 
@@ -17,13 +17,11 @@ public class MigrationProvider implements MigrationInterface {
             throw new IllegalArgumentException("Invalid provider: " + migration.getTarget());
         }
 
-        APIPreparedMigration apiPreparedMigration = new APIPreparedMigration();
+        APIMigration apiMigration = new APIMigration();
 
         for (APIFunction apiFunction : migration.getFunctions()) {
 
             APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
-
-            functionDeployment.setProvider(targetProvider);
 
             APIMigrationObject regionMigration;
             APIMigrationObject runtimeMigration;
@@ -44,22 +42,23 @@ public class MigrationProvider implements MigrationInterface {
 
             }
 
+            functionDeployment.setProvider(targetProvider);
             functionDeployment.setRegion(regionMigration.getTarget());
             functionDeployment.setRuntime(runtimeMigration.getTarget());
 
-            apiPreparedMigration.getRegionMigrations().add(regionMigration);
-            apiPreparedMigration.getRuntimeMigrations().add(runtimeMigration);
-            apiPreparedMigration.getFunctions().add(apiFunction);
+            apiMigration.getRegionMigrations().add(regionMigration);
+            apiMigration.getRuntimeMigrations().add(runtimeMigration);
+            apiMigration.getFunctions().add(apiFunction);
 
         }
 
-        return apiPreparedMigration;
+        return apiMigration;
 
 
     }
 
     @Override
-    public void migrate(APIPreparedMigration preparedMigration) {
+    public void migrate(APIMigration preparedMigration) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

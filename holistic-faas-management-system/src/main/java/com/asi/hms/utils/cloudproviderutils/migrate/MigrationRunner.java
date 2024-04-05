@@ -1,8 +1,8 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
-import com.asi.hms.model.api.APIPreparedMigration;
 import com.asi.hms.utils.cloudproviderutils.enums.MigrationType;
 
 public class MigrationRunner {
@@ -31,11 +31,11 @@ public class MigrationRunner {
         this.migrationInterface = migrationInterface;
     }
 
-    public APIPreparedMigration prepareMigration(APIMigration apiMigration) {
-        return migrationInterface.prepareMigration(apiMigration);
+    public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
+        return migrationInterface.prepareMigration(apiMigrationPreparation);
     }
 
-    public void migrate(APIPreparedMigration preparedMigration) {
+    public void migrate(APIMigration preparedMigration) {
         migrationInterface.migrate(preparedMigration);
     }
 

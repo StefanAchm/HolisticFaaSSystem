@@ -12,13 +12,13 @@ public class RuntimeMigrationHelper {
 
     public static APIMigrationObject fromTo(RuntimeInterface source, Class<? extends RuntimeInterface> target) {
 
-        RuntimeGlobal runtimeGlobal = source.getRuntimeGlobal();
+        RuntimeGlobal sourceRuntimeGlobal = source.getRuntimeGlobal();
 
         for (RuntimeInterface targetRuntime : target.getEnumConstants()) {
 
             RuntimeGlobal targetRuntimeGlobal = targetRuntime.getRuntimeGlobal();
 
-            if(runtimeGlobal.getLanguage().equals(targetRuntimeGlobal.getLanguage()) && runtimeGlobal.getVersion().equals(targetRuntimeGlobal.getVersion())) {
+            if(sourceRuntimeGlobal.getLanguage().equals(targetRuntimeGlobal.getLanguage()) && sourceRuntimeGlobal.getVersion().equals(targetRuntimeGlobal.getVersion())) {
                 return new APIMigrationObject(source.getRuntimeCode(), targetRuntime.getRuntimeCode());
             }
 

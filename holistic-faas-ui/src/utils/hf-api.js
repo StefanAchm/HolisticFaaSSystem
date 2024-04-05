@@ -94,14 +94,21 @@ export default {
         return apiClient.get('/deploy/getAll');
     },
 
-    migrateFunctions(items, migrationSettings) {
+    prepareMigration(items, migrationSettings) {
 
         let migrationRequest = {
             functions: items,
-            provider: migrationSettings.provider
+            target: migrationSettings.provider,
+            migrationType: 'FUNCTION_PROVIDER' // TODO: dynamic
         }
 
+        return apiClient.post('/function/prepareMigration', migrationRequest);
 
+    },
+
+    // deprecated
+    migrateFunctions(migrationRequest) {
         return apiClient.post('/function/migrate', migrationRequest);
     }
+
 }

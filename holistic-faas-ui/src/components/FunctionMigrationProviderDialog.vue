@@ -28,6 +28,13 @@
           </v-row>
 
         </v-container>
+
+        <v-container>
+
+
+        </v-container>
+
+
       </v-card-text>
 
 
@@ -77,6 +84,7 @@ export default {
     migrationSettings: {
       provider: null,
     },
+    preparedItems: []
 
   }),
 
@@ -94,7 +102,23 @@ export default {
   created() {
   },
 
-  watch: {},
+  watch: {
+
+    // migrationSettings: {
+    //
+    //   handler(value) {
+    //
+    //     HfApi.prepareMigration(this.items, value)
+    //         .then((response) => {
+    //           this.preparedItems = response.data
+    //         })
+    //
+    //   }, deep: true
+    //
+    // }
+
+
+  },
 
   methods: {
 
@@ -105,9 +129,20 @@ export default {
 
     save() {
 
-      HfApi.migrateFunctions(this.items, this.migrationSettings)
-          .then(() => {
-            this.close()
+      HfApi.prepareMigration(this.items, this.migrationSettings)
+          .then((response) => {
+
+            console.log(response);
+
+            HfApi.migrateFunctions(response.data)
+                .then((response) => {
+
+                  console.log(response);
+
+                  this.close();
+
+                })
+
           })
 
     }

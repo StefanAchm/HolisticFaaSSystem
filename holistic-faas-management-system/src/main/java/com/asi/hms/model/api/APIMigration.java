@@ -1,34 +1,41 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.utils.cloudproviderutils.enums.MigrationType;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class APIMigration {
 
-    private MigrationType migrationType;
-    private String target;
-
-//    private Provider provider;
+    private Set<APIMigrationObject> regionMigrations;
+    private Set<APIMigrationObject> runtimeMigrations;
 
     private List<APIFunction> functions;
 
-    public MigrationType getMigrationType() {
-        return migrationType;
+    public APIMigration() {
+
+        this.regionMigrations = new HashSet<>();
+        this.runtimeMigrations = new HashSet<>();
+
+        this.functions = new ArrayList<>();
+
     }
 
-    public void setMigrationType(MigrationType migrationType) {
-        this.migrationType = migrationType;
+    public Set<APIMigrationObject> getRegionMigrations() {
+        return regionMigrations;
     }
 
-    public String getTarget() {
-        return target;
+    public void setRegionMigrations(Set<APIMigrationObject> regionMigrations) {
+        this.regionMigrations = regionMigrations;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public Set<APIMigrationObject> getRuntimeMigrations() {
+        return runtimeMigrations;
     }
 
+    public void setRuntimeMigrations(Set<APIMigrationObject> runtimeMigrations) {
+        this.runtimeMigrations = runtimeMigrations;
+    }
 
     public List<APIFunction> getFunctions() {
         return functions;

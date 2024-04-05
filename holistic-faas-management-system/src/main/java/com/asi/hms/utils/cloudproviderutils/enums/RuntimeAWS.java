@@ -56,7 +56,7 @@ public enum RuntimeAWS implements RuntimeInterface {
         // E.g. for java11, set java as language and 11 as version
 
         String language = runtimeString.split("\\d")[0];
-        String version = runtimeString.split("\\D")[1];
+        String version = runtimeString.substring(language.length());
 
         RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
 

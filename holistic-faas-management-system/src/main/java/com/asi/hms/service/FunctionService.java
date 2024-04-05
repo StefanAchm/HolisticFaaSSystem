@@ -83,10 +83,24 @@ public class FunctionService {
 
     }
 
-    public APIPreparedMigration prepareMigration(APIMigration apiMigration) {
+    public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
 
-        return MigrationRunner.getMigrationRunner(apiMigration.getMigrationType())
-                .prepareMigration(apiMigration);
+        return MigrationRunner.getMigrationRunner(apiMigrationPreparation.getMigrationType())
+                .prepareMigration(apiMigrationPreparation);
+
+    }
+
+    public APIMigration migrate(APIMigration apiMigration) {
+
+        // TODO: need to implement this !!!
+
+        for (APIFunction function : apiMigration.getFunctions()) {
+
+            this.functionDeploymentService.addFunctionDeployment(function.getFunctionDeployment());
+
+        }
+
+        return apiMigration;
 
     }
 

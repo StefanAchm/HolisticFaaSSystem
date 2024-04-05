@@ -40,7 +40,7 @@ import java.util.List;
 
 public enum RegionGCP implements RegionInterface {
 
-    US_CENTRAL1("us-central1", "US Central (Iowa)"),
+    US_CENTRAL1("us-central1", "Council Bluffs, Iowa, North America"),
 
     US_EAST1("us-east1", "Moncks Corner, South Carolina, North America"),
     US_EAST4("us-east4", "Ashburn, Virginia, North America"),
@@ -57,7 +57,7 @@ public enum RegionGCP implements RegionInterface {
 
     // APAC = Asia Pacific
     ASIA_EAST1("asia-east1", "Changhua County, Taiwan, APAC"),
-    ASIA_EAST2("asia-east2", "Hong Kong, APAC"),
+    ASIA_EAST2("asia-east2", "Hong Kong, Chine, APAC"),
     ASIA_NORTHEAST1("asia-northeast1", "Tokyo, Japan, APAC"),
     ASIA_NORTHEAST2("asia-northeast2", "Osaka, Japan, APAC"),
     ASIA_NORTHEAST3("asia-northeast3", "Seoul, South Korea, APAC"),
@@ -98,6 +98,10 @@ public enum RegionGCP implements RegionInterface {
         // Split regionName by comma and set correct continent, country, and city
 
         String[] regionNameParts = regionName.split(", ");
+
+        if(regionNameParts.length != 3) {
+            throw new HolisticFaaSException("Region name must consist of continent, country, and city. Region name: " + regionName);
+        }
 
         RegionGlobal regionGlobal = new RegionGlobal();
 
