@@ -37,16 +37,24 @@ public enum RuntimeAWS implements RuntimeInterface {
     PROVIDED_AL_2("provided.al2");
 
 
-    private final String runtimeString;
+    private final String runtimeCode;
 
-    RuntimeAWS(String runtimeString) {
-        this.runtimeString = runtimeString;
+    RuntimeAWS(String runtimeCode) {
+        this.runtimeCode = runtimeCode;
     }
 
+    public static RuntimeAWS fromCode(String runtimeString) {
+        for (RuntimeAWS runtime : RuntimeAWS.values()) {
+            if (runtime.runtimeCode.equals(runtimeString)) {
+                return runtime;
+            }
+        }
+        return null;
+    }
 
     @Override
     public String getRuntimeCode() {
-        return runtimeString;
+        return runtimeCode;
     }
 
     @Override
@@ -55,8 +63,8 @@ public enum RuntimeAWS implements RuntimeInterface {
         // Create a new RuntimeGlobal object and set the language and version
         // E.g. for java11, set java as language and 11 as version
 
-        String language = runtimeString.split("\\d")[0];
-        String version = runtimeString.substring(language.length());
+        String language = runtimeCode.split("\\d")[0];
+        String version = runtimeCode.substring(language.length());
 
         RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
 

@@ -9,6 +9,8 @@ import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.repository.UserRepository;
+import com.asi.hms.utils.cloudproviderutils.enums.RegionAWS;
+import com.asi.hms.utils.cloudproviderutils.enums.RuntimeAWS;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -59,8 +61,8 @@ public class DatabaseInitializer {
             DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
             dbFunctionDeployment.setProvider("AWS");
             dbFunctionDeployment.setUser(user1);
-            dbFunctionDeployment.setRegion("EU_WEST_2");
-            dbFunctionDeployment.setRuntime("JAVA_17");
+            dbFunctionDeployment.setRegion(RegionAWS.EU_WEST_2.getRegionCode());
+            dbFunctionDeployment.setRuntime(RuntimeAWS.JAVA_17.getRuntimeCode());
             dbFunctionDeployment.setMemory(128 + i * 10);
             dbFunctionDeployment.setHandler("com.asi.hsg.HelloWorldHandler::handleRequest");
             dbFunctionDeployment.setStatus(DeployStatus.CREATED);

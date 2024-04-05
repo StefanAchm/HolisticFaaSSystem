@@ -1,10 +1,13 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.*;
 import com.asi.hms.utils.cloudproviderutils.enums.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MigrationProvider implements MigrationInterface {
+
+    private static final Logger logger = LoggerFactory.getLogger(MigrationProvider.class);
 
     @Override
     public APIMigration prepareMigration(APIMigrationPreparation migration) {
@@ -23,24 +26,16 @@ public class MigrationProvider implements MigrationInterface {
 
             APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
 
-            APIMigrationObject regionMigration;
-            APIMigrationObject runtimeMigration;
+            APIMigrationObject regionMigration = RegionMigrationHelper.fromTo(functionDeployment.getProvider().getRegionFromCode(functionDeployment.getRegion()), targetProvider.getRegionClass());
 
-            if(targetProvider == Provider.AWS && functionDeployment.getProvider().equals(Provider.GCP)) {
+            logger.debug("Region migration: " + regionMigration.getSource() + " -> " + regionMigration.getTarget());
 
-                regionMigration = RegionMigrationHelper.fromTo(RegionGCP.valueOf(functionDeployment.getRegion()), RegionAWS.class);
-                runtimeMigration = RuntimeMigrationHelper.fromTo(RuntimeGCP.valueOf(functionDeployment.getRuntime()), RuntimeAWS.class);
+            APIMigrationObject runtimeMigration = RuntimeMigrationHelper.fromTo(functionDeployment.getProvider().getRuntimeFromCode(functionDeployment.getRuntime()), targetProvider.getRuntimeClass());
 
-            } else if(targetProvider == Provider.GCP && functionDeployment.getProvider().equals(Provider.AWS)) {
+            logger.debug("Runtime migration: " + runtimeMigration.getSource() + " -> " + runtimeMigration.getTarget());
 
-                regionMigration = RegionMigrationHelper.fromTo(RegionAWS.valueOf(functionDeployment.getRegion()), RegionGCP.class);
-                runtimeMigration = RuntimeMigrationHelper.fromTo(RuntimeAWS.valueOf(functionDeployment.getRuntime()), RuntimeGCP.class);
-
-            } else {
-
-                throw new HolisticFaaSException("Invalid provider migration: " + functionDeployment.getProvider() + " to " + targetProvider);
-
-            }
+            // TODO: update user credentials ????
+            // Maybe not needed, if just the user is stored, but not the credentials
 
             functionDeployment.setProvider(targetProvider);
             functionDeployment.setRegion(regionMigration.getTarget());
@@ -55,11 +50,6 @@ public class MigrationProvider implements MigrationInterface {
         return apiMigration;
 
 
-    }
-
-    @Override
-    public void migrate(APIMigration preparedMigration) {
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }

@@ -7,6 +7,9 @@ public class APIMigrationObject {
     private String source;
     private String target;
 
+    public APIMigrationObject() {
+    }
+
     public APIMigrationObject(String source, String target) {
         this.source = source;
         this.target = target;

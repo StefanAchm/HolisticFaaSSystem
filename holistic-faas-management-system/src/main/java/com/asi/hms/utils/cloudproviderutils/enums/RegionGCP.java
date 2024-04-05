@@ -82,6 +82,16 @@ public enum RegionGCP implements RegionInterface {
         this.regionName = regionName;
     }
 
+
+    public static RegionGCP fromCode(String code) {
+        for (RegionGCP region : RegionGCP.values()) {
+            if (region.getRegionCode().equals(code)) {
+                return region;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String getRegionCode() {
         return regionCode;

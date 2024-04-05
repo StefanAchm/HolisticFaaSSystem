@@ -45,6 +45,7 @@
         <FunctionsEditMenu
             :items="selected"
             :disabled="selected.length === 0"
+            @menu-closed="init"
         />
 
         <FunctionTypeDialog

@@ -9,7 +9,8 @@ public class MigrationRunner {
 
     private MigrationInterface migrationInterface;
 
-    public MigrationRunner() {}
+    private MigrationRunner() {
+    }
 
     public static MigrationRunner getMigrationRunner(MigrationType migrationType) {
 
@@ -17,26 +18,19 @@ public class MigrationRunner {
 
         switch (migrationType) {
             case FUNCTION_PROVIDER -> migrationRunner.setMigrationInterface(new MigrationProvider());
+            case FUNCTION_REGION -> migrationRunner.setMigrationInterface(new MigrationRegion());
             default -> throw new HolisticFaaSException("Invalid migration type: " + migrationType);
         }
 
         return migrationRunner;
     }
 
-    public MigrationInterface getMigrationInterface() {
-        return migrationInterface;
-    }
-
-    public void setMigrationInterface(MigrationInterface migrationInterface) {
+    private void setMigrationInterface(MigrationInterface migrationInterface) {
         this.migrationInterface = migrationInterface;
     }
 
     public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
         return migrationInterface.prepareMigration(apiMigrationPreparation);
-    }
-
-    public void migrate(APIMigration preparedMigration) {
-        migrationInterface.migrate(preparedMigration);
     }
 
 }

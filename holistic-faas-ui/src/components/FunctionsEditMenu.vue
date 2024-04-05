@@ -34,13 +34,14 @@
           </v-list-item>
 
           <v-list-item>
+            <v-list-item-title @click="migrateToProvider('AWS')">
+              to AWS
+            </v-list-item-title>
+          </v-list-item>
 
-
-
-            <v-list-item-title
-                @click="functionMigrationProviderDialog = true;"
-            >
-              to another Provider
+          <v-list-item>
+            <v-list-item-title @click="migrateToProvider('GCP')">
+              to GCP
             </v-list-item-title>
           </v-list-item>
 
@@ -62,8 +63,10 @@
 <script>
 
 import FunctionMigrationProviderDialog from "@/components/FunctionMigrationProviderDialog.vue";
+import HfApi from "@/utils/hf-api";
 
 export default {
+
   components: {FunctionMigrationProviderDialog},
 
   props: {
@@ -89,6 +92,37 @@ export default {
       console.log('migrateToMyAccount');
       console.log(this.items);
     },
+
+    migrateToProvider(provider) {
+
+      // Items consists of a list of {id, functionDeployment, functionImplementation and functionType}
+      // But the api does not expect the id field, so create a new object without that
+
+      let itemsRequest = this.items.map(item => {
+        return {
+          functionDeployment: item.functionDeployment,
+          functionImplementation: item.functionImplementation,
+          functionType: item.functionType
+        }
+      })
+
+      HfApi.prepareMigration(itemsRequest, provider)
+          .then((response) => {
+
+            console.log(response);
+
+            HfApi.migrateFunctions(response.data)
+                .then((response) => {
+
+                  console.log(response);
+
+                  this.$emit('menu-closed')
+
+                })
+
+          })
+
+    }
 
   }
 

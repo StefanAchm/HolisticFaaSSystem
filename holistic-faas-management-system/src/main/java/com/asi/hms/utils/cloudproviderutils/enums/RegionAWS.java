@@ -19,6 +19,7 @@ package com.asi.hms.utils.cloudproviderutils.enums;
 // Region: us-east-2
 
 import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -62,6 +63,15 @@ public enum RegionAWS implements RegionInterface {
     RegionAWS(String regionCode, String regionName) {
         this.regionCode = regionCode;
         this.regionName = regionName;
+    }
+
+    public static RegionAWS fromCode(String code) {
+        for (RegionAWS region : RegionAWS.values()) {
+            if (region.getRegionCode().equals(code)) {
+                return region;
+            }
+        }
+        return null;
     }
 
     @Override

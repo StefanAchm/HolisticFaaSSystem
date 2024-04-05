@@ -1,6 +1,5 @@
 package com.asi.hms.utils.cloudproviderutils.model;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionType;
@@ -78,16 +77,8 @@ public class Function {
 
         Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
 
-        switch (provider) {
-            case AWS -> {
-                function.setRegion(RegionAWS.valueOf(dbFunctionDeployment.getRegion()));
-                function.setRuntime(RuntimeAWS.valueOf(dbFunctionDeployment.getRuntime()));
-            }
-            case GCP -> {
-                function.setRegion(RegionGCP.valueOf(dbFunctionDeployment.getRegion()));
-                function.setRuntime(RuntimeGCP.valueOf(dbFunctionDeployment.getRuntime()));
-            } default -> throw new HolisticFaaSException("Provider not supported");
-        }
+        function.setRegion(provider.getRegionFromCode(dbFunctionDeployment.getRegion()));
+        function.setRuntime(provider.getRuntimeFromCode(dbFunctionDeployment.getRuntime()));
 
         return function;
 

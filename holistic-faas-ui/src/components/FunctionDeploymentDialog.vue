@@ -219,37 +219,10 @@ export default {
 
             })
 
-        this.functions = this.allFunctions
-            // .filter(func => func.provider === newValue.provider)
-            .map(func => {
-              return {
-                title: func.id,
-                value: func.id
-              }
+        this.runtimes = this.getRuntimes(newValue.provider)
+        this.regions = this.getRegions(newValue.provider)
 
-            })
-
-        this.runtimes = this.providerOptions
-            .filter(provider => provider.provider === newValue.provider)
-            .map(provider => provider.runtimes)
-            .flat()
-            .map(runtime => {
-              return {
-                title: runtime,
-                value: runtime
-              }
-            })
-
-        this.regions = this.providerOptions
-            .filter(provider => provider.provider === newValue.provider)
-            .map(provider => provider.regions)
-            .flat()
-            .map(region => {
-              return {
-                title: region,
-                value: region
-              }
-            })
+        console.log(newValue)
 
 
       },
@@ -260,25 +233,6 @@ export default {
   },
 
   methods: {
-
-    init() {
-
-      HfApi.getAllUsers()
-          .then(response => {
-            this.allUsers = response.data;
-          })
-
-      HfApi.getAllFunctions()
-          .then(response => {
-            this.allFunctions = response.data;
-          })
-
-      HfApi.getProviderOptions()
-          .then(response => {
-            this.providerOptions = response.data;
-          })
-
-    },
 
     close() {
       console.log('close before')

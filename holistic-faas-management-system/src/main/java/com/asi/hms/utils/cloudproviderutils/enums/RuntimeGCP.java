@@ -63,6 +63,14 @@ public enum RuntimeGCP implements RuntimeInterface {
         this.runtimeCode = runtimeCode;
     }
 
+    public static RuntimeGCP fromCode(String runtimeString) {
+        for (RuntimeGCP runtime : RuntimeGCP.values()) {
+            if (runtime.runtimeCode.equals(runtimeString)) {
+                return runtime;
+            }
+        }
+        return null;
+    }
 
     @Override
     public String getRuntimeCode() {

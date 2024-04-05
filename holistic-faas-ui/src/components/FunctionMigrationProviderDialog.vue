@@ -16,7 +16,7 @@
             <v-col>
 
               <v-select
-                  v-model="migrationSettings.provider"
+                  v-model="provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
@@ -81,9 +81,7 @@ export default {
 
   data: () => ({
     currentFile: null,
-    migrationSettings: {
-      provider: null,
-    },
+    provider: null,
     preparedItems: []
 
   }),
@@ -102,23 +100,7 @@ export default {
   created() {
   },
 
-  watch: {
-
-    // migrationSettings: {
-    //
-    //   handler(value) {
-    //
-    //     HfApi.prepareMigration(this.items, value)
-    //         .then((response) => {
-    //           this.preparedItems = response.data
-    //         })
-    //
-    //   }, deep: true
-    //
-    // }
-
-
-  },
+  watch: {},
 
   methods: {
 
@@ -129,7 +111,7 @@ export default {
 
     save() {
 
-      HfApi.prepareMigration(this.items, this.migrationSettings)
+      HfApi.prepareMigration(this.items, this.provider)
           .then((response) => {
 
             console.log(response);

@@ -94,11 +94,11 @@ export default {
         return apiClient.get('/deploy/getAll');
     },
 
-    prepareMigration(items, migrationSettings) {
+    prepareMigration(items, target) {
 
         let migrationRequest = {
             functions: items,
-            target: migrationSettings.provider,
+            target: target,
             migrationType: 'FUNCTION_PROVIDER' // TODO: dynamic
         }
 

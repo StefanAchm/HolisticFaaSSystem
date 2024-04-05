@@ -7,6 +7,4 @@ public interface MigrationInterface {
 
     APIMigration prepareMigration(APIMigrationPreparation migration);
 
-    void migrate(APIMigration preparedMigration);
-
 }
