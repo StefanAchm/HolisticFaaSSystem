@@ -2,12 +2,22 @@ import axios from 'axios';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080/hf/api',
-    withCredentials: false,
+    withCredentials: true,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }
 });
+
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    }
+)
 
 export default {
 
@@ -75,6 +85,14 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }
         });
+    },
+
+    register(user) {
+        return apiClient.post('/user/register', user);
+    },
+
+    login(user) {
+        return apiClient.post('/user/login', user);
     },
 
 

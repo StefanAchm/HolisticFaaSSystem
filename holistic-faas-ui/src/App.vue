@@ -53,7 +53,8 @@
         <v-list-item
             v-for="item in items"
             :key="item.title"
-            link @click="$router.push({ path: item.route})"
+            link
+            @click="navigateTo(item.route)"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -108,6 +109,16 @@ export default {
       mini: true,
     }
   },
+
+  methods: {
+    navigateTo(route) {
+
+      this.$router.push({path: route})
+          .catch(() => {
+            console.log('Error navigating to route')
+          })
+    }
+  }
 
 };
 </script>

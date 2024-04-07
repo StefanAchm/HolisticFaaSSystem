@@ -10,6 +10,7 @@ public class APIUser {
     private UUID id;
 
     private String username;
+    private String password;
 
     private List<APIUserCredentials> userCredentials;
 
@@ -42,5 +43,13 @@ public class APIUser {
 
     public void setUserCredentials(List<APIUserCredentials> userCredentials) {
         this.userCredentials = userCredentials;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

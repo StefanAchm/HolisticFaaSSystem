@@ -3,8 +3,10 @@ package com.asi.hms.components;
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
+import com.asi.hms.service.UserService;
 import com.asi.hms.utils.cloudproviderutils.enums.RegionAWS;
 import com.asi.hms.utils.cloudproviderutils.enums.RuntimeAWS;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -12,18 +14,22 @@ import javax.annotation.PostConstruct;
 @Component
 public class DatabaseInitializer {
 
+    private final PasswordEncoder passwordEncoder;
     private final FunctionDeploymentRepository functionDeploymentRepository;
     private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionTypeRepository functionTypeRepository;
     private final UserCredentialsRepository userCredentialsRepository;
     private final UserRepository userRepository;
 
-    public DatabaseInitializer(FunctionDeploymentRepository functionDeploymentRepository,
+    public DatabaseInitializer(PasswordEncoder passwordEncoder,
+                               FunctionDeploymentRepository functionDeploymentRepository,
                                FunctionImplementationRepository functionImplementationRepository,
                                FunctionTypeRepository functionTypeRepository,
                                UserCredentialsRepository userCredentialsRepository,
-                                 UserRepository userRepository
+                               UserRepository userRepository
     ) {
+
+        this.passwordEncoder = passwordEncoder;
 
         this.functionDeploymentRepository = functionDeploymentRepository;
         this.functionImplementationRepository = functionImplementationRepository;
@@ -39,6 +45,7 @@ public class DatabaseInitializer {
 
         DBUser user1 = new DBUser();
         user1.setUsername("user1");
+        user1.setPassword(passwordEncoder.encode("password"));
 
         userRepository.save(user1);
 
@@ -68,7 +75,7 @@ public class DatabaseInitializer {
 
         functionImplementationRepository.save(dbFunctionImplementation);
 
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
 
             DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
             dbFunctionDeployment.setProvider("AWS");
