@@ -112,9 +112,9 @@ export default {
       menu: false,
       activePicker: null,
       headers: [
-        {text: 'Username', value: 'username', width: '150px'},
-        {text: 'Credentials', value: 'credentialsFilePath', width: '150px'},
-        {text: 'Provider', value: 'provider', width: '400px'}
+        {text: 'Username', value: 'user.username', width: '100px'},
+        {text: 'Provider', value: 'provider', width: '100px'},
+        {text: 'Credentials', value: 'credentialsFilePath', width: '300px'},
       ],
       users: []
     }

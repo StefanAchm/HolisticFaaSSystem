@@ -1,23 +1,20 @@
 package com.asi.hms.service;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.utils.cloudproviderutils.enums.Provider;
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
-import com.asi.hms.utils.cloudproviderutils.model.UserInterface;
 import com.asi.hms.model.api.APIFunctionDeployment;
-import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
+import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBUser;
+import com.asi.hms.model.db.DBUserCredentials;
 import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.ProgressHandler;
-import com.asi.hms.utils.cloudproviderutils.deploy.DeployAWS;
-import com.asi.hms.utils.cloudproviderutils.deploy.DeployGCP;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployInterface;
+import com.asi.hms.utils.cloudproviderutils.enums.Provider;
+import com.asi.hms.utils.cloudproviderutils.model.Function;
+import com.asi.hms.utils.cloudproviderutils.model.UserInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -54,11 +51,9 @@ public class FunctionDeploymentService {
 
     public void addFunctionDeployment(APIFunctionDeployment apiFunctionDeployment) {
 
-        DBUser user = this.userRepository.findByUsername(apiFunctionDeployment.getUserName());
-
-        if (user == null) {
-            throw new HolisticFaaSException("User '" + apiFunctionDeployment.getUserName() + "' not found");
-        }
+        DBUser user = this.userRepository
+                .findById(apiFunctionDeployment.getUserId())
+                .orElseThrow(() -> new HolisticFaaSException("User '" + apiFunctionDeployment.getUserId() + "'not found"));
 
         DBFunctionImplementation functionImplementation = this.functionImplementationRepository
                 .findById(apiFunctionDeployment.getFunctionImplementationId())
@@ -138,25 +133,15 @@ public class FunctionDeploymentService {
                                     Function function,
                                     ProgressHandler progressHandler) {
 
-        DeployInterface deployer;
-        UserInterface user;
+        DBUserCredentials dbUserCredentials = dbFunctionDeployment.getUser().getUserCredentials()
+                .stream()
+                .filter(c -> c.getProvider().equals(dbFunctionDeployment.getProvider()))
+                .findFirst()
+                .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
 
         Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
-
-        switch (provider) {
-            case AWS -> {
-                deployer = new DeployAWS();
-                user = UserAWS.fromFile(Paths.get(dbFunctionDeployment.getUser().getCredentialsFilePath()));
-            }
-            case GCP -> {
-                deployer = new DeployGCP();
-                user = UserGCP.fromFile(Paths.get(dbFunctionDeployment.getUser().getCredentialsFilePath()));
-
-            }
-
-            default -> throw new HolisticFaaSException("Provider not supported");
-
-        }
+        UserInterface userFromFile = provider.getUserFromFile(Paths.get(dbUserCredentials.getCredentialsFilePath()));
+        DeployInterface deployer = provider.getDeployer();
 
         logger.info("Deploying function {} to provider {} at region {} for user {}",
                 function.getName(),
@@ -164,7 +149,7 @@ public class FunctionDeploymentService {
                 function.getRegion(),
                 dbFunctionDeployment.getUser().getUsername());
 
-        return deployer.deployFunction(function, user, progressHandler);
+        return deployer.deployFunction(function, userFromFile, progressHandler);
 
     }
 

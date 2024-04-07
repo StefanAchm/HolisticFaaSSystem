@@ -20,7 +20,9 @@ public class APIFunctionDeployment {
     private DeployStatus status;
     private String statusMessage;
 
+    private UUID userId;
     private String userName;
+
     private UUID functionImplementationId;
 
     public static APIFunctionDeployment fromDBFunctionDeployment(DBFunctionDeployment dbFunctionDeployment) {
@@ -37,6 +39,7 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setStatus(dbFunctionDeployment.getStatus());
         apiFunctionDeployment.setStatusMessage(dbFunctionDeployment.getStatusMessage());
 
+        apiFunctionDeployment.setUserId(dbFunctionDeployment.getUser().getId());
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionImplementationId(dbFunctionDeployment.getFunctionImplementation().getId());
 
@@ -99,6 +102,14 @@ public class APIFunctionDeployment {
 
     public void setRuntime(String runtime) {
         this.runtime = runtime;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {

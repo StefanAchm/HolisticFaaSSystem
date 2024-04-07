@@ -36,7 +36,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     private DBFunctionImplementation functionImplementation;
 
     @ManyToOne
-    @JoinColumn(name = "user_username")
+    @JoinColumn(name = "user_id")
     private DBUser user;
 
     public DBFunctionDeployment() {

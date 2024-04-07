@@ -1,14 +1,8 @@
 package com.asi.hms.components;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.model.db.DBFunctionDeployment;
-import com.asi.hms.model.db.DBFunctionImplementation;
-import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.model.db.DBUser;
-import com.asi.hms.repository.FunctionDeploymentRepository;
-import com.asi.hms.repository.FunctionImplementationRepository;
-import com.asi.hms.repository.FunctionTypeRepository;
-import com.asi.hms.repository.UserRepository;
+import com.asi.hms.model.db.*;
+import com.asi.hms.repository.*;
 import com.asi.hms.utils.cloudproviderutils.enums.RegionAWS;
 import com.asi.hms.utils.cloudproviderutils.enums.RuntimeAWS;
 import org.springframework.stereotype.Component;
@@ -21,16 +15,21 @@ public class DatabaseInitializer {
     private final FunctionDeploymentRepository functionDeploymentRepository;
     private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionTypeRepository functionTypeRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
     private final UserRepository userRepository;
 
     public DatabaseInitializer(FunctionDeploymentRepository functionDeploymentRepository,
                                FunctionImplementationRepository functionImplementationRepository,
                                FunctionTypeRepository functionTypeRepository,
-                               UserRepository userRepository) {
+                               UserCredentialsRepository userCredentialsRepository,
+                                 UserRepository userRepository
+    ) {
 
         this.functionDeploymentRepository = functionDeploymentRepository;
         this.functionImplementationRepository = functionImplementationRepository;
         this.functionTypeRepository = functionTypeRepository;
+
+        this.userCredentialsRepository = userCredentialsRepository;
         this.userRepository = userRepository;
 
     }
@@ -39,11 +38,24 @@ public class DatabaseInitializer {
     private void init() {
 
         DBUser user1 = new DBUser();
-        user1.setCredentialsFilePath("holistic-faas-management-system\\src\\main\\resources\\auth\\stefan01\\aws.properties");
-        user1.setProvider("AWS");
         user1.setUsername("user1");
 
         userRepository.save(user1);
+
+
+        DBUserCredentials credentials1 = new DBUserCredentials();
+        credentials1.setCredentialsFilePath("holistic-faas-management-system\\src\\main\\resources\\auth\\stefan01\\aws.properties");
+        credentials1.setProvider("AWS");
+        credentials1.setUser(user1);
+
+        userCredentialsRepository.save(credentials1);
+
+        DBUserCredentials credentials2 = new DBUserCredentials();
+        credentials2.setCredentialsFilePath("holistic-faas-management-system\\src\\main\\resources\\auth\\stefan01\\gcp.json");
+        credentials2.setProvider("GCP");
+        credentials2.setUser(user1);
+
+        userCredentialsRepository.save(credentials2);
 
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName("function01");
@@ -72,7 +84,6 @@ public class DatabaseInitializer {
             functionDeploymentRepository.save(dbFunctionDeployment);
 
         }
-
 
     }
 

@@ -1,39 +1,27 @@
 package com.asi.hms.service;
 
-import com.asi.hms.model.api.APIUser;
 import com.asi.hms.model.db.DBUser;
 import com.asi.hms.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
-    private final UploadFileService uploadFileService;
-
-    public UserService(UserRepository userRepository, UploadFileService uploadFileService) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.uploadFileService = uploadFileService;
     }
 
-    public void create(MultipartFile file, APIUser apiUser) {
-
-        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.CREDENTIALS_DIR);
+    public DBUser register(String username) {
 
         DBUser dbUser = new DBUser();
-        dbUser.setUsername(apiUser.getUsername());
-        dbUser.setProvider(apiUser.getProvider());
-        dbUser.setCredentialsFilePath(path);
+        dbUser.setUsername(username);
 
         this.userRepository.save(dbUser);
 
+        return dbUser;
+
     }
 
-    public List<APIUser> getAllUser() {
-        return this.userRepository.findAll().stream().map(APIUser::fromDBUser).toList();
-    }
 }

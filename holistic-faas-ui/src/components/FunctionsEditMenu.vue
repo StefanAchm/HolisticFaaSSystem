@@ -18,7 +18,19 @@
             v-on="on"
             :class="{ 'v-btn--disabled': disabled }"
         >
-          Migrate
+
+          <span v-if="items.length === 0">
+            Migrate
+          </span>
+
+          <span v-else-if="items.length === 1">
+            Migrate 1 function
+          </span>
+
+          <span v-else>
+            Migrate {{ items.length }} functions
+          </span>
+
         </v-btn>
       </template>
 

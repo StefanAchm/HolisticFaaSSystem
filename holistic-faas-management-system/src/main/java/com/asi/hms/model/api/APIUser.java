@@ -2,23 +2,30 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBUser;
 
+import java.util.List;
+import java.util.UUID;
+
 public class APIUser {
+
+    private UUID id;
 
     private String username;
 
-    private String credentialsFilePath;
-
-    private String provider;
+    private List<APIUserCredentials> userCredentials;
 
     public static APIUser fromDBUser(DBUser dbUser) {
-
         APIUser apiUser = new APIUser();
+        apiUser.setId(dbUser.getId());
         apiUser.setUsername(dbUser.getUsername());
-        apiUser.setCredentialsFilePath(dbUser.getCredentialsFilePath());
-        apiUser.setProvider(dbUser.getProvider());
-
         return apiUser;
+    }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -29,20 +36,11 @@ public class APIUser {
         this.username = username;
     }
 
-    public String getCredentialsFilePath() {
-        return credentialsFilePath;
+    public List<APIUserCredentials> getUserCredentials() {
+        return userCredentials;
     }
 
-    public void setCredentialsFilePath(String credentialsFilePath) {
-        this.credentialsFilePath = credentialsFilePath;
+    public void setUserCredentials(List<APIUserCredentials> userCredentials) {
+        this.userCredentials = userCredentials;
     }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
 }

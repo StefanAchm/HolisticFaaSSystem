@@ -1,27 +1,28 @@
 package com.asi.hms.model.db;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class DBUser {
 
     @Id
+    @GeneratedValue
+    private UUID id;
+
     private String username;
 
-    // TODO: security issue, should be stored in a secure way
-    private String credentialsFilePath;
-
-    private String provider;
-
     @OneToMany(mappedBy = "user")
-    private List<DBFunctionDeployment> functionDeployments;
+    private List<DBUserCredentials> userCredentials;
 
-    public DBUser() {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -32,19 +33,11 @@ public class DBUser {
         this.username = username;
     }
 
-    public String getCredentialsFilePath() {
-        return credentialsFilePath;
+    public List<DBUserCredentials> getUserCredentials() {
+        return userCredentials;
     }
 
-    public void setCredentialsFilePath(String credentialsFilePath) {
-        this.credentialsFilePath = credentialsFilePath;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setUserCredentials(List<DBUserCredentials> userCredentials) {
+        this.userCredentials = userCredentials;
     }
 }

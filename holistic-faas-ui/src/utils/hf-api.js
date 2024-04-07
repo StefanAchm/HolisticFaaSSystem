@@ -61,7 +61,7 @@ export default {
     // User
 
     getAllUsers() {
-        return apiClient.get('/user/getAll');
+        return apiClient.get('/user_credentials/getAll');
     },
 
     uploadUserCredentials(file, data) {
