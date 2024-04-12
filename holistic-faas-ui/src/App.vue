@@ -15,24 +15,9 @@
     <v-navigation-drawer
         app
         permanent
+        :mini-variant.sync="mini"
         v-if="store.getters.isAuthenticated"
     >
-
-<!--      <template v-slot:append>-->
-<!--        <v-list-item class="px-2">-->
-
-<!--          <v-btn-->
-<!--              icon-->
-<!--              @click.stop="mini = !mini"-->
-<!--          >-->
-<!--            <v-icon v-if="!mini">mdi-chevron-left</v-icon>-->
-<!--            <v-icon v-if="mini">mdi-chevron-right</v-icon>-->
-
-<!--          </v-btn>-->
-
-<!--        </v-list-item>-->
-
-<!--      </template>-->
 
       <v-list-item>
         <v-list-item-content>
@@ -68,11 +53,45 @@
       </v-list>
 
       <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block @click="logout()">
-            Logout
-          </v-btn>
-        </div>
+
+        <v-list>
+
+          <v-list-item>
+
+            <!--            <v-btn-->
+            <!--                icon-->
+            <!--                @click.stop="mini = !mini"-->
+            <!--            >-->
+            <!--              <v-icon v-if="!mini">mdi-chevron-left</v-icon>-->
+            <!--              <v-icon v-if="mini">mdi-chevron-right</v-icon>-->
+
+            <!--            </v-btn>-->
+
+          </v-list-item>
+
+          <v-list-item>
+
+            <v-list-item-content>
+
+              <div class="pa-2">
+
+                <v-btn
+                    width="100%"
+                    color="primary"
+                    @click="logout()"
+                    v-if="!mini"
+                >
+                  Logout
+                </v-btn>
+
+              </div>
+
+            </v-list-item-content>
+
+          </v-list-item>
+
+        </v-list>
+
       </template>
 
     </v-navigation-drawer>
@@ -88,9 +107,9 @@
 
     </v-main>
 
-    <v-footer app>
-      <!-- -->
-    </v-footer>
+    <!--    <v-footer app>-->
+    <!--      &lt;!&ndash; &ndash;&gt;-->
+    <!--    </v-footer>-->
 
   </v-app>
 
@@ -110,21 +129,23 @@ export default {
         {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
       ],
       right: null,
-      mini: true,
+      mini: false,
     }
   },
 
   methods: {
     navigateTo(route) {
 
-      this.$router.push({path: route}).catch(() => {})
+      this.$router.push({path: route}).catch(() => {
+      })
 
     },
 
     logout() {
       this.$store.dispatch('logout')
           .then(() => {
-            this.$router.push({name: 'login'}).catch(() => {})
+            this.$router.push({name: 'login'}).catch(() => {
+            })
           });
     }
 

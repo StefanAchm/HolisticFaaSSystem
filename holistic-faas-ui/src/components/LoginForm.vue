@@ -14,9 +14,13 @@
 
           <v-card-title>
 
-            <span class="text-h5">{{ getCardTitle() }}</span>
+            <span class="text-h4">{{ getCardTitle() }}</span>
 
           </v-card-title>
+
+          <v-card-subtitle>
+            <span class="text-h7">Manage serverless functions</span>
+          </v-card-subtitle>
 
           <v-card-text>
 
@@ -44,23 +48,28 @@
                 {{ error }}
               </v-alert>
 
-              <v-row justify="center">
-                <v-col cols="auto">
-                  <v-btn type="submit">Login</v-btn>
-                </v-col>
-              </v-row>
 
-              <v-row justify="center">
-                <v-col cols="auto">
-                  <v-btn
-                      x-small
-                      color="blue darken-1"
-                      text
-                      @click="changeForm()">
-                    Register here
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <v-btn
+                  width="100%"
+                  color="primary"
+                  type="submit"
+                  class="my-6"
+              >
+                Login
+              </v-btn>
+
+
+              <v-spacer></v-spacer>
+
+
+              <v-btn
+                  width="100%"
+                  x-small
+                  color="blue darken-1"
+                  text
+                  @click="changeForm()">
+                Register here
+              </v-btn>
 
             </v-form>
 
@@ -80,23 +89,25 @@
                   @click:append="showPassword = !showPassword"
               ></v-text-field>
 
-              <v-row justify="center">
-                <v-col cols="auto">
-                  <v-btn type="submit">Register</v-btn>
-                </v-col>
-              </v-row>
+              <v-btn
+                  width="100%"
+                  color="primary"
+                  type="submit"
+                  class="my-6"
+              >
+                Register
+              </v-btn>
 
-              <v-row justify="center">
-                <v-col cols="auto">
-                  <v-btn
-                      x-small
-                      color="blue darken-1"
-                      text
-                      @click="changeForm()">
-                    Go to login
-                  </v-btn>
-                </v-col>
-              </v-row>
+
+              <v-btn
+                  width="100%"
+                  x-small
+                  color="blue darken-1"
+                  text
+                  @click="changeForm()">
+                Go to login
+              </v-btn>
+
 
             </v-form>
 
@@ -172,7 +183,7 @@ export default {
     },
 
     getCardTitle() {
-      return this.registerForm ? 'Register' : 'Login';
+      return this.registerForm ? 'Register' : 'Sign in';
     },
 
     getButtonTitle() {
