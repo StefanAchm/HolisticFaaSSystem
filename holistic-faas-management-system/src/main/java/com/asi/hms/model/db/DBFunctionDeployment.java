@@ -2,6 +2,7 @@ package com.asi.hms.model.db;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.api.APIFunctionDeployment;
+import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -20,9 +21,13 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     private String provider;
 
     private Integer memory;
+
     private Integer timeoutSecs;
+
     private String handler;
+
     private String region;
+
     private String runtime;
 
     @Enumerated(EnumType.STRING)
@@ -41,6 +46,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
     public DBFunctionDeployment() {
         this.status = DeployStatus.CREATED;
+        this.statusMessage = "Deployment not started";
     }
 
     public static DBFunctionDeployment fromAPIFunctionDeployment(

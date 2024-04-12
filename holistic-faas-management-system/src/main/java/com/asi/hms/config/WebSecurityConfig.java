@@ -52,23 +52,19 @@ public class WebSecurityConfig {
 
         http
                 .csrf().disable()
-//                .httpBasic(Customizer.withDefaults())
-
                 .authorizeRequests()
-//                    .antMatchers("/hf/**").permitAll()
                 .antMatchers("/api/user/login").permitAll()
                 .antMatchers("/api/user/register").permitAll()
-//                    .antMatchers("/api/**").authenticated()
+                .antMatchers("/websocket/**").permitAll()
                 .anyRequest().authenticated()
-                // Allow cors
-                .and()
-                .cors()
+
 
                 .and()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors() // Allow cors
 
-        ;
-//
+                .and()
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(this.authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 

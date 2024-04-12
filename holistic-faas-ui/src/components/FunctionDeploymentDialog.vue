@@ -33,22 +33,22 @@
 
           </v-row>
 
-          <v-row>
+<!--          <v-row>-->
 
-            <v-col>
+<!--            <v-col>-->
 
-              <v-select
-                  v-model="editItemLocal.userName"
-                  :items="users"
-                  item-text="title"
-                  item-value="value"
-                  label="User"
-              ></v-select>
+<!--              <v-select-->
+<!--                  v-model="editItemLocal.userName"-->
+<!--                  :items="users"-->
+<!--                  item-text="title"-->
+<!--                  item-value="value"-->
+<!--                  label="User"-->
+<!--              ></v-select>-->
 
 
-            </v-col>
+<!--            </v-col>-->
 
-          </v-row>
+<!--          </v-row>-->
 
           <!--          <v-row>-->
 
@@ -71,7 +71,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.memory" label="Memory"></v-text-field>
+              <v-text-field
+                  type="number"
+                  v-model="editItemLocal.memory"
+                  label="Memory"></v-text-field>
             </v-col>
 
           </v-row>
@@ -79,7 +82,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.timeoutSecs" label="TimeoutSecs"></v-text-field>
+              <v-text-field
+                  type="number"
+                  v-model="editItemLocal.timeoutSecs"
+                  label="TimeoutSecs"></v-text-field>
             </v-col>
 
           </v-row>
@@ -87,7 +93,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.handler" label="Handler"></v-text-field>
+              <v-text-field
+                  type="text"
+                  v-model="editItemLocal.handler"
+                  label="Handler"></v-text-field>
             </v-col>
 
           </v-row>
@@ -222,8 +231,7 @@ export default {
         this.runtimes = this.getRuntimes(newValue.provider)
         this.regions = this.getRegions(newValue.provider)
 
-        console.log(newValue)
-
+        console.log(this.regions)
 
       },
       deep: true
@@ -243,6 +251,8 @@ export default {
 
 
     upload() {
+
+      this.editItemLocal.userId = this.$store.state.userId;
 
       HfApi.deployFunction(this.editItemLocal)
           .finally(() => {

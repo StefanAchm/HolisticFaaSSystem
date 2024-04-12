@@ -7,7 +7,7 @@
     />
 
     <v-menu
-        :disabled="disabled"
+        :disabled="items.length === 0"
         offset-y
     >
 
@@ -16,19 +16,11 @@
             color="primary"
             v-bind="attrs"
             v-on="on"
-            :class="{ 'v-btn--disabled': disabled }"
+            :disabled="items.length === 0"
         >
 
-          <span v-if="items.length === 0">
-            Migrate
-          </span>
-
-          <span v-else-if="items.length === 1">
-            Migrate 1 function
-          </span>
-
-          <span v-else>
-            Migrate {{ items.length }} functions
+          <span>
+            Migrate ({{ items.length }})
           </span>
 
         </v-btn>
@@ -86,10 +78,6 @@ export default {
       type: Array,
       required: true,
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data: () => ({
@@ -104,15 +92,13 @@ export default {
       // Items consists of a list of {id, functionDeployment, functionImplementation and functionType}
       // But the api does not expect the id field, so create a new object without that
 
-      let itemsRequest = this.items.map(item => {
+      return this.items.map(item => {
         return {
           functionDeployment: item.functionDeployment,
           functionImplementation: item.functionImplementation,
           functionType: item.functionType
         }
       })
-
-      return itemsRequest
     },
 
     migrateToMyAccount() {

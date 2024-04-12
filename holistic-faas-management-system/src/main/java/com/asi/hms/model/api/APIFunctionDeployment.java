@@ -3,6 +3,7 @@ package com.asi.hms.model.api;
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.utils.cloudproviderutils.enums.*;
 import com.asi.hms.model.db.DBFunctionDeployment;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.util.UUID;
 
@@ -82,6 +83,24 @@ public class APIFunctionDeployment {
 
     public String getHandler() {
         return handler;
+    }
+
+    @JsonGetter("handlerShort")
+    public String getHandlerShort() {
+
+        // E.g. if a handler is "com.asi.hsg.HelloWorldHandler::handleRequest"
+        // then the short handler is "c.a.h.HelloWorldHandler::handleRequest"
+
+        String[] parts = handler.split("\\.");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < parts.length - 1; i++) {
+            sb.append(parts[i].charAt(0)).append(".");
+        }
+
+        sb.append(parts[parts.length - 1]);
+
+        return sb.toString();
+
     }
 
     public void setHandler(String handler) {

@@ -16,10 +16,6 @@ public class DBUser {
 
     private String password;
 
-    // TODO
-//    @ManyToOne
-//    private DBRole roles;
-
     @OneToMany(mappedBy = "user")
     private List<DBUserCredentials> userCredentials;
 

@@ -9,6 +9,7 @@ import com.asi.hms.model.db.DBUser;
 import com.asi.hms.model.db.DBUserCredentials;
 import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionImplementationRepository;
+import com.asi.hms.repository.UserCredentialsRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.ProgressHandler;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployInterface;
@@ -32,17 +33,20 @@ public class FunctionDeploymentService {
     private static final Logger logger = LoggerFactory.getLogger(FunctionDeploymentService.class);
 
     private final UserRepository userRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
     private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionDeploymentRepository functionDeploymentRepository;
 
     private final WebSocketSessionService sessionService;
 
     public FunctionDeploymentService(UserRepository userRepository,
+                                     UserCredentialsRepository userCredentialsRepository,
                                      FunctionImplementationRepository functionImplementationRepository,
                                      FunctionDeploymentRepository functionDeploymentRepository,
                                      WebSocketSessionService sessionService) {
 
         this.userRepository = userRepository;
+        this.userCredentialsRepository = userCredentialsRepository;
         this.functionImplementationRepository = functionImplementationRepository;
         this.functionDeploymentRepository = functionDeploymentRepository;
         this.sessionService = sessionService;
@@ -70,7 +74,6 @@ public class FunctionDeploymentService {
     }
 
 
-
     @Async
     public void deploy(UUID functionDeploymentId, boolean localOnly) {
 
@@ -94,10 +97,17 @@ public class FunctionDeploymentService {
 
             boolean success;
 
-            if(!localOnly) {
+            if (!localOnly) {
+
+                DBUserCredentials userCredentials = this.userCredentialsRepository
+                        .findDBUserCredentialsByUserAndProvider(
+                                dbFunctionDeployment.getUser(),
+                                dbFunctionDeployment.getProvider()
+                        )
+                        .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
 
                 Function function = Function.fromDbFunction(dbFunctionDeployment);
-                success = deploy(dbFunctionDeployment, function, progressHandler);
+                success = deploy(userCredentials, dbFunctionDeployment, function, progressHandler);
 
             } else {
 
@@ -119,7 +129,7 @@ public class FunctionDeploymentService {
         }
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);
-        progressHandler.finish();
+        progressHandler.finish(dbFunctionDeployment.getStatusMessage());
 
     }
 
@@ -129,15 +139,10 @@ public class FunctionDeploymentService {
 
     }
 
-    protected static boolean deploy(DBFunctionDeployment dbFunctionDeployment,
+    protected static boolean deploy(DBUserCredentials dbUserCredentials,
+                                    DBFunctionDeployment dbFunctionDeployment,
                                     Function function,
                                     ProgressHandler progressHandler) {
-
-        DBUserCredentials dbUserCredentials = dbFunctionDeployment.getUser().getUserCredentials()
-                .stream()
-                .filter(c -> c.getProvider().equals(dbFunctionDeployment.getProvider()))
-                .findFirst()
-                .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
 
         Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
         UserInterface userFromFile = provider.getUserFromFile(Paths.get(dbUserCredentials.getCredentialsFilePath()));
@@ -156,7 +161,7 @@ public class FunctionDeploymentService {
     @Deprecated
     private boolean localDeployTesting(ProgressHandler progressHandler) {
 
-        for(int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= 7; i++) {
 
             progressHandler.update("Step " + i);
 

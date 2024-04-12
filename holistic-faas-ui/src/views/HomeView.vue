@@ -84,15 +84,8 @@
 
 <script>
 
-import store from "../store";
-
 export default {
   name: "HomeView.vue",
-  computed: {
-    store() {
-      return store
-    }
-  }
 }
 </script>
 

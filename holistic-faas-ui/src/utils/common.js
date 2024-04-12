@@ -44,7 +44,7 @@ export default {
                 .map(region => {
                     return {
                         title: region.regionCode + ': ' + region.regionName,
-                        value: region.regionValue,
+                        value: region.regionCode,
                         hint: region.regionName
                     }
                 })
@@ -60,7 +60,7 @@ export default {
                 .map(runtime => {
                     return {
                         title: runtime.runtimeCode,
-                        value: runtime.runtimeValue,
+                        value: runtime.runtimeCode,
                         hint: runtime.runtimeCode
                     }
                 })

@@ -48,7 +48,10 @@ public class WebSocketSessionService implements MessageInterface {
                 Gson gson = new Gson();
                 String textMessage = gson.toJson(message);
 
-                session.sendMessage(new TextMessage(textMessage));
+                synchronized (session) {
+                    session.sendMessage(new TextMessage(textMessage));
+                }
+
 
             } catch (IOException e) {
 
