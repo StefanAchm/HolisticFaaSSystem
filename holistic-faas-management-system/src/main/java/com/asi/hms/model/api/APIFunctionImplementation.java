@@ -2,6 +2,7 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.utils.FileUtil;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,6 @@ public class APIFunctionImplementation {
     private UUID id;
 
     private String filePath;
-
-    private String fileName;
 
     private UUID functionTypeId;
 
@@ -38,12 +37,9 @@ public class APIFunctionImplementation {
         this.filePath = filePath;
     }
 
+    @JsonGetter("fileName")
     public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+        return FileUtil.getFileNameFromPath(this.filePath);
     }
 
     public UUID getFunctionTypeId() {
@@ -68,7 +64,6 @@ public class APIFunctionImplementation {
 
         apiFunctionImplementation.setId(dbFunctionImplementation.getId());
         apiFunctionImplementation.setFilePath(dbFunctionImplementation.getFilePath());
-        apiFunctionImplementation.setFileName(FileUtil.getFileNameFromPath(dbFunctionImplementation.getFilePath()));
 
         apiFunctionImplementation.setFunctionTypeId(dbFunctionImplementation.getFunctionType().getId());
 

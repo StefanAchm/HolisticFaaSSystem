@@ -33,22 +33,22 @@
 
           </v-row>
 
-          <v-row>
+<!--          <v-row>-->
 
-            <v-col>
+<!--            <v-col>-->
 
-              <v-select
-                  v-model="editItemLocal.userName"
-                  :items="users"
-                  item-text="title"
-                  item-value="value"
-                  label="User"
-              ></v-select>
+<!--              <v-select-->
+<!--                  v-model="editItemLocal.userName"-->
+<!--                  :items="users"-->
+<!--                  item-text="title"-->
+<!--                  item-value="value"-->
+<!--                  label="User"-->
+<!--              ></v-select>-->
 
 
-            </v-col>
+<!--            </v-col>-->
 
-          </v-row>
+<!--          </v-row>-->
 
           <!--          <v-row>-->
 
@@ -71,7 +71,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.memory" label="Memory"></v-text-field>
+              <v-text-field
+                  type="number"
+                  v-model="editItemLocal.memory"
+                  label="Memory"></v-text-field>
             </v-col>
 
           </v-row>
@@ -79,7 +82,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.timeoutSecs" label="TimeoutSecs"></v-text-field>
+              <v-text-field
+                  type="number"
+                  v-model="editItemLocal.timeoutSecs"
+                  label="TimeoutSecs"></v-text-field>
             </v-col>
 
           </v-row>
@@ -87,7 +93,10 @@
           <v-row>
 
             <v-col>
-              <v-text-field v-model="editItemLocal.handler" label="Handler"></v-text-field>
+              <v-text-field
+                  type="text"
+                  v-model="editItemLocal.handler"
+                  label="Handler"></v-text-field>
             </v-col>
 
           </v-row>
@@ -219,38 +228,10 @@ export default {
 
             })
 
-        this.functions = this.allFunctions
-            // .filter(func => func.provider === newValue.provider)
-            .map(func => {
-              return {
-                title: func.id,
-                value: func.id
-              }
+        this.runtimes = this.getRuntimes(newValue.provider)
+        this.regions = this.getRegions(newValue.provider)
 
-            })
-
-        this.runtimes = this.providerOptions
-            .filter(provider => provider.provider === newValue.provider)
-            .map(provider => provider.runtimes)
-            .flat()
-            .map(runtime => {
-              return {
-                title: runtime,
-                value: runtime
-              }
-            })
-
-        this.regions = this.providerOptions
-            .filter(provider => provider.provider === newValue.provider)
-            .map(provider => provider.regions)
-            .flat()
-            .map(region => {
-              return {
-                title: region,
-                value: region
-              }
-            })
-
+        console.log(this.regions)
 
       },
       deep: true
@@ -261,25 +242,6 @@ export default {
 
   methods: {
 
-    init() {
-
-      HfApi.getAllUsers()
-          .then(response => {
-            this.allUsers = response.data;
-          })
-
-      HfApi.getAllFunctions()
-          .then(response => {
-            this.allFunctions = response.data;
-          })
-
-      HfApi.getProviderOptions()
-          .then(response => {
-            this.providerOptions = response.data;
-          })
-
-    },
-
     close() {
       console.log('close before')
       this.dialogLocal = false
@@ -289,6 +251,8 @@ export default {
 
 
     upload() {
+
+      this.editItemLocal.userId = this.$store.state.userId;
 
       HfApi.deployFunction(this.editItemLocal)
           .finally(() => {

@@ -1,4 +1,4 @@
-package com.asi.hms.enums;
+package com.asi.hms.utils.cloudproviderutils.enums;
 
 /**
  * GCP Lambda Runtimes,
@@ -57,16 +57,42 @@ public enum RuntimeGCP implements RuntimeInterface {
     DOTNET_CORE_6("dotnet6"),
     DOTNET_CORE_3("dotnet3");
 
-    private final String runtimeString;
+    private final String runtimeCode;
 
-    RuntimeGCP(String runtimeString) {
-        this.runtimeString = runtimeString;
+    RuntimeGCP(String runtimeCode) {
+        this.runtimeCode = runtimeCode;
     }
 
+    public static RuntimeGCP fromCode(String runtimeString) {
+        for (RuntimeGCP runtime : RuntimeGCP.values()) {
+            if (runtime.runtimeCode.equals(runtimeString)) {
+                return runtime;
+            }
+        }
+        return null;
+    }
 
     @Override
-    public String getRuntimeString() {
-        return runtimeString;
+    public String getRuntimeCode() {
+        return runtimeCode;
     }
+
+    @Override
+    public RuntimeGlobal getRuntimeGlobal() {
+
+        // Create a new RuntimeGlobal object and set the language and version
+        // E.g. for java11, set java as language and 11 as version
+
+        String language = runtimeCode.split("\\d")[0];
+        String version = runtimeCode.substring(language.length());
+
+        RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
+        runtimeGlobal.setLanguage(language);
+        runtimeGlobal.setVersion(version);
+
+        return runtimeGlobal;
+
+    }
+
 
 }

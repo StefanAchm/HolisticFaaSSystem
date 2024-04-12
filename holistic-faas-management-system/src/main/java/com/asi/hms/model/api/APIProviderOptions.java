@@ -1,8 +1,8 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.enums.Provider;
-import com.asi.hms.enums.RegionInterface;
-import com.asi.hms.enums.RuntimeInterface;
+import com.asi.hms.utils.cloudproviderutils.enums.Provider;
+import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
+import com.asi.hms.utils.cloudproviderutils.enums.RuntimeInterface;
 
 import java.util.List;
 

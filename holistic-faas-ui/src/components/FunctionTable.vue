@@ -15,36 +15,32 @@
 
         <v-toolbar-title>Functions</v-toolbar-title>
 
-        <v-spacer></v-spacer>
-
         <v-btn
             color="primary"
             class="mx-2"
             @click="functionDialogVisible = true">
 
-          Add Function
+          Add
 
         </v-btn>
 
-<!--        <v-btn-->
-<!--            color="primary"-->
-<!--            class="mx-2"-->
-<!--            :disabled="selected.length === 0"-->
-<!--            @click="functionMigrationDialogVisible = true">-->
+        <v-spacer></v-spacer>
 
-<!--          Migrate-->
 
-<!--        </v-btn>-->
-<!--        -->
-<!--        <FunctionMigrationDialog-->
-<!--            :dialog.sync="functionMigrationDialogVisible"-->
-<!--            :items="selected"-->
-<!--            @dialog-closed="init"-->
-<!--        />-->
+
+        <v-btn
+            :disabled="selected.length === 0"
+            color="primary"
+            class="mx-2"
+            @click="deployAll">
+
+          Deploy ({{selected.length}})
+
+        </v-btn>
 
         <FunctionsEditMenu
             :items="selected"
-            :disabled="selected.length === 0"
+            @menu-closed="init"
         />
 
         <FunctionTypeDialog
@@ -65,12 +61,6 @@
             :function-type="editItem.functionType"/>
 
       </v-toolbar>
-
-    </template>
-
-    <template v-slot:[`item.type`]="{ item }">
-
-      <span>{{ item.functionType.name }}</span>
 
     </template>
 
@@ -107,6 +97,20 @@
 
     </template>
 
+    <template v-slot:[`item.handler`]="{ item }">
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+        <span
+            v-bind="attrs"
+            v-on="on"
+        >{{ item.handler }}</span>
+        </template>
+        <span>{{ item.functionDeployment?.handler }}</span>
+      </v-tooltip>
+
+    </template>
+
     <template v-slot:[`item.deployment`]="{ item }">
 
       <div v-if="item.functionDeployment === null">
@@ -131,7 +135,7 @@
           <strong> TimeoutSecs: </strong> {{ item.functionDeployment.timeoutSecs }} <br>
           <strong> Memory: </strong> {{ item.functionDeployment.memory }} <br>
           <strong> Runtime: </strong> {{ item.functionDeployment.runtime }} <br>
-          <strong> UserName: </strong> {{ item.functionDeployment.userName }} <br>
+          <strong> User: </strong> {{ item.functionDeployment.userName }} <br>
 
         </span>
 
@@ -182,6 +186,14 @@
 
     <template v-slot:[`item.status`]="{ item }">
 
+      <!--      <v-progress-circular-->
+      <!--          :value="getLoadingValue(item)"-->
+      <!--          :rotate="-90"-->
+      <!--          v-if="getLoadingValue(item) !== null && getLoadingValue(item) !== undefined"-->
+      <!--          color="primary"-->
+      <!--          size="24"-->
+      <!--      />-->
+
       <v-tooltip bottom>
 
         <template v-slot:activator="{ on, attrs }">
@@ -190,13 +202,15 @@
               :color="getColor(item)"
               v-on="on"
               v-bind="attrs"
+              :class="{ 'pulsate-icon': item.functionDeployment?.status === 'STARTED' }"
+              @click="deployFunction(item)"
           >
             {{ getIcon(item) }}
           </v-icon>
 
         </template>
 
-        <span>{{ getToolTipMessage(item) }}</span>
+        <span>{{ toolTipMessage(item) }}</span>
 
       </v-tooltip>
 
@@ -237,6 +251,7 @@ import FunctionTypeDialog from "@/components/FunctionTypeDialog.vue";
 import FunctionImplementationDialog from "@/components/FunctionImplementationDialog.vue";
 import FunctionDeploymentDialog from "@/components/FunctionDeploymentDialog.vue";
 import FunctionsEditMenu from "@/components/FunctionsEditMenu.vue";
+import hfWebsocket from "@/utils/hf-websocket";
 
 export default {
 
@@ -255,13 +270,28 @@ export default {
     selected: [],
     headers: [
 
-      {text: 'Name', value: 'type', sortable: true},
-      {text: 'Implementation', value: 'implementation', sortable: true},
-      {text: 'Deployment', value: 'deployment', sortable: true},
-      {text: 'Edit', value: 'edit', sortable: true},
-      // {text: 'Add Deployment', value: 'actionsD', sortable: true},
       {text: 'Status', value: 'status', sortable: false},
+      {text: 'Name', value: 'name', sortable: true},
+      {text: 'Implementation', value: 'implementation', sortable: true},
+
+      // {text: 'Deployment', value: 'deployment', sortable: true},
+
+
+      {text: 'Handler', value: 'handler', sortable: true},
+      {text: 'Provider', value: 'provider', sortable: true},
+      {text: 'Region', value: 'region', sortable: true},
+      {text: 'TimeoutSecs', value: 'timeoutSecs', sortable: true},
+      {text: 'Memory', value: 'memory', sortable: true},
+      {text: 'Runtime', value: 'runtime', sortable: true},
+      {text: 'User', value: 'userName', sortable: true},
+
+      {text: '', value: 'edit', sortable: true},
+
+      // {text: 'Add Deployment', value: 'actionsD', sortable: true},
+
+
       // {text: 'Deploy', value: 'deploy', sortable: false},
+
 
     ],
 
@@ -280,7 +310,7 @@ export default {
   }),
 
   created() {
-    this.loadFunctions();
+    this.init();
   },
 
   methods: {
@@ -288,6 +318,9 @@ export default {
     init() {
       this.loadFunctions();
       this.selectedMenuItem = {};
+      this.selected = [];
+      hfWebsocket.onMessage(this.updateProgress)
+
     },
 
     loadFunctions() {
@@ -296,7 +329,24 @@ export default {
             this.functions = response.data;
 
             for (let i = 0; i < this.functions.length; i++) {
-              this.functions[i].id = i;
+
+              if (this.functions[i].functionDeployment) {
+                this.functions[i].id = this.functions[i].functionDeployment.id;
+              } else if (this.functions[i].functionImplementation) {
+                this.functions[i].id = this.functions[i].functionImplementation.id;
+              } else {
+                this.functions[i].id = this.functions[i].functionType.id;
+              }
+
+
+              this.functions[i].name = this.functions[i].functionType.name;
+              this.functions[i].handler = this.functions[i].functionDeployment?.handlerShort;
+              this.functions[i].provider = this.functions[i].functionDeployment?.provider;
+              this.functions[i].region = this.functions[i].functionDeployment?.region;
+              this.functions[i].timeoutSecs = this.functions[i].functionDeployment?.timeoutSecs;
+              this.functions[i].memory = this.functions[i].functionDeployment?.memory;
+              this.functions[i].runtime = this.functions[i].functionDeployment?.runtime;
+              this.functions[i].userName = this.functions[i].functionDeployment?.userName;
             }
 
           })
@@ -314,7 +364,7 @@ export default {
 
     getIcon(item) {
 
-      if(item.functionDeployment === null) {
+      if (item.functionDeployment === null) {
         return 'mdi-progress-helper'
       }
 
@@ -335,7 +385,7 @@ export default {
 
     getColor(item) {
 
-      if(item.functionDeployment === null) {
+      if (item.functionDeployment === null) {
         return 'grey'
       }
 
@@ -355,39 +405,37 @@ export default {
 
     },
 
-    deployFunction(item) {
+    toolTipMessage(item) {
 
-      HfApi.deployFunctionDeploy(item.functionDeployment.id)
-
-    },
-
-    getToolTipMessage(item) {
-
-      if(item.functionDeployment === null) {
+      if (item.functionDeployment === null) {
         return 'No Deployment'
       }
 
-      let status = item.functionDeployment.status
-
-      if (status === 'CREATED') {
-        return 'Deployment not started'
+      if (item.functionDeployment.text) {
+        return item.functionDeployment.text
       } else {
         return item.functionDeployment?.statusMessage
       }
 
     },
 
+    deployFunction(item) {
 
-    updateProgress(data) {
+      HfApi.deployFunctionDeploy(item.functionDeployment.id)
+
+    },
+
+    deployAll() {
+
+      this.selected.forEach(item => {
+        this.deployFunction(item)
+      })
+      this.selected = []
+    },
+
+    updateProgress(message) {
 
       // Update progress of process component, depending on the message
-
-      let message = null
-      try {
-        message = JSON.parse(data);
-      } catch (e) {
-        return
-      }
 
       let id = message.id;
       let step = message.step;
@@ -398,32 +446,53 @@ export default {
 
       let value = step / steps * 100
 
-      this.functionDeployments
-          .filter(fd => fd.id === id)
-          .forEach(fd => {
+      this.functions
+          .filter(f => f.id === id)
+          .forEach(f => {
+
+            let fd = f.functionDeployment
+
             this.$set(fd, 'isLoadingValue', value)
+
             if (value === 100) {
-              // this.init()
               this.$set(fd, 'isLoadingValue', null)
             }
 
-            if (status) {
-              this.$set(fd, 'status', status)
-
-              if (status === 'STARTED') {
-                this.$set(fd, 'statusMessage', text)
-              } else {
-                this.$set(fd, 'statusMessage', statusMessage)
-              }
-            }
+            this.$set(fd, 'status', status)
+            this.$set(fd, 'statusMessage', statusMessage)
+            this.$set(fd, 'text', text)
 
           })
 
-    }
+    },
 
   },
+
+  // computed: {
+  //
+
+  //
+  // }
 
 
 }
 
 </script>
+
+<style scoped>
+.pulsate-icon {
+  animation: pulsate 1s infinite;
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+</style>

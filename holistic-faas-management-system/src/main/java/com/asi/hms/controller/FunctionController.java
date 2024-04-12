@@ -1,6 +1,7 @@
 package com.asi.hms.controller;
 
 import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.service.FunctionService;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,18 @@ public class FunctionController {
 
     }
 
-    @PostMapping(value = "/migrate")
-    public ResponseEntity<String> migrateFunction(@RequestBody APIMigration apiMigration) {
-        this.functionService.migrateFunction(apiMigration);
-        return ResponseEntity.ok("Function migrated");
+    @PostMapping(value = "/prepareMigration")
+    public ResponseEntity<APIMigration> prepareMigration(@RequestBody APIMigrationPreparation apiMigrationPreparation) {
+
+        return ResponseEntity.ok(this.functionService.prepareMigration(apiMigrationPreparation));
+
     }
 
+    @PostMapping(value = "/migrate")
+    public ResponseEntity<APIMigration> migrate(@RequestBody APIMigration apiMigration) {
+
+        return ResponseEntity.ok(this.functionService.migrate(apiMigration));
+
+    }
 
 }

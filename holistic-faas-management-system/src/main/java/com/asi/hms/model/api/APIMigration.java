@@ -1,20 +1,50 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.enums.Provider;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class APIMigration {
 
-    private Provider provider;
+    private Set<APIMigrationObject> userMigrations;
+    private Set<APIMigrationObject> regionMigrations;
+    private Set<APIMigrationObject> runtimeMigrations;
+
     private List<APIFunction> functions;
 
-    public Provider getProvider() {
-        return provider;
+    public APIMigration() {
+
+        this.userMigrations = new HashSet<>();
+        this.regionMigrations = new HashSet<>();
+        this.runtimeMigrations = new HashSet<>();
+
+        this.functions = new ArrayList<>();
+
     }
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
+    public Set<APIMigrationObject> getUserMigrations() {
+        return userMigrations;
+    }
+
+    public void setUserMigrations(Set<APIMigrationObject> userMigrations) {
+        this.userMigrations = userMigrations;
+    }
+
+    public Set<APIMigrationObject> getRegionMigrations() {
+        return regionMigrations;
+    }
+
+    public void setRegionMigrations(Set<APIMigrationObject> regionMigrations) {
+        this.regionMigrations = regionMigrations;
+    }
+
+    public Set<APIMigrationObject> getRuntimeMigrations() {
+        return runtimeMigrations;
+    }
+
+    public void setRuntimeMigrations(Set<APIMigrationObject> runtimeMigrations) {
+        this.runtimeMigrations = runtimeMigrations;
     }
 
     public List<APIFunction> getFunctions() {

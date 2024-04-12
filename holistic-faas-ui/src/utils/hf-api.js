@@ -2,12 +2,22 @@ import axios from 'axios';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080/hf/api',
-    withCredentials: false,
+    withCredentials: true,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }
 });
+
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    }
+)
 
 export default {
 
@@ -61,20 +71,28 @@ export default {
     // User
 
     getAllUsers() {
-        return apiClient.get('/user/getAll');
+        return apiClient.get('/user_credentials/getAll');
     },
 
     uploadUserCredentials(file, data) {
         let formData = new FormData();
 
         formData.append('file', file);
-        formData.append('apiUser', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+        formData.append('apiUserCredentials', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
-        return apiClient.post('/user/create', formData, {
+        return apiClient.post('/user_credentials/add', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
+    },
+
+    register(user) {
+        return apiClient.post('/user/register', user);
+    },
+
+    login(user) {
+        return apiClient.post('/user/login', user);
     },
 
 
@@ -94,14 +112,21 @@ export default {
         return apiClient.get('/deploy/getAll');
     },
 
-    migrateFunctions(items, migrationSettings) {
+    prepareMigration(items, target, type) {
 
         let migrationRequest = {
             functions: items,
-            provider: migrationSettings.provider
+            target: target,
+            migrationType: type
         }
 
+        return apiClient.post('/function/prepareMigration', migrationRequest);
 
+    },
+
+    // deprecated
+    migrateFunctions(migrationRequest) {
         return apiClient.post('/function/migrate', migrationRequest);
     }
+
 }

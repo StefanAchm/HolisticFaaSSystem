@@ -4,8 +4,8 @@ import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
+import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,15 +16,12 @@ public class FunctionService {
 
     private final FunctionDeploymentService functionDeploymentService;
     private final FunctionTypeRepository functionTypeRepository;
-    private final FunctionDeploymentRepository functionDeploymentRepository;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
-                           FunctionDeploymentRepository functionDeploymentRepository,
                            FunctionTypeRepository functionTypeRepository
     ) {
 
         this.functionDeploymentService = functionDeploymentService;
-        this.functionDeploymentRepository = functionDeploymentRepository;
         this.functionTypeRepository = functionTypeRepository;
 
     }
@@ -82,21 +79,24 @@ public class FunctionService {
 
     }
 
-    public void migrateFunction(APIMigration migration) {
+    public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
 
-        // TODO: think about migration!
+        return MigrationRunner.getMigrationRunner(apiMigrationPreparation.getMigrationType())
+                .prepareMigration(apiMigrationPreparation);
 
-        migration.getFunctions().forEach(apiFunction -> {
+    }
 
-            // Create a copy of the functionDeployment and set the correct migration property
+    public APIMigration migrate(APIMigration apiMigration) {
 
-            APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
-            functionDeployment.setProvider(migration.getProvider());
+        // TODO: need to implement this !!!
 
-            this.functionDeploymentService.addFunctionDeployment(functionDeployment);
+        for (APIFunction function : apiMigration.getFunctions()) {
 
+            this.functionDeploymentService.addFunctionDeployment(function.getFunctionDeployment());
 
-        });
+        }
+
+        return apiMigration;
 
     }
 

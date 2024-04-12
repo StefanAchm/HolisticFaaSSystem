@@ -15,23 +15,9 @@
     <v-navigation-drawer
         app
         permanent
+        :mini-variant.sync="mini"
+        v-if="store.getters.isAuthenticated"
     >
-
-<!--      <template v-slot:append>-->
-<!--        <v-list-item class="px-2">-->
-
-<!--          <v-btn-->
-<!--              icon-->
-<!--              @click.stop="mini = !mini"-->
-<!--          >-->
-<!--            <v-icon v-if="!mini">mdi-chevron-left</v-icon>-->
-<!--            <v-icon v-if="mini">mdi-chevron-right</v-icon>-->
-
-<!--          </v-btn>-->
-
-<!--        </v-list-item>-->
-
-<!--      </template>-->
 
       <v-list-item>
         <v-list-item-content>
@@ -39,7 +25,7 @@
             Holistic FaaS
           </v-list-item-title>
           <v-list-item-subtitle>
-            Management System
+            Logged in as {{ store.state.username }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -53,7 +39,8 @@
         <v-list-item
             v-for="item in items"
             :key="item.title"
-            link @click="$router.push({ path: item.route})"
+            link
+            @click="navigateTo(item.route)"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -64,6 +51,48 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <template v-slot:append>
+
+        <v-list>
+
+          <v-list-item>
+
+            <!--            <v-btn-->
+            <!--                icon-->
+            <!--                @click.stop="mini = !mini"-->
+            <!--            >-->
+            <!--              <v-icon v-if="!mini">mdi-chevron-left</v-icon>-->
+            <!--              <v-icon v-if="mini">mdi-chevron-right</v-icon>-->
+
+            <!--            </v-btn>-->
+
+          </v-list-item>
+
+          <v-list-item>
+
+            <v-list-item-content>
+
+              <div class="pa-2">
+
+                <v-btn
+                    width="100%"
+                    color="primary"
+                    @click="logout()"
+                    v-if="!mini"
+                >
+                  Logout
+                </v-btn>
+
+              </div>
+
+            </v-list-item-content>
+
+          </v-list-item>
+
+        </v-list>
+
+      </template>
 
     </v-navigation-drawer>
 
@@ -78,9 +107,9 @@
 
     </v-main>
 
-    <v-footer app>
-      <!-- -->
-    </v-footer>
+    <!--    <v-footer app>-->
+    <!--      &lt;!&ndash; &ndash;&gt;-->
+    <!--    </v-footer>-->
 
   </v-app>
 
@@ -88,14 +117,9 @@
 
 <script>
 
-// import TransactionsView from './components/TransactionsView.vue'
-
 export default {
-  name: 'App',
 
-  // components: {
-  //   TransactionsView
-  // },
+  name: 'App',
 
   data() {
     return {
@@ -105,9 +129,39 @@ export default {
         {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
       ],
       right: null,
-      mini: true,
+      mini: false,
     }
   },
+
+  methods: {
+    navigateTo(route) {
+
+      this.$router.push({path: route}).catch(() => {
+      })
+
+    },
+
+    logout() {
+      this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push({name: 'login'}).catch(() => {
+            })
+          });
+    }
+
+  },
+
+  computed: {
+
+    store() {
+      return this.$store;
+    },
+
+    // username() {
+    //   return this.$store.state.username;
+    // },
+
+  }
 
 };
 </script>

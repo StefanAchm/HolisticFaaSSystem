@@ -1,8 +1,8 @@
-package com.asi.hms.utils.cloudproviderutils;
+package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.Function;
-import com.asi.hms.model.UserGCP;
+import com.asi.hms.utils.cloudproviderutils.model.Function;
+import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
 import com.asi.hms.utils.ProgressHandler;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;
@@ -60,12 +60,12 @@ public class DeployGCP implements DeployInterface<UserGCP> {
 
         try (CloudFunctionsServiceClient client = CloudFunctionsServiceClient.create(cloudFunctionsServiceSettings)) {
 
-            String parent = LocationName.format(user.getProjectName(), function.getRegion().getRegionName());
+            String parent = LocationName.format(user.getProjectName(), function.getRegion().getRegionCode());
 
             CloudFunction cloudFunction = CloudFunction.newBuilder()
                     .setName(parent + "/functions/" + function.getName())
                     .setEntryPoint(function.getHandler())
-                    .setRuntime(function.getRuntime().getRuntimeString())
+                    .setRuntime(function.getRuntime().getRuntimeCode())
                     .setHttpsTrigger(HttpsTrigger.newBuilder().build()) // Not sure if https trigger is needed
                     .setSourceArchiveUrl(sourceZipFile)
                     .setAvailableMemoryMb(function.getMemory())

@@ -19,3 +19,4 @@
 4. Open the project in your favorite IDE (e.g. IntelliJ IDEA, Eclipse, etc.)
 5. Run the gradle project with the `bootRun` task
 6. The server will start on [http://localhost:8080/hf](http://localhost:8080/hf)
+7. Swagger is available at [ttp://localhost:8080/hf/swagger-ui/#/](http://localhost:8080/hf/swagger-ui/#/)
