@@ -203,6 +203,7 @@
               v-on="on"
               v-bind="attrs"
               :class="{ 'pulsate-icon': item.functionDeployment?.status === 'STARTED' }"
+              @click="deployFunction(item)"
           >
             {{ getIcon(item) }}
           </v-icon>
