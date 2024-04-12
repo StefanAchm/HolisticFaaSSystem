@@ -13,7 +13,7 @@
         <v-dialog v-model="dialog" max-width="500px">
 
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Add User</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Add Credentials</v-btn>
           </template>
 
           <v-card>
@@ -23,13 +23,14 @@
 
             <v-card-text>
               <v-container>
-                <v-row>
 
-                  <v-col>
-                    <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
-                  </v-col>
+<!--                <v-row>-->
 
-                </v-row>
+<!--                  <v-col>-->
+<!--                    <v-text-field v-model="editedItem.username" label="Username"></v-text-field>-->
+<!--                  </v-col>-->
+
+<!--                </v-row>-->
 
                 <v-row>
 
@@ -103,12 +104,9 @@ export default {
       editedIndex: -1,
       currentFile: null,
       editedItem: {
-        name: '',
         provider: '',
       },
-      defaultItem: {
-        name: '',
-      },
+      defaultItem: {},
       menu: false,
       activePicker: null,
       headers: [
@@ -158,6 +156,8 @@ export default {
     },
 
     upload() {
+
+      this.editedItem.userId = this.$store.state.userId;
 
       HfApi.uploadUserCredentials(this.currentFile, this.editedItem)
           .finally(() => {

@@ -15,6 +15,7 @@
     <v-navigation-drawer
         app
         permanent
+        v-if="store.getters.isAuthenticated"
     >
 
 <!--      <template v-slot:append>-->
@@ -39,7 +40,7 @@
             Holistic FaaS
           </v-list-item-title>
           <v-list-item-subtitle>
-            Management System
+            Logged in as {{ store.state.username }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -66,6 +67,14 @@
         </v-list-item>
       </v-list>
 
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="logout()">
+            Logout
+          </v-btn>
+        </div>
+      </template>
+
     </v-navigation-drawer>
 
 
@@ -89,14 +98,9 @@
 
 <script>
 
-// import TransactionsView from './components/TransactionsView.vue'
-
 export default {
-  name: 'App',
 
-  // components: {
-  //   TransactionsView
-  // },
+  name: 'App',
 
   data() {
     return {
@@ -113,11 +117,29 @@ export default {
   methods: {
     navigateTo(route) {
 
-      this.$router.push({path: route})
-          .catch(() => {
-            console.log('Error navigating to route')
-          })
+      this.$router.push({path: route}).catch(() => {})
+
+    },
+
+    logout() {
+      this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push({name: 'login'}).catch(() => {})
+          });
     }
+
+  },
+
+  computed: {
+
+    store() {
+      return this.$store;
+    },
+
+    // username() {
+    //   return this.$store.state.username;
+    // },
+
   }
 
 };

@@ -5,22 +5,22 @@ import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.model.api.APIMigrationObject;
 import com.asi.hms.model.api.APIMigrationPreparation;
 
-public class MigrationRegion implements MigrationInterface {
+import java.util.UUID;
+
+public class MigrationImplUser implements MigrationInterface {
 
     @Override
     public APIMigration prepareMigration(APIMigrationPreparation migration) {
-
-        String targetRegion = migration.getTarget();
 
         APIMigration apiMigration = new APIMigration();
 
         for (APIFunction apiFunction : migration.getFunctions()) {
 
-            String sourceRegion = apiFunction.getFunctionDeployment().getRegion();
+            String sourceUser = apiFunction.getFunctionDeployment().getUserId().toString();
 
-            apiFunction.getFunctionDeployment().setRegion(targetRegion);
+            apiFunction.getFunctionDeployment().setUserId(UUID.fromString(migration.getTarget()));
 
-            apiMigration.getRegionMigrations().add(new APIMigrationObject(sourceRegion, targetRegion));
+            apiMigration.getUserMigrations().add(new APIMigrationObject(sourceUser, migration.getTarget()));
             apiMigration.getFunctions().add(apiFunction);
 
         }

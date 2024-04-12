@@ -100,13 +100,7 @@ export default {
 
   methods: {
 
-    migrateToMyAccount() {
-      console.log('migrateToMyAccount');
-      console.log(this.items);
-    },
-
-    migrateToProvider(provider) {
-
+    getMigrateRequest() {
       // Items consists of a list of {id, functionDeployment, functionImplementation and functionType}
       // But the api does not expect the id field, so create a new object without that
 
@@ -118,7 +112,32 @@ export default {
         }
       })
 
-      HfApi.prepareMigration(itemsRequest, provider)
+      return itemsRequest
+    },
+
+    migrateToMyAccount() {
+
+      HfApi.prepareMigration(this.getMigrateRequest(), this.$store.state.userId, 'FUNCTION_USER')
+          .then((response) => {
+
+            console.log(response);
+
+            HfApi.migrateFunctions(response.data)
+                .then((response) => {
+
+                  console.log(response);
+
+                  this.$emit('menu-closed')
+
+                })
+
+          })
+
+    },
+
+    migrateToProvider(provider) {
+
+      HfApi.prepareMigration(this.getMigrateRequest(), provider, 'FUNCTION_PROVIDER')
           .then((response) => {
 
             console.log(response);

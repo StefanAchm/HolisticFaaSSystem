@@ -1,6 +1,6 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.model.api.APIAuthToken;
+import com.asi.hms.model.api.APILoginResponse;
 import com.asi.hms.model.api.APIUser;
 import com.asi.hms.service.UserService;
 import com.asi.hms.components.JwtUtils;
@@ -31,27 +31,21 @@ public class UserController {
 
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<String> createUser(@RequestParam String username) {
-//        this.userService.register(username);
-//        return ResponseEntity.ok("User created successfully");
-//    }
-
     @PostMapping("/register")
-    public ResponseEntity<APIAuthToken> register(@RequestBody APIUser user) {
+    public ResponseEntity<String> register(@RequestBody APIUser user) {
 
         this.userService.register(user);
 
-        return login(user);
+        return ResponseEntity.ok("User registered");
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity<APIAuthToken> login(@RequestBody APIUser user) {
+    public ResponseEntity<APILoginResponse> login(@RequestBody APIUser user) {
 
         try {
 
-            Authentication authentication = authenticationManager.authenticate(
+            Authentication authentication = this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             user.getUsername(),
                             user.getPassword()
@@ -60,9 +54,9 @@ public class UserController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String token = jwtUtils.generateToken(authentication.getName());
+            String token = this.jwtUtils.generateToken(authentication.getName());
 
-            return ResponseEntity.ok(new APIAuthToken(token));
+            return ResponseEntity.ok(this.userService.login(user, token));
 
         } catch (AuthenticationException e) {
 
@@ -70,20 +64,11 @@ public class UserController {
 
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(new APIAuthToken(e.getMessage()));
-
-//            return ResponseEntity
-//                    .status(HttpStatus.UNAUTHORIZED)
-//                    .build();
+                    .build();
 
         }
 
     }
 
-
-//    @GetMapping("/getAll")
-//    public ResponseEntity<String> getAllUsers() {
-//        return ResponseEntity.ok(this.userService.getAllUsers());
-//    }
 
 }

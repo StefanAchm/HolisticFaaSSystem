@@ -21,25 +21,9 @@ public class UserCredentialsController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<String> add(@RequestPart("file") MultipartFile file,
-                                         @RequestPart(value = "apiUser", required = false) APIUserCredentials apiUserCredentials){
+                                         @RequestPart(value = "apiUserCredentials", required = false) APIUserCredentials apiUserCredentials){
 
-        if(apiUserCredentials == null) {
-
-            // TODO: remove this workaround
-
-            // Workaround, because Swagger does only show the file input, but not the apiFunction input
-
-            apiUserCredentials = new APIUserCredentials();
-
-            String randomName = UUID.randomUUID().toString();
-
-//            apiUserCredentials.setUsername(randomName);
-            apiUserCredentials.setProvider("AWS"); // TODO
-
-
-        }
-
-        userCredentialsService.add(file, apiUserCredentials);
+        this.userCredentialsService.add(file, apiUserCredentials);
 
         return ResponseEntity.ok("Credentials added");
 

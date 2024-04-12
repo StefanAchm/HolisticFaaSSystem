@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from "@/views/HomeView";
-import store from "@/store";
+import store from "../store";
 
 Vue.use(VueRouter)
 
@@ -49,7 +49,9 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-    const isAuthenticated = store.getters.isAuthenticated
+    store.commit('initStore');
+
+    const isAuthenticated = store.getters["isAuthenticated"]
 
     if (to.name === 'login') {
         next()

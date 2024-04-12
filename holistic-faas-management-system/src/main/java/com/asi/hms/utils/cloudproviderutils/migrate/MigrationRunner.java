@@ -17,8 +17,9 @@ public class MigrationRunner {
         MigrationRunner migrationRunner = new MigrationRunner();
 
         switch (migrationType) {
-            case FUNCTION_PROVIDER -> migrationRunner.setMigrationInterface(new MigrationProvider());
-            case FUNCTION_REGION -> migrationRunner.setMigrationInterface(new MigrationRegion());
+            case FUNCTION_PROVIDER -> migrationRunner.setMigrationInterface(new MigrationImplProvider());
+            case FUNCTION_REGION -> migrationRunner.setMigrationInterface(new MigrationImplRegion());
+            case FUNCTION_USER -> migrationRunner.setMigrationInterface(new MigrationImplUser());
             default -> throw new HolisticFaaSException("Invalid migration type: " + migrationType);
         }
 

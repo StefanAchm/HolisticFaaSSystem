@@ -4,7 +4,6 @@ import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.repository.FunctionDeploymentRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
@@ -17,15 +16,12 @@ public class FunctionService {
 
     private final FunctionDeploymentService functionDeploymentService;
     private final FunctionTypeRepository functionTypeRepository;
-    private final FunctionDeploymentRepository functionDeploymentRepository;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
-                           FunctionDeploymentRepository functionDeploymentRepository,
                            FunctionTypeRepository functionTypeRepository
     ) {
 
         this.functionDeploymentService = functionDeploymentService;
-        this.functionDeploymentRepository = functionDeploymentRepository;
         this.functionTypeRepository = functionTypeRepository;
 
     }

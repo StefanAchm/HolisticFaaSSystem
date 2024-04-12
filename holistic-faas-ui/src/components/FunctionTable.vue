@@ -132,7 +132,7 @@
           <strong> TimeoutSecs: </strong> {{ item.functionDeployment.timeoutSecs }} <br>
           <strong> Memory: </strong> {{ item.functionDeployment.memory }} <br>
           <strong> Runtime: </strong> {{ item.functionDeployment.runtime }} <br>
-          <strong> UserId: </strong> {{ item.functionDeployment.userId }} <br>
+          <strong> Username: </strong> {{ item.functionDeployment.userName }} <br>
 
         </span>
 

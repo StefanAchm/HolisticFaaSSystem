@@ -39,16 +39,11 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return this.userService;
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(passwordComponent.bCryptPasswordEncoder());
+        provider.setUserDetailsService(this.userService);
+        provider.setPasswordEncoder(this.passwordComponent.bCryptPasswordEncoder());
         return provider;
     }
 
@@ -62,6 +57,7 @@ public class WebSecurityConfig {
                 .authorizeRequests()
 //                    .antMatchers("/hf/**").permitAll()
                 .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/register").permitAll()
 //                    .antMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
                 // Allow cors
@@ -74,7 +70,7 @@ public class WebSecurityConfig {
         ;
 //
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(this.authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,12 +1,10 @@
 package com.asi.hms.service;
 
+import com.asi.hms.model.api.APILoginResponse;
 import com.asi.hms.model.api.APIUser;
 import com.asi.hms.model.db.DBUser;
 import com.asi.hms.model.db.UserPrincipal;
 import com.asi.hms.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +16,21 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserService(
-            PasswordEncoder passwordEncoder,
-            UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder,
+                       UserRepository userRepository) {
 
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+
+    }
+
+
+    public APILoginResponse login(APIUser user, String token) {
+
+        UserPrincipal userPrincipal = this.loadUserByUsername(user.getUsername());
+        APIUser apiUserFromDb = APIUser.fromDBUser(userPrincipal.getDbUser());
+
+        return new APILoginResponse(apiUserFromDb, token);
 
     }
 
@@ -31,7 +38,7 @@ public class UserService implements UserDetailsService {
 
         DBUser dbUser = new DBUser();
         dbUser.setUsername(user.getUsername());
-        dbUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        dbUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         this.userRepository.save(dbUser);
 
@@ -39,25 +46,9 @@ public class UserService implements UserDetailsService {
 
     }
 
-//    public String login(String username) {
-//
-//        Authentication authentication = authenticationManager
-//                .authenticate(
-//
-//
-////        DBUser dbUser = this.userRepository.findByUsername(username);
-////
-////        if (dbUser == null) {
-////            return "User not found";
-////        }
-////
-////        return "User found";
-//
-//
-//    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
 
         DBUser dbUser = this.userRepository.findByUsername(username);
 
@@ -68,4 +59,5 @@ public class UserService implements UserDetailsService {
         return new UserPrincipal(dbUser);
 
     }
+
 }

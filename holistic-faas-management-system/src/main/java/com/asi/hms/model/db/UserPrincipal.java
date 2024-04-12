@@ -14,6 +14,10 @@ public class UserPrincipal implements UserDetails {
         this.dbUser = dbUser;
     }
 
+    public DBUser getDbUser() {
+        return dbUser;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList(); // todo

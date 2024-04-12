@@ -78,9 +78,9 @@ export default {
         let formData = new FormData();
 
         formData.append('file', file);
-        formData.append('apiUser', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+        formData.append('apiUserCredentials', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
-        return apiClient.post('/user/create', formData, {
+        return apiClient.post('/user_credentials/add', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -112,12 +112,12 @@ export default {
         return apiClient.get('/deploy/getAll');
     },
 
-    prepareMigration(items, target) {
+    prepareMigration(items, target, type) {
 
         let migrationRequest = {
             functions: items,
             target: target,
-            migrationType: 'FUNCTION_PROVIDER' // TODO: dynamic
+            migrationType: type
         }
 
         return apiClient.post('/function/prepareMigration', migrationRequest);

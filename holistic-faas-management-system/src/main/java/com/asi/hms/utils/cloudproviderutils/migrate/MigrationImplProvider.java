@@ -5,9 +5,9 @@ import com.asi.hms.utils.cloudproviderutils.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MigrationProvider implements MigrationInterface {
+public class MigrationImplProvider implements MigrationInterface {
 
-    private static final Logger logger = LoggerFactory.getLogger(MigrationProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(MigrationImplProvider.class);
 
     @Override
     public APIMigration prepareMigration(APIMigrationPreparation migration) {
