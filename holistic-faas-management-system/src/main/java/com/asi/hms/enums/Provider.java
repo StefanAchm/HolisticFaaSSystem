@@ -1,8 +1,11 @@
 package com.asi.hms.enums;
 
+import com.asi.hms.model.db.DBFunctionDeployment;
+import com.asi.hms.service.WebSocketSessionService;
+import com.asi.hms.utils.ProgressHandler;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployGCP;
-import com.asi.hms.utils.cloudproviderutils.deploy.DeployInterface;
+import com.asi.hms.utils.cloudproviderutils.deploy.DeployerInterface;
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
 import com.asi.hms.model.UserInterface;
@@ -15,10 +18,11 @@ public enum Provider {
 
     GCP;
 
-    public DeployInterface getDeployer() {
+
+    public DeployerInterface getDeployer(UserInterface user) {
         return switch (this) {
-            case AWS -> new DeployAWS();
-            case GCP -> new DeployGCP();
+            case AWS -> new DeployAWS((UserAWS) user);
+            case GCP -> new DeployGCP((UserGCP) user);
         };
     }
 
@@ -57,4 +61,10 @@ public enum Provider {
         };
     }
 
+    public ProgressHandler getProgressHandler(DBFunctionDeployment dbFunctionDeployment, WebSocketSessionService sessionService) {
+        return switch (this) {
+            case AWS -> new ProgressHandler(dbFunctionDeployment, DeployAWS.STEPS, sessionService);
+            case GCP -> new ProgressHandler(dbFunctionDeployment, DeployGCP.STEPS, sessionService);
+        };
+    }
 }

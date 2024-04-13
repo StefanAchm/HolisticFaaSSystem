@@ -18,8 +18,7 @@ public class FunctionService {
     private final FunctionTypeRepository functionTypeRepository;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
-                           FunctionTypeRepository functionTypeRepository
-    ) {
+                           FunctionTypeRepository functionTypeRepository) {
 
         this.functionDeploymentService = functionDeploymentService;
         this.functionTypeRepository = functionTypeRepository;
@@ -81,20 +80,18 @@ public class FunctionService {
 
     public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
 
-        return MigrationRunner.getMigrationRunner(apiMigrationPreparation.getMigrationType())
+        return MigrationRunner
+                .getMigrationRunner(apiMigrationPreparation.getMigrationType())
                 .prepareMigration(apiMigrationPreparation);
 
     }
 
     public APIMigration migrate(APIMigration apiMigration) {
 
-        // TODO: need to implement this !!!
-
-        for (APIFunction function : apiMigration.getFunctions()) {
-
-            this.functionDeploymentService.addFunctionDeployment(function.getFunctionDeployment());
-
-        }
+        apiMigration.getFunctions()
+                .stream()
+                .map(APIFunction::getFunctionDeployment)
+                .forEach(this.functionDeploymentService::addFunctionDeployment);
 
         return apiMigration;
 

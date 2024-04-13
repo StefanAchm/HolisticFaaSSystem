@@ -12,8 +12,6 @@ import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.UserCredentialsRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.ProgressHandler;
-import com.asi.hms.utils.cloudproviderutils.deploy.DeployInterface;
-import com.asi.hms.enums.Provider;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
 import com.asi.hms.model.UserInterface;
 import org.slf4j.Logger;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -91,69 +88,67 @@ public class FunctionDeploymentService {
     @Async
     public void deploy(UUID functionDeploymentId) {
 
-        Optional<DBFunctionDeployment> byId = this.functionDeploymentRepository.findById(functionDeploymentId);
+        DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
+        DBUserCredentials userCredentials = getDbUserCredentials(dbFunctionDeployment);
 
-        if (byId.isEmpty()) {
-            throw new HolisticFaaSException("Function not found");
-        }
-
-        DBFunctionDeployment dbFunctionDeployment = byId.get();
-
-        dbFunctionDeployment.setStatus(DeployStatus.STARTED);
-        dbFunctionDeployment.setStatusMessage("Deployment started");
-        this.functionDeploymentRepository.save(dbFunctionDeployment);
-
-        // TODO: Define steps dynamically
-        ProgressHandler progressHandler = new ProgressHandler(dbFunctionDeployment, 6, this.sessionService);
-        progressHandler.start();
+        Function function = Function.fromDbFunction(dbFunctionDeployment);
+        ProgressHandler progressHandler = function.getProvider().getProgressHandler(dbFunctionDeployment, this.sessionService);
 
         try {
 
-            DBUserCredentials userCredentials = this.userCredentialsRepository
-                    .findDBUserCredentialsByUserAndProvider(
-                            dbFunctionDeployment.getUser(),
-                            dbFunctionDeployment.getProvider()
+            // Start deployment
+            dbFunctionDeployment.setStatusWithMessage(DeployStatus.STARTED, "Deployment started");
+            this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+            progressHandler.start(
+                    String.format("Deploying function %s to provider %s at region %s for user %s",
+                            function.getName(),
+                            function.getProvider(),
+                            function.getRegion(),
+                            userCredentials.getUser().getUsername()
                     )
-                    .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
+            );
 
-            Function function = Function.fromDbFunction(dbFunctionDeployment);
+            UserInterface user = function.getProvider().getUserFromFile(Paths.get(userCredentials.getCredentialsFilePath()));
 
-            boolean success = deploy(userCredentials, dbFunctionDeployment, function, progressHandler);
+            // Actual deployment
+            boolean success = function.getProvider()
+                    .getDeployer(user)
+                    .deployFunction(function, progressHandler);
 
-            dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
-            dbFunctionDeployment.setStatusMessage(success ? "Deployed successfully" : "Failed to deploy");
-
+            dbFunctionDeployment.setStatusWithMessage(
+                    success ? DeployStatus.DEPLOYED : DeployStatus.FAILED,
+                    success ? "Deployed successfully" : "Failed to deploy"
+            );
 
         } catch (HolisticFaaSException e) {
 
-            dbFunctionDeployment.setStatusMessage(e.getMessage());
-            dbFunctionDeployment.setStatus(DeployStatus.FAILED);
+            dbFunctionDeployment.setStatusWithMessage(DeployStatus.FAILED, e.getMessage());
+            logger.error("Error deploying function:", e);
 
-            logger.error("Error deploying function", e);
+        } finally {
+
+            this.functionDeploymentRepository.save(dbFunctionDeployment);
+            progressHandler.finish(dbFunctionDeployment.getStatusMessage());
 
         }
 
-        this.functionDeploymentRepository.save(dbFunctionDeployment);
-        progressHandler.finish(dbFunctionDeployment.getStatusMessage());
-
     }
 
-    protected static boolean deploy(DBUserCredentials dbUserCredentials,
-                                    DBFunctionDeployment dbFunctionDeployment,
-                                    Function function,
-                                    ProgressHandler progressHandler) {
+    private DBUserCredentials getDbUserCredentials(DBFunctionDeployment dbFunctionDeployment) {
 
-        Provider provider = Provider.valueOf(dbFunctionDeployment.getProvider());
-        UserInterface userFromFile = provider.getUserFromFile(Paths.get(dbUserCredentials.getCredentialsFilePath()));
-        DeployInterface deployer = provider.getDeployer();
+        return this.userCredentialsRepository
+                .findDBUserCredentialsByUserAndProvider(
+                        dbFunctionDeployment.getUser(),
+                        dbFunctionDeployment.getProvider()
+                )
+                .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
+    }
 
-        logger.info("Deploying function {} to provider {} at region {} for user {}",
-                function.getName(),
-                provider,
-                function.getRegion(),
-                dbFunctionDeployment.getUser().getUsername());
+    private DBFunctionDeployment getDbFunctionDeployment(UUID functionDeploymentId) {
 
-        return deployer.deployFunction(function, userFromFile, progressHandler);
+        return this.functionDeploymentRepository.findById(functionDeploymentId)
+                .orElseThrow(() -> new HolisticFaaSException("Function deployment not found"));
 
     }
 

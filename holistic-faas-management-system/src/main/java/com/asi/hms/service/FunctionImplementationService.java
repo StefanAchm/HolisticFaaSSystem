@@ -30,7 +30,10 @@ public class FunctionImplementationService {
 
     public List<APIFunctionImplementation> getAllFunction() {
 
-        return this.functionImplementationRepository.findAll().stream().map(APIFunctionImplementation::fromDBFunctionImplementation).toList();
+        return this.functionImplementationRepository
+                .findAll()
+                .stream()
+                .map(APIFunctionImplementation::fromDBFunctionImplementation).toList();
 
     }
 
@@ -41,7 +44,8 @@ public class FunctionImplementationService {
         DBFunctionImplementation dbFunctionImplementation = new DBFunctionImplementation();
         dbFunctionImplementation.setFilePath(path);
 
-        DBFunctionType dbFunctionType = this.functionTypeRepository.findById(apiFunctionImplementation.getFunctionTypeId())
+        DBFunctionType dbFunctionType = this.functionTypeRepository
+                .findById(apiFunctionImplementation.getFunctionTypeId())
                 .orElseThrow(() -> new HolisticFaaSException("Functiontype not found"));
 
         dbFunctionImplementation.setFunctionType(dbFunctionType);

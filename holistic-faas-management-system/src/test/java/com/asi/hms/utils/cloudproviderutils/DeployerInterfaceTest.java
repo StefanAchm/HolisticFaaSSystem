@@ -17,12 +17,12 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 
-class DeployInterfaceTest {
+class DeployerInterfaceTest {
 
     @Test
     void testDeployFunctionToAWS() {
 
-        DeployAWS deployAws = new DeployAWS();
+
 
         Function function = new Function();
         function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/aws-helloworld-java-1.0-SNAPSHOT.zip"));
@@ -35,16 +35,14 @@ class DeployInterfaceTest {
 
         Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/aws.properties");
 
-        UserAWS user = UserAWS.fromFile(filePath);
+        DeployAWS deployAws = new DeployAWS(UserAWS.fromFile(filePath));
 
-        Assertions.assertTrue(deployAws.deployFunction(function, user));
+        Assertions.assertTrue(deployAws.deployFunction(function, null));
 
     }
 
     @Test
     void testDeployFunctionToGCP() {
-
-        DeployGCP deployGcp = new DeployGCP();
 
         Function function = new Function();
         function.setFilePath(FileUtil.getFilePathFromResourcesFile("zips/gcp-helloworld-java-1.0-SNAPSHOT.zip"));
@@ -57,9 +55,9 @@ class DeployInterfaceTest {
 
         Path filePath = FileUtil.getFilePathFromResourcesFile("auth/stefan01/gcp.json");
 
-        UserGCP user = UserGCP.fromFile(filePath);
+        DeployGCP deployGcp = new DeployGCP(UserGCP.fromFile(filePath));
 
-        Assertions.assertTrue(deployGcp.deployFunction(function, user));
+        Assertions.assertTrue(deployGcp.deployFunction(function, null));
 
 
     }

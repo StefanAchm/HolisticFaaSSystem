@@ -17,20 +17,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-public class DeployAWS implements DeployInterface<UserAWS> {
+public class DeployAWS implements DeployerInterface {
 
     public static final int STEPS = 6;
 
-    @Override
-    public boolean deployFunction(Function function, UserAWS user, ProgressHandler progressHandler) {
+    private final UserAWS user;
 
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(user.getAccessKeyId(), user.getSecretAccessKey());
+    public DeployAWS(UserAWS user) {
+        this.user = user;
+    }
+
+    @Override
+    public boolean deployFunction(Function function, ProgressHandler progressHandler) {
+
+        AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(
+                this.user.getAccessKeyId(),
+                this.user.getSecretAccessKey()
+        );
 
         progressHandler.update("Created AWS credentials");
 
         LambdaClient awsLambda = LambdaClient.builder()
                 .region(Region.of(function.getRegion().getRegionCode()))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
                 .build();
 
         progressHandler.update("Created AWS Lambda client");
@@ -51,7 +60,7 @@ public class DeployAWS implements DeployInterface<UserAWS> {
             CreateFunctionRequest functionRequest = CreateFunctionRequest.builder()
                     .functionName(function.getName())
                     .handler(function.getHandler())
-                    .role(user.getRoleArn()) // The ARN of the role
+                    .role(this.user.getRoleArn()) // The ARN of the role
                     .runtime(function.getRuntime().getRuntimeCode())
                     .code(code)
                     .memorySize(function.getMemory())

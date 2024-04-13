@@ -59,6 +59,11 @@ public class Function {
      */
     private RuntimeInterface runtime;
 
+    /**
+     * The provider of the function.
+     */
+    private Provider provider;
+
     public static Function fromDbFunction(DBFunctionDeployment dbFunctionDeployment) {
 
         DBFunctionImplementation dbFunctionImplementation = dbFunctionDeployment.getFunctionImplementation();
@@ -81,6 +86,7 @@ public class Function {
 
         function.setRegion(provider.getRegionFromCode(dbFunctionDeployment.getRegion()));
         function.setRuntime(provider.getRuntimeFromCode(dbFunctionDeployment.getRuntime()));
+        function.setProvider(provider);
 
         return function;
 
@@ -148,6 +154,14 @@ public class Function {
 
     public void setRuntime(RuntimeInterface runtime) {
         this.runtime = runtime;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
     }
 
 }

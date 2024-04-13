@@ -46,6 +46,11 @@ public class ProgressHandler {
         this.send("Progress started", this.step++);
     }
 
+    public void start(String message) {
+        this.step = 1; // Start at 1
+        this.send(message, this.step++);
+    }
+
     public void finish(String message) {
         this.send(message, this.steps);
     }

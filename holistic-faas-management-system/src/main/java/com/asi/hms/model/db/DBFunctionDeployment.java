@@ -155,4 +155,10 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+    public void setStatusWithMessage(DeployStatus status, String message) {
+        this.status = status;
+        this.statusMessage = message;
+    }
+
 }

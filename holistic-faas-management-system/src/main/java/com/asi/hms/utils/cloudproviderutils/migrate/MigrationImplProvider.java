@@ -7,18 +7,10 @@ import org.slf4j.LoggerFactory;
 
 public class MigrationImplProvider implements MigrationInterface {
 
-    private static final Logger logger = LoggerFactory.getLogger(MigrationImplProvider.class);
-
     @Override
     public APIMigration prepareMigration(APIMigrationPreparation migration) {
 
-        Provider targetProvider;
-
-        try {
-            targetProvider = Provider.valueOf(migration.getTarget());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid provider: " + migration.getTarget());
-        }
+        Provider targetProvider = Provider.valueOf(migration.getTarget());
 
         APIMigration apiMigration = new APIMigration();
 
@@ -26,16 +18,15 @@ public class MigrationImplProvider implements MigrationInterface {
 
             APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
 
-            APIMigrationObject regionMigration = RegionMigrationHelper.fromTo(functionDeployment.getProvider().getRegionFromCode(functionDeployment.getRegion()), targetProvider.getRegionClass());
+            APIMigrationObject regionMigration = RegionMigrationHelper.fromTo(
+                    functionDeployment.getProvider().getRegionFromCode(functionDeployment.getRegion()),
+                    targetProvider.getRegionClass()
+            );
 
-            logger.debug("Region migration: " + regionMigration.getSource() + " -> " + regionMigration.getTarget());
-
-            APIMigrationObject runtimeMigration = RuntimeMigrationHelper.fromTo(functionDeployment.getProvider().getRuntimeFromCode(functionDeployment.getRuntime()), targetProvider.getRuntimeClass());
-
-            logger.debug("Runtime migration: " + runtimeMigration.getSource() + " -> " + runtimeMigration.getTarget());
-
-            // TODO: update user credentials ????
-            // Maybe not needed, if just the user is stored, but not the credentials
+            APIMigrationObject runtimeMigration = RuntimeMigrationHelper.fromTo(
+                    functionDeployment.getProvider().getRuntimeFromCode(functionDeployment.getRuntime()),
+                    targetProvider.getRuntimeClass()
+            );
 
             functionDeployment.setProvider(targetProvider);
             functionDeployment.setRegion(regionMigration.getTarget());
