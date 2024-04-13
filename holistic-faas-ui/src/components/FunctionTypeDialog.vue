@@ -15,6 +15,7 @@
 
         <v-text-field
           v-model="editItemLocal.name"
+          label="Name"
         />
 
       </v-card-text>
@@ -69,7 +70,7 @@ export default  {
       }
     },
     formTitle() {
-      return this.editItemLocal?.id ? 'Change' : 'New'
+      return this.editItemLocal?.id ? 'Change' : 'Add Functiontype'
     }
   },
 

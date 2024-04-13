@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserCredentialsService {
@@ -48,6 +49,20 @@ public class UserCredentialsService {
     }
 
     public List<APIUserCredentials> getAllUser() {
-        return this.userCredentialsRepository.findAll().stream().map(APIUserCredentials::fromDBUser).toList();
+        return this.userCredentialsRepository.findAll().stream().map(APIUserCredentials::fromDBUserCredentials).toList();
     }
+
+    public List<APIUserCredentials> get(UUID userId) {
+
+        DBUser dbUser = this.userRepository
+                .findById(userId)
+                .orElseThrow(() -> new HolisticFaaSException("User '" + userId + "' not found"));
+
+        return this.userCredentialsRepository.findByUser(dbUser)
+                .stream()
+                .map(APIUserCredentials::fromDBUserCredentials)
+                .toList();
+
+    }
+
 }

@@ -74,6 +74,15 @@ export default {
         return apiClient.get('/user_credentials/getAll');
     },
 
+    getUserCredentials(user) {
+        // Need to set the user as body, not as query parameter
+        return apiClient.get('/user_credentials/get', {
+            params: {
+                userId: user.id
+            }
+        });
+    },
+
     uploadUserCredentials(file, data) {
         let formData = new FormData();
 

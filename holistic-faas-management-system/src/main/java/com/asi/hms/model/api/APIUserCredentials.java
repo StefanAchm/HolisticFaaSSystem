@@ -1,6 +1,8 @@
 package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBUserCredentials;
+import com.asi.hms.utils.FileUtil;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.util.UUID;
 
@@ -14,7 +16,7 @@ public class APIUserCredentials {
 
     private UUID userId;
 
-    public static APIUserCredentials fromDBUser(DBUserCredentials dbUserCredentials) {
+    public static APIUserCredentials fromDBUserCredentials(DBUserCredentials dbUserCredentials) {
 
         APIUserCredentials apiUserCredentials = new APIUserCredentials();
         apiUserCredentials.setUser(APIUser.fromDBUser(dbUserCredentials.getUser()));
@@ -57,4 +59,10 @@ public class APIUserCredentials {
     public void setUserId(UUID userId) {
         this.userId = userId;
     }
+
+    @JsonGetter("fileName")
+    public String getFileName() {
+        return FileUtil.getFileNameFromPath(this.credentialsFilePath);
+    }
+
 }

@@ -127,6 +127,7 @@ export default {
         {title: 'Home', icon: 'mdi-bank', route: '/'},
         {title: 'Functions', icon: 'mdi-lambda', route: '/functionsV3'},
         {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
+        {title: 'Profile', icon: 'mdi-account', route: '/profile'},
       ],
       right: null,
       mini: false,
