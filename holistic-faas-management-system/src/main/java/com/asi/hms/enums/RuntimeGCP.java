@@ -1,5 +1,7 @@
 package com.asi.hms.enums;
 
+import com.asi.hms.model.RuntimeGlobal;
+
 /**
  * GCP Lambda Runtimes,
  * see <a href="https://cloud.google.com/functions/docs/concepts/execution-environment?hl=de">this</a> for more information

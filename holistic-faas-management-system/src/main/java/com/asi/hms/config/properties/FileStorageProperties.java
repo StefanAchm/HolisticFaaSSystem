@@ -19,16 +19,15 @@ public class FileStorageProperties {
     @Value("${app.upload.dir}")
     private String uploadDir;
 
-    private Path rootLocation;
 
     @PostConstruct
     public void init() {
 
-        this.rootLocation = Paths.get(uploadDir);
-
         try {
 
-            Path directories = Files.createDirectories(this.rootLocation);
+            Path rootLocation = Paths.get(uploadDir);
+
+            Path directories = Files.createDirectories(rootLocation);
 
             String absolutePath = directories.toAbsolutePath().toString();
 

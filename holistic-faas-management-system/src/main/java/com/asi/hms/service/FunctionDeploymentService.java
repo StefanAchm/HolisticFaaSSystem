@@ -25,7 +25,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class FunctionDeploymentService {
@@ -73,9 +72,24 @@ public class FunctionDeploymentService {
 
     }
 
+    public List<APIFunctionDeployment> getAllFunctionDeployments() {
+
+        return this.functionDeploymentRepository.findAll().stream().map(APIFunctionDeployment::fromDBFunctionDeployment).toList();
+
+    }
+
+
+    public APIFunctionDeployment getFunctionDeployment(UUID functionId) {
+
+        return APIFunctionDeployment.fromDBFunctionDeployment(this.functionDeploymentRepository.findById(functionId).orElseThrow());
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Deployment logic:
 
     @Async
-    public void deploy(UUID functionDeploymentId, boolean localOnly) {
+    public void deploy(UUID functionDeploymentId) {
 
         Optional<DBFunctionDeployment> byId = this.functionDeploymentRepository.findById(functionDeploymentId);
 
@@ -95,25 +109,16 @@ public class FunctionDeploymentService {
 
         try {
 
-            boolean success;
+            DBUserCredentials userCredentials = this.userCredentialsRepository
+                    .findDBUserCredentialsByUserAndProvider(
+                            dbFunctionDeployment.getUser(),
+                            dbFunctionDeployment.getProvider()
+                    )
+                    .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
 
-            if (!localOnly) {
+            Function function = Function.fromDbFunction(dbFunctionDeployment);
 
-                DBUserCredentials userCredentials = this.userCredentialsRepository
-                        .findDBUserCredentialsByUserAndProvider(
-                                dbFunctionDeployment.getUser(),
-                                dbFunctionDeployment.getProvider()
-                        )
-                        .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
-
-                Function function = Function.fromDbFunction(dbFunctionDeployment);
-                success = deploy(userCredentials, dbFunctionDeployment, function, progressHandler);
-
-            } else {
-
-                success = localDeployTesting(progressHandler);
-
-            }
+            boolean success = deploy(userCredentials, dbFunctionDeployment, function, progressHandler);
 
             dbFunctionDeployment.setStatus(success ? DeployStatus.DEPLOYED : DeployStatus.FAILED);
             dbFunctionDeployment.setStatusMessage(success ? "Deployed successfully" : "Failed to deploy");
@@ -133,12 +138,6 @@ public class FunctionDeploymentService {
 
     }
 
-    public List<APIFunctionDeployment> getAllFunctionDeployments() {
-
-        return this.functionDeploymentRepository.findAll().stream().map(APIFunctionDeployment::fromDBFunctionDeployment).toList();
-
-    }
-
     protected static boolean deploy(DBUserCredentials dbUserCredentials,
                                     DBFunctionDeployment dbFunctionDeployment,
                                     Function function,
@@ -155,31 +154,6 @@ public class FunctionDeploymentService {
                 dbFunctionDeployment.getUser().getUsername());
 
         return deployer.deployFunction(function, userFromFile, progressHandler);
-
-    }
-
-    @Deprecated
-    private boolean localDeployTesting(ProgressHandler progressHandler) {
-
-        for (int i = 1; i <= 7; i++) {
-
-            progressHandler.update("Step " + i);
-
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        return Math.random() > 0.5;
-
-    }
-
-    public APIFunctionDeployment getFunctionDeployment(UUID functionId) {
-
-        return APIFunctionDeployment.fromDBFunctionDeployment(this.functionDeploymentRepository.findById(functionId).orElseThrow());
 
     }
 

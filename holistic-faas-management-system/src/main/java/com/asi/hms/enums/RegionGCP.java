@@ -1,6 +1,7 @@
 package com.asi.hms.enums;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.RegionGlobal;
 import com.asi.hms.model.UserGCP;
 import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.cloud.functions.v1.CloudFunctionsServiceClient;
@@ -113,13 +114,11 @@ public enum RegionGCP implements RegionInterface {
             throw new HolisticFaaSException("Region name must consist of continent, country, and city. Region name: " + regionName);
         }
 
-        RegionGlobal regionGlobal = new RegionGlobal();
-
-        regionGlobal.setContinent(regionNameParts[2]);
-        regionGlobal.setCountry(regionNameParts[1]);
-        regionGlobal.setCity(regionNameParts[0]);
-
-        return regionGlobal;
+        return new RegionGlobal(
+                regionNameParts[2],
+                regionNameParts[1],
+                regionNameParts[0]
+        );
 
     }
 

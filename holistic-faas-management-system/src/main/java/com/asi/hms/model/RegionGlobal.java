@@ -1,4 +1,4 @@
-package com.asi.hms.enums;
+package com.asi.hms.model;
 
 public class RegionGlobal {
 
@@ -10,9 +10,6 @@ public class RegionGlobal {
         this.continent = continent;
         this.country = country;
         this.city = city;
-    }
-
-    public RegionGlobal() {
     }
 
     public String getContinent() {

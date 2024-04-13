@@ -18,6 +18,7 @@ package com.asi.hms.enums;
 // Region: us-east-1
 // Region: us-east-2
 
+import com.asi.hms.model.RegionGlobal;
 import com.asi.hms.model.UserAWS;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -93,11 +94,11 @@ public enum RegionAWS implements RegionInterface {
         String continent = regionName.substring(0, regionName.indexOf("(") - 1);
         String city = regionName.substring(regionName.indexOf("(") + 1, regionName.indexOf(")"));
 
-        RegionGlobal regionGlobal = new RegionGlobal();
-        regionGlobal.setContinent(continent);
-        regionGlobal.setCity(city);
-
-        return regionGlobal;
+        return new RegionGlobal(
+                continent,
+                null,
+                city
+        );
 
     }
 

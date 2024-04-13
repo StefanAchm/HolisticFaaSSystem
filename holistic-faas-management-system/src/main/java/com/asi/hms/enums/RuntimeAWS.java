@@ -1,5 +1,7 @@
 package com.asi.hms.enums;
 
+import com.asi.hms.model.RuntimeGlobal;
+
 /**
  * AWS Lambda Runtimes,
  * see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">this</a> site for more information:
