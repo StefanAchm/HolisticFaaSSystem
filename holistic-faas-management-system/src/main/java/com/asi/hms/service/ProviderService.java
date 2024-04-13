@@ -1,7 +1,7 @@
 package com.asi.hms.service;
 
+import com.asi.hms.enums.*;
 import com.asi.hms.model.api.APIProviderOptions;
-import com.asi.hms.utils.cloudproviderutils.enums.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;

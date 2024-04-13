@@ -1,4 +1,4 @@
-package com.asi.hms.components;
+package com.asi.hms.config.web;
 
 import com.asi.hms.service.WebSocketSessionService;
 import org.springframework.beans.factory.annotation.Autowired;

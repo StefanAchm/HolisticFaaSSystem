@@ -1,7 +1,7 @@
 package com.asi.hms.model.api;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.utils.cloudproviderutils.enums.*;
+import com.asi.hms.enums.Provider;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.fasterxml.jackson.annotation.JsonGetter;
 

@@ -1,9 +1,11 @@
 package com.asi.hms.utils.cloudproviderutils.model;
 
+import com.asi.hms.enums.Provider;
+import com.asi.hms.enums.RegionInterface;
+import com.asi.hms.enums.RuntimeInterface;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.utils.cloudproviderutils.enums.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

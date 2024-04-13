@@ -1,6 +1,6 @@
 package com.asi.hms.service;
 
-import com.asi.hms.components.FileStorageProperties;
+import com.asi.hms.config.properties.FileStorageProperties;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

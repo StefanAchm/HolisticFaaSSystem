@@ -1,11 +1,11 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
 
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployGCP;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployInterface;
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
-import com.asi.hms.utils.cloudproviderutils.model.UserInterface;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
+import com.asi.hms.model.UserInterface;
 
 import java.nio.file.Path;
 

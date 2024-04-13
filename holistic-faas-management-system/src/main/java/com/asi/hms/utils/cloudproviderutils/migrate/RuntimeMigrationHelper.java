@@ -1,8 +1,8 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
 import com.asi.hms.model.api.APIMigrationObject;
-import com.asi.hms.utils.cloudproviderutils.enums.RuntimeGlobal;
-import com.asi.hms.utils.cloudproviderutils.enums.RuntimeInterface;
+import com.asi.hms.enums.RuntimeGlobal;
+import com.asi.hms.enums.RuntimeInterface;
 
 public class RuntimeMigrationHelper {
 

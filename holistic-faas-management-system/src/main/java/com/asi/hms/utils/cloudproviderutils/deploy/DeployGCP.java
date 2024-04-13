@@ -2,7 +2,7 @@ package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
+import com.asi.hms.model.UserGCP;
 import com.asi.hms.utils.ProgressHandler;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;

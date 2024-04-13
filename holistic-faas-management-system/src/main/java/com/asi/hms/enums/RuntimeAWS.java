@@ -1,4 +1,4 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
 
 /**
  * AWS Lambda Runtimes,

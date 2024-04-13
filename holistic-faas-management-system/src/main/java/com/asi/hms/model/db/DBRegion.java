@@ -1,6 +1,6 @@
 package com.asi.hms.model.db;
 
-import com.asi.hms.utils.cloudproviderutils.enums.Provider;
+import com.asi.hms.enums.Provider;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

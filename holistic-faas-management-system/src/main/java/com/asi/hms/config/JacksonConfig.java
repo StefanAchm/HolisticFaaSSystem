@@ -1,7 +1,7 @@
 package com.asi.hms.config;
 
-import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
-import com.asi.hms.utils.cloudproviderutils.enums.RuntimeInterface;
+import com.asi.hms.enums.RegionInterface;
+import com.asi.hms.enums.RuntimeInterface;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;

@@ -1,7 +1,7 @@
 package com.asi.hms.utils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.utils.cloudproviderutils.model.Message;
+import com.asi.hms.model.Message;
 import com.asi.hms.model.db.ProgressObjectInterface;
 import com.asi.hms.service.WebSocketSessionService;
 
@@ -52,7 +52,7 @@ public class ProgressHandler {
 
     private void send(String message, int step) {
 
-        sessionService.sendMessage(
+        this.sessionService.sendMessage(
                 new Message(
                         this.progressObject.getId(),
                         step,

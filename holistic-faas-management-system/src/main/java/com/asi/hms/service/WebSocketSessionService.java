@@ -1,8 +1,7 @@
 package com.asi.hms.service;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.utils.cloudproviderutils.model.Message;
-import com.asi.hms.utils.cloudproviderutils.MessageInterface;
+import com.asi.hms.model.Message;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class WebSocketSessionService implements MessageInterface {
+public class WebSocketSessionService {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketSessionService.class);
 
@@ -62,11 +61,9 @@ public class WebSocketSessionService implements MessageInterface {
 
     }
 
-    @Override
     public void sendMessage(Message message) {
         logger.info("Sending message: {}", message);
         sessions.values().forEach(session -> sendMessage(session.getId(), message));
     }
-
 
 }

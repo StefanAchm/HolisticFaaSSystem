@@ -1,8 +1,8 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
 import com.asi.hms.model.api.APIMigrationObject;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionGlobal;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
+import com.asi.hms.enums.RegionGlobal;
+import com.asi.hms.enums.RegionInterface;
 
 public class RegionMigrationHelper {
 

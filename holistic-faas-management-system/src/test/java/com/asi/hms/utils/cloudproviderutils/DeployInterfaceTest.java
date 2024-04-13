@@ -1,13 +1,12 @@
 package com.asi.hms.utils.cloudproviderutils;
 
-import com.asi.hms.utils.ProgressHandler;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionAWS;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionGCP;
-import com.asi.hms.utils.cloudproviderutils.enums.RuntimeAWS;
-import com.asi.hms.utils.cloudproviderutils.enums.RuntimeGCP;
+import com.asi.hms.enums.RegionAWS;
+import com.asi.hms.enums.RegionGCP;
+import com.asi.hms.enums.RuntimeAWS;
+import com.asi.hms.enums.RuntimeGCP;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
 import com.asi.hms.utils.FileUtil;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployAWS;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployGCP;

@@ -1,4 +1,4 @@
-package com.asi.hms.components;
+package com.asi.hms.config.properties;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import org.slf4j.Logger;

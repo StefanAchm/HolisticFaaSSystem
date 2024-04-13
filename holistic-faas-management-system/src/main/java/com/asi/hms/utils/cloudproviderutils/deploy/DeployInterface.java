@@ -1,7 +1,7 @@
 package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserInterface;
+import com.asi.hms.model.UserInterface;
 import com.asi.hms.utils.ProgressHandler;
 
 public interface DeployInterface<U extends UserInterface> {

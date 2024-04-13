@@ -1,7 +1,7 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
+import com.asi.hms.model.UserGCP;
 import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.cloud.functions.v1.CloudFunctionsServiceClient;
 import com.google.cloud.functions.v1.CloudFunctionsServiceSettings;

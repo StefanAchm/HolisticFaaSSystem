@@ -1,9 +1,7 @@
 package com.asi.hms.enums;
 
-import com.asi.hms.utils.cloudproviderutils.enums.RegionAWS;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionGCP;
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
+import com.asi.hms.model.UserAWS;
+import com.asi.hms.model.UserGCP;
 import com.asi.hms.utils.FileUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
 
 // Region: ap-south-1
 // Region: ca-central-1
@@ -18,8 +18,7 @@ package com.asi.hms.utils.cloudproviderutils.enums;
 // Region: us-east-1
 // Region: us-east-2
 
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.asi.hms.model.UserAWS;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;

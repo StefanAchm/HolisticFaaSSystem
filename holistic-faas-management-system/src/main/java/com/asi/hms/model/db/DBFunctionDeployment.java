@@ -2,7 +2,6 @@ package com.asi.hms.model.db;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.api.APIFunctionDeployment;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
 
 import javax.persistence.*;
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
+import com.asi.hms.enums.Provider;
 import com.asi.hms.model.api.*;
-import com.asi.hms.utils.cloudproviderutils.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

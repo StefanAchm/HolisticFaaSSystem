@@ -2,7 +2,7 @@ package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserAWS;
+import com.asi.hms.model.UserAWS;
 import com.asi.hms.utils.ProgressHandler;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
