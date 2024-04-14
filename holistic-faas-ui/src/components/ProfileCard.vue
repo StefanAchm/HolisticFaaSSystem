@@ -50,15 +50,6 @@
 
         </v-row>
 
-
-        <!--        <v-icon-->
-        <!--            class="ml-2"-->
-        <!--            small-->
-        <!--            @click="edit(provider.name)"-->
-
-        <!--        >mdi-pencil-->
-        <!--        </v-icon>-->
-
       </v-list>
 
     </v-card-text>

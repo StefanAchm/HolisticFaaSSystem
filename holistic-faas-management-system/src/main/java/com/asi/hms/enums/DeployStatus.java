@@ -4,11 +4,17 @@ public enum DeployStatus {
 
     CREATED,
 
+    CHANGED,
+
     STARTED,
 
     FAILED,
 
-    DEPLOYED,
+    DEPLOYED;
+
+    public boolean canUpdate() {
+        return this == CHANGED || this == DEPLOYED;
+    }
 
 
 }

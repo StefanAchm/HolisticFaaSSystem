@@ -428,6 +428,8 @@ export default {
         return 'mdi-progress-upload'
       } else if (status === 'CREATED') {
         return 'mdi-progress-clock'
+      } else if (status === 'CHANGED') {
+        return 'mdi-progress-wrench'
       } else {
         return ''
       }
@@ -448,6 +450,8 @@ export default {
       } else if (status === 'STARTED') {
         return 'blue'
       } else if (status === 'CREATED') {
+        return 'orange'
+      } else if (status === 'CHANGED') {
         return 'orange'
       } else {
         return ''

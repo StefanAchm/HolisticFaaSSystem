@@ -12,6 +12,7 @@ import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.UserCredentialsRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.ProgressHandler;
+import com.asi.hms.utils.cloudproviderutils.deploy.DeployerInterface;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
 import com.asi.hms.model.UserInterface;
 import org.slf4j.Logger;
@@ -75,6 +76,7 @@ public class FunctionDeploymentService {
                 .findById(apiFunctionDeployment.getId())
                 .orElseThrow(() -> new HolisticFaaSException("Function deployment not found"));
 
+        functionDeployment.setStatusWithMessage(DeployStatus.CHANGED, "Function deployment changed");
         functionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
         functionDeployment.setMemory(apiFunctionDeployment.getMemory());
         functionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());
@@ -111,14 +113,18 @@ public class FunctionDeploymentService {
         Function function = Function.fromDbFunction(dbFunctionDeployment);
         ProgressHandler progressHandler = function.getProvider().getProgressHandler(dbFunctionDeployment, this.sessionService);
 
+        boolean isUpdate = dbFunctionDeployment.getStatus().canUpdate();
+        String action = isUpdate ? "Update" : "Deployment";
+
         try {
 
             // Start deployment
-            dbFunctionDeployment.setStatusWithMessage(DeployStatus.STARTED, "Deployment started");
+            dbFunctionDeployment.setStatusWithMessage(DeployStatus.STARTED, action + " started");
             this.functionDeploymentRepository.save(dbFunctionDeployment);
 
             progressHandler.start(
-                    String.format("Deploying function %s to provider %s at region %s for user %s",
+                    String.format("%s of function %s to provider %s at region %s for user %s",
+                            action,
                             function.getName(),
                             function.getProvider(),
                             function.getRegion(),
@@ -127,21 +133,23 @@ public class FunctionDeploymentService {
             );
 
             UserInterface user = function.getProvider().getUserFromFile(Paths.get(userCredentials.getCredentialsFilePath()));
+            DeployerInterface deployer = function.getProvider().getDeployer(user);
 
             // Actual deployment
-            boolean success = function.getProvider()
-                    .getDeployer(user)
-                    .deployFunction(function, progressHandler);
+            boolean success = isUpdate
+                    ? deployer.updateFunction(function, progressHandler)
+                    : deployer.deployFunction(function, progressHandler);
+
 
             dbFunctionDeployment.setStatusWithMessage(
                     success ? DeployStatus.DEPLOYED : DeployStatus.FAILED,
-                    success ? "Deployed successfully" : "Failed to deploy"
+                    action + " " + (success ? "success" : "failed")
             );
 
         } catch (HolisticFaaSException e) {
 
             dbFunctionDeployment.setStatusWithMessage(DeployStatus.FAILED, e.getMessage());
-            logger.error("Error deploying function:", e);
+            logger.error("{} error:", action, e);
 
         } finally {
 
