@@ -89,7 +89,7 @@ export default {
         formData.append('file', file);
         formData.append('apiUserCredentials', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
-        return apiClient.post('/user_credentials/add', formData, {
+        return apiClient.post('/user_credentials/addOrUpdate', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

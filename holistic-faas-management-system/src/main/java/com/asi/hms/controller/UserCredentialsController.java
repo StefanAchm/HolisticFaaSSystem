@@ -22,9 +22,19 @@ public class UserCredentialsController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<String> add(@RequestPart("file") MultipartFile file,
-                                      @RequestPart(value = "apiUserCredentials", required = false) APIUserCredentials apiUserCredentials){
+                                      @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
 
-        this.userCredentialsService.add(file, apiUserCredentials);
+        this.userCredentialsService.addOrUpdate(file, apiUserCredentials, true);
+
+        return ResponseEntity.ok("Credentials added");
+
+    }
+
+    @PostMapping(value = "/addOrUpdate")
+    public ResponseEntity<String> addOrUpdate(@RequestPart("file") MultipartFile file,
+                                              @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
+
+        this.userCredentialsService.addOrUpdate(file, apiUserCredentials, false);
 
         return ResponseEntity.ok("Credentials added");
 

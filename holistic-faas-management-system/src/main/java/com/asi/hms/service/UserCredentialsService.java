@@ -28,10 +28,9 @@ public class UserCredentialsService {
         this.userRepository = userRepository;
         this.userCredentialsRepository = userCredentialsRepository;
         this.uploadFileService = uploadFileService;
-
     }
 
-    public void add(MultipartFile file, APIUserCredentials apiUserCredentials) {
+    public void addOrUpdate(MultipartFile file, APIUserCredentials apiUserCredentials, boolean alwaysCreate) {
 
         DBUser dbUser = this.userRepository
                 .findById(apiUserCredentials.getUserId())
@@ -40,6 +39,19 @@ public class UserCredentialsService {
         String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.CREDENTIALS_DIR);
 
         DBUserCredentials dbUserCredentials = new DBUserCredentials();
+
+        if(!alwaysCreate) {
+
+            dbUserCredentials = this.userCredentialsRepository.findDBUserCredentialsByUserAndProvider(
+                            dbUser,
+                            apiUserCredentials.getProvider()
+                    )
+                    .stream()
+                    .findFirst()
+                    .orElseGet(DBUserCredentials::new);
+
+        }
+
         dbUserCredentials.setUser(dbUser);
         dbUserCredentials.setProvider(apiUserCredentials.getProvider());
         dbUserCredentials.setCredentialsFilePath(path);
@@ -64,5 +76,7 @@ public class UserCredentialsService {
                 .toList();
 
     }
+
+
 
 }
