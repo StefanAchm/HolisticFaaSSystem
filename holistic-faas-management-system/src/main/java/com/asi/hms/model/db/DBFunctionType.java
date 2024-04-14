@@ -44,4 +44,5 @@ public class DBFunctionType {
     public void setFunctionImplementations(List<DBFunctionImplementation> functionImplementations) {
         this.functionImplementations = functionImplementations;
     }
+
 }

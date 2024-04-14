@@ -23,6 +23,11 @@ public class DatabaseInitializer {
             "com.asi.hsg.HelloWorldHandler",
     };
 
+    private final String[] credentials = {
+            "auth\\stefan01\\aws.properties",
+            "auth\\stefan01\\gcp.json"
+    };
+
     private final String resourcesPath = "C:\\Users\\Stefan\\Documents\\git\\HolisticFaaS\\holistic-faas-management-system\\src\\main\\resources\\";
 
     private final PasswordEncoder passwordEncoder;
@@ -54,29 +59,41 @@ public class DatabaseInitializer {
     @PostConstruct
     private void init() {
 
-        DBUser user1 = new DBUser();
-        user1.setUsername("user1");
-        user1.setPassword(passwordEncoder.encode("password"));
+        DBUser user1 = addUser("user1", "password");
 
-        userRepository.save(user1);
+        addUserCredentials(user1, "AWS", credentials[0]);
+        addUserCredentials(user1, "GCP", credentials[1]);
 
+        addFunction(user1, "function1", implementations[0], handlers[0], Provider.AWS, 5, true);
+        addFunction(user1, "function2", implementations[1], handlers[1], Provider.GCP, 2, false);
 
-        DBUserCredentials credentials1 = new DBUserCredentials();
-        credentials1.setCredentialsFilePath(resourcesPath + "auth\\stefan01\\aws.properties");
-        credentials1.setProvider("AWS");
-        credentials1.setUser(user1);
+        DBUser user2 = addUser("user2", "password");
+        addUserCredentials(user2, "AWS", credentials[0]);
 
-        userCredentialsRepository.save(credentials1);
+        DBUser user3 = addUser("user3", "password");
 
-        DBUserCredentials credentials2 = new DBUserCredentials();
-        credentials2.setCredentialsFilePath(resourcesPath + "auth\\stefan01\\gcp.json");
-        credentials2.setProvider("GCP");
-        credentials2.setUser(user1);
+    }
 
-        userCredentialsRepository.save(credentials2);
+    private DBUser addUser(String username, String password) {
 
-        addFunction(user1, "function1", implementations[0], handlers[0], Provider.AWS, 5);
-        addFunction(user1, "function2", implementations[1], handlers[1], Provider.GCP, 2);
+        DBUser user = new DBUser();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+
+        userRepository.save(user);
+
+        return user;
+
+    }
+
+    private void addUserCredentials(DBUser user, String provider, String credentialsFilePath) {
+
+        DBUserCredentials credentials = new DBUserCredentials();
+        credentials.setCredentialsFilePath(resourcesPath + credentialsFilePath);
+        credentials.setProvider(provider);
+        credentials.setUser(user);
+
+        userCredentialsRepository.save(credentials);
 
     }
 
@@ -86,7 +103,8 @@ public class DatabaseInitializer {
                              String implementationPath,
                              String handlerPath,
                              Provider provider,
-                             int nrOfDeployments) {
+                             int nrOfDeployments,
+                             boolean random) {
 
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName(functionName);
@@ -101,7 +119,7 @@ public class DatabaseInitializer {
 
         for (int i = 0; i < nrOfDeployments; i++) {
 
-            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation);
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation, random);
 
             functionDeploymentRepository.save(dbFunctionDeployment);
 
@@ -112,18 +130,20 @@ public class DatabaseInitializer {
     private static DBFunctionDeployment getDbFunctionDeployment(DBUser user,
                                                                 String handlerPath,
                                                                 Provider provider,
-                                                                DBFunctionImplementation dbFunctionImplementation) {
+                                                                DBFunctionImplementation dbFunctionImplementation,
+                                                                boolean random) {
 
         DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
 
         dbFunctionDeployment.setProvider(provider.name());
         dbFunctionDeployment.setUser(user);
-        dbFunctionDeployment.setRegion("eu-west-2");
+        dbFunctionDeployment.setRegion(provider == Provider.AWS ? "eu-west-2" : "europe-west2");
         dbFunctionDeployment.setRuntime("java17");
-        dbFunctionDeployment.setMemory(128);
+
+        dbFunctionDeployment.setMemory(random ? (int) (Math.random() * 10) + 128 : 128);
         dbFunctionDeployment.setHandler(handlerPath);
         dbFunctionDeployment.setStatus(DeployStatus.CREATED);
-        dbFunctionDeployment.setTimeoutSecs(3);
+        dbFunctionDeployment.setTimeoutSecs(random ? (int) (Math.random() * 10) + 3 : 3);
         dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
 
         return dbFunctionDeployment;

@@ -40,6 +40,20 @@ export default {
         return apiClient.get('/function_implementation/getAll');
     },
 
+    updateFunction(file, data) {
+        let formData = new FormData();
+
+        formData.append('file', file);
+        formData.append('apiFunction', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+
+        return apiClient.post('/function_implementation/update', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+    },
+
     uploadFunction(file, data) {
 
         let formData = new FormData();
@@ -58,6 +72,14 @@ export default {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Function deployment
 
+    addFunctionDeployment(data) {
+        return apiClient.post('/function_deployment/add', data);
+    },
+
+    updateFunctionDeployment(data) {
+        return apiClient.post('/function_deployment/update', data);
+    },
+
     deployFunction(data) {
         return apiClient.post('/function_deployment/add', data);
     },
@@ -74,13 +96,22 @@ export default {
         return apiClient.get('/user_credentials/getAll');
     },
 
+    getUserCredentials(user) {
+        // Need to set the user as body, not as query parameter
+        return apiClient.get('/user_credentials/get', {
+            params: {
+                userId: user.id
+            }
+        });
+    },
+
     uploadUserCredentials(file, data) {
         let formData = new FormData();
 
         formData.append('file', file);
         formData.append('apiUserCredentials', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
-        return apiClient.post('/user_credentials/add', formData, {
+        return apiClient.post('/user_credentials/addOrUpdate', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

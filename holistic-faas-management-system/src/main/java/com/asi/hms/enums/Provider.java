@@ -1,5 +1,6 @@
 package com.asi.hms.enums;
 
+import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.service.WebSocketSessionService;
 import com.asi.hms.utils.ProgressHandler;
@@ -10,6 +11,8 @@ import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
 import com.asi.hms.model.UserInterface;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 
 public enum Provider {
@@ -65,6 +68,15 @@ public enum Provider {
         return switch (this) {
             case AWS -> new ProgressHandler(dbFunctionDeployment, DeployAWS.STEPS, sessionService);
             case GCP -> new ProgressHandler(dbFunctionDeployment, DeployGCP.STEPS, sessionService);
+        };
+    }
+
+    // https://console.aws.amazon.com/lambda/home?region=eu-west-2#/functions/function1-063a989a-bcc0-480c-8554-69d5aa5025b9
+    // https://console.cloud.google.com/functions/details/europe-west2/function2?project=holistic-faas
+    public URI getUrlFromFunctionDeployment(String region, String uniqueName) throws URISyntaxException {
+        return switch (this) {
+            case AWS -> new URI("https://console.aws.amazon.com/lambda/home?region=" + region + "#/functions/" + uniqueName);
+            case GCP -> new URI("https://console.cloud.google.com/functions/details/" + region + "/" + uniqueName);
         };
     }
 }

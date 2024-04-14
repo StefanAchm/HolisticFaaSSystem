@@ -71,13 +71,13 @@ public class UploadFileService {
 
             logger.info("File uploaded to: {}", destinationPath.toAbsolutePath());
 
+            return destinationPath.toAbsolutePath();
+
         } catch (Exception e) {
 
             throw new HolisticFaaSException("Error uploading file, " + e.getMessage());
 
         }
-
-        return destinationPath;
 
     }
 

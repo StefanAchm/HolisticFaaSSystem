@@ -2,9 +2,12 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.enums.Provider;
+import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 public class APIFunctionDeployment {
@@ -26,6 +29,8 @@ public class APIFunctionDeployment {
 
     private UUID functionImplementationId;
 
+    private URI uri;
+
     public static APIFunctionDeployment fromDBFunctionDeployment(DBFunctionDeployment dbFunctionDeployment) {
 
         APIFunctionDeployment apiFunctionDeployment = new APIFunctionDeployment();
@@ -43,6 +48,17 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setUserId(dbFunctionDeployment.getUser().getId());
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionImplementationId(dbFunctionDeployment.getFunctionImplementation().getId());
+
+        try {
+            apiFunctionDeployment.setUri(
+                    apiFunctionDeployment.provider.getUrlFromFunctionDeployment(
+                            dbFunctionDeployment.getRegion(),
+                            dbFunctionDeployment.getUniqueName()
+                    )
+            );
+        } catch (URISyntaxException e) {
+            throw new HolisticFaaSException("URI could not be created", e);
+        }
 
         return apiFunctionDeployment;
 
@@ -161,5 +177,13 @@ public class APIFunctionDeployment {
 
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 }

@@ -7,4 +7,6 @@ public interface DeployerInterface {
 
     boolean deployFunction(Function function, ProgressHandler progressHandler);
 
+    boolean updateFunction(Function function, ProgressHandler progressHandler);
+
 }

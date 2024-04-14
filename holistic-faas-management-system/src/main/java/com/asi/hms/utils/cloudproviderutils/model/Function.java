@@ -5,7 +5,6 @@ import com.asi.hms.enums.RegionInterface;
 import com.asi.hms.enums.RuntimeInterface;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
-import com.asi.hms.model.db.DBFunctionType;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,7 +66,6 @@ public class Function {
     public static Function fromDbFunction(DBFunctionDeployment dbFunctionDeployment) {
 
         DBFunctionImplementation dbFunctionImplementation = dbFunctionDeployment.getFunctionImplementation();
-        DBFunctionType dbFunctionType = dbFunctionImplementation.getFunctionType();
 
         Function function = new Function();
 
@@ -75,8 +73,7 @@ public class Function {
 
         function.setFilePath(Paths.get(dbFunctionImplementation.getFilePath()));
 
-        // TODO: setting a unique name for now, not sure if that is wanted!
-        function.setName(dbFunctionType.getName() + "-" + dbFunctionDeployment.getId());
+        function.setName(dbFunctionDeployment.getUniqueName());
 
         function.setMemory(dbFunctionDeployment.getMemory());
         function.setTimeoutSecs(dbFunctionDeployment.getTimeoutSecs());
