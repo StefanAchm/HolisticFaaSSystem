@@ -47,7 +47,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="$router.push({ path: '/functionsV3'})">Explore</v-btn>
+            <v-btn color="blue darken-1" text @click="$router.push({ path: '/functions'})">Explore</v-btn>
           </v-card-actions>
 
         </v-card>

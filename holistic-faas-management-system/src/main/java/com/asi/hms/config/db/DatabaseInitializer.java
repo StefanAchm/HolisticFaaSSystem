@@ -64,8 +64,8 @@ public class DatabaseInitializer {
         addUserCredentials(user1, "AWS", credentials[0]);
         addUserCredentials(user1, "GCP", credentials[1]);
 
-        addFunction(user1, "function1", implementations[0], handlers[0], Provider.AWS, 5);
-        addFunction(user1, "function2", implementations[1], handlers[1], Provider.GCP, 2);
+        addFunction(user1, "function1", implementations[0], handlers[0], Provider.AWS, 5, true);
+        addFunction(user1, "function2", implementations[1], handlers[1], Provider.GCP, 2, false);
 
         DBUser user2 = addUser("user2", "password");
         addUserCredentials(user2, "AWS", credentials[0]);
@@ -103,7 +103,8 @@ public class DatabaseInitializer {
                              String implementationPath,
                              String handlerPath,
                              Provider provider,
-                             int nrOfDeployments) {
+                             int nrOfDeployments,
+                             boolean random) {
 
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName(functionName);
@@ -118,7 +119,7 @@ public class DatabaseInitializer {
 
         for (int i = 0; i < nrOfDeployments; i++) {
 
-            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation);
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation, random);
 
             functionDeploymentRepository.save(dbFunctionDeployment);
 
@@ -129,18 +130,20 @@ public class DatabaseInitializer {
     private static DBFunctionDeployment getDbFunctionDeployment(DBUser user,
                                                                 String handlerPath,
                                                                 Provider provider,
-                                                                DBFunctionImplementation dbFunctionImplementation) {
+                                                                DBFunctionImplementation dbFunctionImplementation,
+                                                                boolean random) {
 
         DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
 
         dbFunctionDeployment.setProvider(provider.name());
         dbFunctionDeployment.setUser(user);
-        dbFunctionDeployment.setRegion("eu-west-2");
+        dbFunctionDeployment.setRegion(provider == Provider.AWS ? "eu-west-2" : "europe-west2");
         dbFunctionDeployment.setRuntime("java17");
-        dbFunctionDeployment.setMemory(128);
+
+        dbFunctionDeployment.setMemory(random ? (int) (Math.random() * 10) + 128 : 128);
         dbFunctionDeployment.setHandler(handlerPath);
         dbFunctionDeployment.setStatus(DeployStatus.CREATED);
-        dbFunctionDeployment.setTimeoutSecs(3);
+        dbFunctionDeployment.setTimeoutSecs(random ? (int) (Math.random() * 10) + 3 : 3);
         dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
 
         return dbFunctionDeployment;

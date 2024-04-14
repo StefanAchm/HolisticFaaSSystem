@@ -49,7 +49,7 @@ public class FunctionDeploymentService {
 
     }
 
-    public void addFunctionDeployment(APIFunctionDeployment apiFunctionDeployment) {
+    public void add(APIFunctionDeployment apiFunctionDeployment) {
 
         DBUser user = this.userRepository
                 .findById(apiFunctionDeployment.getUserId())
@@ -66,6 +66,23 @@ public class FunctionDeploymentService {
         );
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+    }
+
+    public void update(APIFunctionDeployment apiFunctionDeployment) {
+
+        DBFunctionDeployment functionDeployment = this.functionDeploymentRepository
+                .findById(apiFunctionDeployment.getId())
+                .orElseThrow(() -> new HolisticFaaSException("Function deployment not found"));
+
+        functionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
+        functionDeployment.setMemory(apiFunctionDeployment.getMemory());
+        functionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());
+        functionDeployment.setHandler(apiFunctionDeployment.getHandler());
+        functionDeployment.setRegion(apiFunctionDeployment.getRegion());
+        functionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
+
+        this.functionDeploymentRepository.save(functionDeployment);
 
     }
 

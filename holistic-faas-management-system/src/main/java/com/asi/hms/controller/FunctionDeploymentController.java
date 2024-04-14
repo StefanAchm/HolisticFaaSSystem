@@ -19,9 +19,15 @@ public class FunctionDeploymentController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> addFunctionDeployment(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
-        this.functionDeploymentService.addFunctionDeployment(apiFunctionDeployment);
+    public ResponseEntity<String> add(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        this.functionDeploymentService.add(apiFunctionDeployment);
         return ResponseEntity.ok("Deploy Function added");
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseEntity<String> update(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        this.functionDeploymentService.update(apiFunctionDeployment);
+        return ResponseEntity.ok("Deploy Function edited");
     }
 
     @PostMapping(value = "/deploy")

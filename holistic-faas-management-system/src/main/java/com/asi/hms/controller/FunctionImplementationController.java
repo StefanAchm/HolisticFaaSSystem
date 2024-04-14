@@ -31,6 +31,16 @@ public class FunctionImplementationController {
 
     }
 
+    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> update(@RequestPart("file") MultipartFile file,
+                                      @RequestPart(value = "apiFunction") APIFunctionImplementation apiFunctionImplementation) {
+
+        this.functionImplementationService.update(file, apiFunctionImplementation);
+
+        return ResponseEntity.ok("File uploaded");
+
+    }
+
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIFunctionImplementation>> getAllFunctionImplementations() {
 

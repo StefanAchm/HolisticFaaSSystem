@@ -34,7 +34,7 @@
 
             <v-icon color="blue" v-if="provider.inputFile" small>mdi-alert-circle-outline</v-icon>
             <v-icon color="green" v-else-if="provider.path" small>mdi-check-circle-outline</v-icon>
-            <v-icon color="red" v-else small class="color" >mdi-alert-circle-outline</v-icon>
+            <v-icon color="red" v-else small>mdi-alert-circle-outline</v-icon>
 
           </v-col>
 

@@ -54,6 +54,20 @@ public class FunctionImplementationService {
 
     }
 
+    public void update(MultipartFile file, APIFunctionImplementation apiFunctionImplementation) {
+
+        DBFunctionImplementation dbFunctionImplementation = this.functionImplementationRepository
+                .findById(apiFunctionImplementation.getId())
+                .orElseThrow(() -> new HolisticFaaSException("Function not found"));
+
+        // TODO: delete old file
+        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+
+        dbFunctionImplementation.setFilePath(path);
+        this.functionImplementationRepository.save(dbFunctionImplementation);
+
+    }
+
 
 
 }

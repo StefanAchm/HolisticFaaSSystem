@@ -2,9 +2,6 @@
 
   <v-card>
 
-<!--    <FunctionTypeTable/>-->
-<!--    <FunctionImplementationTable/>-->
-
     <FunctionTable/>
 
   </v-card>
@@ -13,8 +10,6 @@
 
 <script setup>
 
-// import FunctionTypeTable from "@/components/FunctionTypeTable.vue";
-// import FunctionImplementationTable from "@/components/FunctionImplementationTable.vue";
-import FunctionTable from "@/components/FunctionTable.vue";
+import FunctionTable from "@/components/function/FunctionTable.vue";
 
 </script>

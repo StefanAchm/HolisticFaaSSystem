@@ -27,12 +27,16 @@ export default {
     methods: {
 
         init() {
-
-            HfApi.getProviderOptions()
-                .then(response => {
-                    this.providerOptions = response.data;
-                })
-
+            return new Promise((resolve, reject) => {
+                HfApi.getProviderOptions()
+                    .then(response => {
+                        this.providerOptions = response.data;
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
         },
 
         getRegions(provider) {

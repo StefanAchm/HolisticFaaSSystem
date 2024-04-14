@@ -14,21 +14,6 @@ const routes = [
     {
         path: '/functions',
         name: 'functions',
-        component: () => import('../views/FunctionView.vue')
-    },
-    {
-        path: '/function-deployments',
-        name: 'function-deployments',
-        component: () => import('../views/FunctionDeploymentsView.vue')
-    },
-    {
-        path: '/functionsV2',
-        name: 'functionsV2',
-        component: () => import('../views/AllFunctionsView.vue')
-    },
-    {
-        path: '/functionsV3',
-        name: 'functionsV3',
         component: () => import('../views/FunctionsView.vue')
     },
     {

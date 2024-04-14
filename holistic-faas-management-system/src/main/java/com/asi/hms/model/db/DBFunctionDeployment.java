@@ -4,6 +4,7 @@ import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.api.APIFunctionDeployment;
 
 import javax.persistence.*;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -159,6 +160,11 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public void setStatusWithMessage(DeployStatus status, String message) {
         this.status = status;
         this.statusMessage = message;
+    }
+
+    public String getUniqueName() {
+        // TODO: setting a unique name for now, not sure if that is wanted!
+        return this.getFunctionImplementation().getFunctionType().getName() + "-" + this.id;
     }
 
 }

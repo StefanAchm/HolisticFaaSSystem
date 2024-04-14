@@ -91,7 +91,7 @@ public class FunctionService {
         apiMigration.getFunctions()
                 .stream()
                 .map(APIFunction::getFunctionDeployment)
-                .forEach(this.functionDeploymentService::addFunctionDeployment);
+                .forEach(this.functionDeploymentService::add);
 
         return apiMigration;
 
