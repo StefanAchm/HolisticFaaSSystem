@@ -2,7 +2,7 @@ package com.asi.hms.utils.cloudproviderutils.deploy;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
-import com.asi.hms.utils.cloudproviderutils.model.UserGCP;
+import com.asi.hms.model.UserGCP;
 import com.asi.hms.utils.ProgressHandler;
 import com.google.cloud.functions.v1.*;
 import com.google.cloud.storage.*;
@@ -12,22 +12,28 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
-public class DeployGCP implements DeployInterface<UserGCP> {
+public class DeployGCP implements DeployerInterface {
 
     public static final int STEPS = 6;
 
+    private final UserGCP user;
+
+    public DeployGCP(UserGCP user) {
+        this.user = user;
+    }
+
     @Override
-    public boolean deployFunction(Function function, UserGCP user, ProgressHandler progressHandler) {
+    public boolean deployFunction(Function function, ProgressHandler progressHandler) {
 
         try {
 
             String bucketName = getBucketName(function);
 
-            createBucket(user, bucketName, progressHandler);
+            createBucket(this.user, bucketName, progressHandler);
 
-            String sourceZipFile = uploadZipToBucket(function, user, bucketName, progressHandler); // or use the bucketNameExt
+            String sourceZipFile = uploadZipToBucket(function, this.user, bucketName, progressHandler); // or use the bucketNameExt
 
-            return createFunction(function, user, sourceZipFile, progressHandler);
+            return createFunction(function, this.user, sourceZipFile, progressHandler);
 
         } catch (Exception e) {
 

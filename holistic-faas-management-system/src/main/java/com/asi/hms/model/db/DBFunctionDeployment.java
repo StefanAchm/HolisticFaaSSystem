@@ -2,7 +2,6 @@ package com.asi.hms.model.db;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.api.APIFunctionDeployment;
-import com.asi.hms.utils.cloudproviderutils.enums.RegionInterface;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -156,4 +155,10 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+    public void setStatusWithMessage(DeployStatus status, String message) {
+        this.status = status;
+        this.statusMessage = message;
+    }
+
 }

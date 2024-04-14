@@ -1,4 +1,4 @@
-package com.asi.hms.components;
+package com.asi.hms.config.security;
 
 import com.asi.hms.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

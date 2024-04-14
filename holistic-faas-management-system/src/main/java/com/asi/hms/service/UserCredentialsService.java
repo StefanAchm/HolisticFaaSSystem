@@ -32,7 +32,8 @@ public class UserCredentialsService {
 
     public void add(MultipartFile file, APIUserCredentials apiUserCredentials) {
 
-        DBUser dbUser = this.userRepository.findById(apiUserCredentials.getUserId())
+        DBUser dbUser = this.userRepository
+                .findById(apiUserCredentials.getUserId())
                 .orElseThrow(() -> new HolisticFaaSException("User '" + apiUserCredentials.getUserId() + "' not found"));
 
         String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.CREDENTIALS_DIR);

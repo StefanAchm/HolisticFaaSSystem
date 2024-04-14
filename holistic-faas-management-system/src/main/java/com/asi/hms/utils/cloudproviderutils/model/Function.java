@@ -1,9 +1,11 @@
 package com.asi.hms.utils.cloudproviderutils.model;
 
+import com.asi.hms.enums.Provider;
+import com.asi.hms.enums.RegionInterface;
+import com.asi.hms.enums.RuntimeInterface;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.utils.cloudproviderutils.enums.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,6 +59,11 @@ public class Function {
      */
     private RuntimeInterface runtime;
 
+    /**
+     * The provider of the function.
+     */
+    private Provider provider;
+
     public static Function fromDbFunction(DBFunctionDeployment dbFunctionDeployment) {
 
         DBFunctionImplementation dbFunctionImplementation = dbFunctionDeployment.getFunctionImplementation();
@@ -79,6 +86,7 @@ public class Function {
 
         function.setRegion(provider.getRegionFromCode(dbFunctionDeployment.getRegion()));
         function.setRuntime(provider.getRuntimeFromCode(dbFunctionDeployment.getRuntime()));
+        function.setProvider(provider);
 
         return function;
 
@@ -146,6 +154,14 @@ public class Function {
 
     public void setRuntime(RuntimeInterface runtime) {
         this.runtime = runtime;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
     }
 
 }

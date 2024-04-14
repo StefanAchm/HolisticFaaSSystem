@@ -3,7 +3,7 @@ package com.asi.hms.utils.cloudproviderutils.migrate;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
-import com.asi.hms.utils.cloudproviderutils.enums.MigrationType;
+import com.asi.hms.enums.MigrationType;
 
 public class MigrationRunner {
 

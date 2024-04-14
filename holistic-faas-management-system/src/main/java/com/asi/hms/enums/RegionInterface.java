@@ -1,5 +1,6 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
 
+import com.asi.hms.model.RegionGlobal;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;

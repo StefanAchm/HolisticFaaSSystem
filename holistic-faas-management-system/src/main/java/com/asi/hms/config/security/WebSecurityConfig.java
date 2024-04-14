@@ -1,7 +1,5 @@
-package com.asi.hms.config;
+package com.asi.hms.config.security;
 
-import com.asi.hms.components.AuthTokenFilter;
-import com.asi.hms.components.PasswordComponent;
 import com.asi.hms.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

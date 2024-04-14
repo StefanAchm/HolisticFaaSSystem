@@ -1,4 +1,6 @@
-package com.asi.hms.utils.cloudproviderutils.enums;
+package com.asi.hms.enums;
+
+import com.asi.hms.model.RuntimeGlobal;
 
 /**
  * GCP Lambda Runtimes,

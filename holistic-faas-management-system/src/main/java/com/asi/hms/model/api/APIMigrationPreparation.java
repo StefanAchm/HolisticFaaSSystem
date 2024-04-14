@@ -1,6 +1,6 @@
 package com.asi.hms.model.api;
 
-import com.asi.hms.utils.cloudproviderutils.enums.MigrationType;
+import com.asi.hms.enums.MigrationType;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
-package com.asi.hms.components;
+package com.asi.hms.config.db;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
-import com.asi.hms.utils.cloudproviderutils.enums.Provider;
+import com.asi.hms.enums.Provider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

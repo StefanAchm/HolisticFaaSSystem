@@ -3,7 +3,7 @@ package com.asi.hms.controller;
 import com.asi.hms.model.api.APILoginResponse;
 import com.asi.hms.model.api.APIUser;
 import com.asi.hms.service.UserService;
-import com.asi.hms.components.JwtUtils;
+import com.asi.hms.config.security.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
