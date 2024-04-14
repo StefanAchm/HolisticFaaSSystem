@@ -156,7 +156,9 @@ export default {
 
       regions: [],
       
-      editItemLocal: {}
+      editItemLocal: {
+        functionDeployment: {},
+      }
 
     }
   },
@@ -168,7 +170,9 @@ export default {
         this.init()
             .then(() => {
                   this.editItemLocal = Object.assign({}, this.editItem);
-                  // console.log("Edit item", this.editItem);
+                  if(!this.editItemLocal.functionDeployment) {
+                    this.editItemLocal.functionDeployment = {}
+                  }
                 }
             )
       }
@@ -177,11 +181,10 @@ export default {
 
     editItemLocal: {
       handler(newValue) {
-
         // Filter users by provider
         // Create a new array with the filtered users for select
         this.users = this.allUsers
-            .filter(user => user.provider === newValue.provider)
+            .filter(user => user.provider === newValue.functionDeployment.provider)
             .map(user => {
               return {
                 title: user.username,
@@ -190,12 +193,8 @@ export default {
 
             })
 
-        console.log(newValue.provider)
-
-        this.runtimes = this.getRuntimes(newValue.provider)
-        this.regions = this.getRegions(newValue.provider)
-
-        console.log(this.regions[0])
+        this.runtimes = this.getRuntimes(newValue.functionDeployment.provider)
+        this.regions = this.getRegions(newValue.functionDeployment.provider)
 
       },
       deep: true
@@ -225,6 +224,7 @@ export default {
 
         } else {
 
+            this.editItemLocal.functionDeployment.functionImplementationId = this.editItemLocal.functionImplementation.id;
             HfApi.addFunctionDeployment(this.editItemLocal.functionDeployment)
                 .finally(() => {
                   this.close();

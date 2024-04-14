@@ -113,16 +113,9 @@ export default {
 
       HfApi.prepareMigration(this.items, this.provider)
           .then((response) => {
-
-            console.log(response);
-
             HfApi.migrateFunctions(response.data)
-                .then((response) => {
-
-                  console.log(response);
-
+                .then(() => {
                   this.close();
-
                 })
 
           })

@@ -242,7 +242,9 @@
 
     <template v-slot:[`item.link`]="{ item }">
 
-      <v-tooltip bottom>
+      <v-tooltip
+          v-if="item.functionDeployment"
+          bottom>
 
         <template v-slot:activator="{ on, attrs }">
 
@@ -255,7 +257,7 @@
 
         </template>
 
-        <span>Open in {{item.functionDeployment.provider}} console</span>
+        <span>Open in {{item.functionDeployment?.provider}} console</span>
 
       </v-tooltip>
 
@@ -397,7 +399,9 @@ export default {
 
     addDeployment(item) {
       this.editItem = item;
-      this.editItem.functionDeployment.id = null;
+      if(this.editItem.functionDeployment) {
+        this.editItem.functionDeployment.id = null;
+      }
       this.functionDeploymentDialogVisible = true;
     },
 
@@ -407,7 +411,6 @@ export default {
     },
 
     openNewTab(item) {
-      console.log(item);
       window.open(item.functionDeployment.uri)
     },
 

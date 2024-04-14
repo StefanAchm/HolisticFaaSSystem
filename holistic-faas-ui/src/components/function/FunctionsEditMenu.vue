@@ -105,16 +105,9 @@ export default {
 
       HfApi.prepareMigration(this.getMigrateRequest(), this.$store.state.userId, 'FUNCTION_USER')
           .then((response) => {
-
-            console.log(response);
-
             HfApi.migrateFunctions(response.data)
-                .then((response) => {
-
-                  console.log(response);
-
+                .then(() => {
                   this.$emit('menu-closed')
-
                 })
 
           })
@@ -125,16 +118,9 @@ export default {
 
       HfApi.prepareMigration(this.getMigrateRequest(), provider, 'FUNCTION_PROVIDER')
           .then((response) => {
-
-            console.log(response);
-
             HfApi.migrateFunctions(response.data)
-                .then((response) => {
-
-                  console.log(response);
-
+                .then(() => {
                   this.$emit('menu-closed')
-
                 })
 
           })

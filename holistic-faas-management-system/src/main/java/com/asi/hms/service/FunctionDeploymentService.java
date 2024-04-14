@@ -76,7 +76,10 @@ public class FunctionDeploymentService {
                 .findById(apiFunctionDeployment.getId())
                 .orElseThrow(() -> new HolisticFaaSException("Function deployment not found"));
 
-        functionDeployment.setStatusWithMessage(DeployStatus.CHANGED, "Function deployment changed");
+        if(functionDeployment.getStatus().equals(DeployStatus.DEPLOYED) || functionDeployment.getStatus().equals(DeployStatus.FAILED)) {
+            functionDeployment.setStatusWithMessage(DeployStatus.CHANGED, "Function deployment changed");
+        }
+
         functionDeployment.setProvider(apiFunctionDeployment.getProvider().toString());
         functionDeployment.setMemory(apiFunctionDeployment.getMemory());
         functionDeployment.setTimeoutSecs(apiFunctionDeployment.getTimeoutSecs());

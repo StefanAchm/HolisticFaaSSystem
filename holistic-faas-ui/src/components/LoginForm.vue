@@ -162,9 +162,8 @@ export default {
                 });
 
           })
-          .catch((error) => {
+          .catch(() => {
             this.error = 'Invalid credentials';
-            console.log(error)
           })
 
       ;
@@ -176,9 +175,8 @@ export default {
           .then(() => {
             this.changeForm();
           })
-          .catch((error) => {
+          .catch(() => {
             this.error = 'Could not register';
-            console.log(error)
           })
     },
 
