@@ -29,6 +29,42 @@
 
         </v-btn>
 
+        <v-btn
+            color="primary"
+            class="mx-2"
+            @click="downloadYaml">
+
+          Download YAML
+
+        </v-btn>
+
+<!--        <v-file-input-->
+<!--            truncate-length="60"-->
+<!--            @change="selectFile"-->
+<!--        ></v-file-input>-->
+
+<!--        <v-btn-->
+<!--            color="primary"-->
+<!--            class="mx-2"-->
+<!--            @click="uploadPackage">-->
+
+<!--          Upload Package-->
+
+<!--        </v-btn>-->
+
+        <div>
+          <input
+              type="file"
+              ref="fileInput"
+              @change="onFileSelected"
+              style="display: none"
+              accept=".yaml,.yml"
+          />
+          <v-btn
+              color="primary"
+              @click="onButtonClick">Upload YAML</v-btn>
+        </div>
+
         <v-spacer></v-spacer>
 
         <v-btn
@@ -77,7 +113,7 @@
 
     <template v-slot:[`item.implementation`]="{ item }">
 
-      <div v-if="item.functionImplementation === null">
+      <div v-if="item.functionImplementation === null || !item.functionImplementation.fileName">
         No Implementation
         <v-icon color="red" small>mdi-alert-circle-outline</v-icon>
       </div>
@@ -519,6 +555,47 @@ export default {
             this.$set(fd, 'statusMessage', statusMessage)
             this.$set(fd, 'text', text)
 
+          })
+
+    },
+
+    downloadYaml() {
+      HfApi.downloadYaml(this.selected)
+          .then(response => {
+            // Create a new Blob object using the response data of the file
+            let blob = new Blob([response.data], {type: 'application/yaml'});
+
+            // Create a link element
+            let link = document.createElement('a');
+
+            // Create an object URL for the file
+            link.href = window.URL.createObjectURL(blob);
+
+            // Set the file name and download attribute
+            link.download = 'functions.yaml';
+
+            // Add the link to the DOM
+            document.body.appendChild(link);
+
+            // Simulate clicking the link
+            link.click();
+
+            // Remove the link from the DOM
+            document.body.removeChild(link);
+          });
+    },
+
+    onButtonClick() {
+      // Trigger the click event on the hidden file input when the button is clicked
+      this.$refs.fileInput.click();
+    },
+    onFileSelected(event) {
+      // Handle the file selected by the user
+      const file = event.target.files[0];
+
+      HfApi.uploadYaml(file, this.$store.state.userId)
+          .then(() => {
+            this.init()
           })
 
     },

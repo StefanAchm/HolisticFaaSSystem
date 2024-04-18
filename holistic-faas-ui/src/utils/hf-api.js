@@ -155,9 +155,46 @@ export default {
 
     },
 
-    // deprecated
     migrateFunctions(migrationRequest) {
         return apiClient.post('/function/migrate', migrationRequest);
-    }
+    },
+
+    downloadYaml(items) {
+        return apiClient.post('/function/download', items, {
+            responseType: 'blob'
+        });
+    },
+
+    uploadYaml(file, userId) {
+
+        let formData = new FormData();
+
+        formData.append('file', file);
+        // formData.append('apiFunction', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+
+        return apiClient.post('/function/uploadYaml?userId=' + userId, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+    },
+
+    uploadPackage(file) {
+
+        // TODO: add user id!
+
+        let formData = new FormData();
+
+        formData.append('file', file);
+        // formData.append('apiFunction', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+
+        return apiClient.post('/function/uploadPackage', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+    },
 
 }

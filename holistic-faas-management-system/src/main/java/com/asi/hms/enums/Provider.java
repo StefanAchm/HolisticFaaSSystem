@@ -1,6 +1,5 @@
 package com.asi.hms.enums;
 
-import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.service.WebSocketSessionService;
 import com.asi.hms.utils.ProgressHandler;

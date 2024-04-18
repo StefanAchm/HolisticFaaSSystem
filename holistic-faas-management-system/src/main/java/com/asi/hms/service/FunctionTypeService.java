@@ -16,11 +16,13 @@ public class FunctionTypeService {
         this.functionTypeRepository = functionTypeRepository;
     }
 
-    public void addFunctionType(APIFunctionType apiFunctionType) {
+    public APIFunctionType add(APIFunctionType apiFunctionType) {
 
         DBFunctionType dbFunctionType = DBFunctionType.fromAPIFunctionType(apiFunctionType);
 
         this.functionTypeRepository.save(dbFunctionType);
+
+        return APIFunctionType.fromDBFunctionType(dbFunctionType);
 
     }
 

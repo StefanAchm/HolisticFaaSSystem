@@ -37,9 +37,12 @@ public class FunctionImplementationService {
 
     }
 
-    public void add(MultipartFile file, APIFunctionImplementation apiFunctionImplementation) {
+    public APIFunctionImplementation add(MultipartFile file, APIFunctionImplementation apiFunctionImplementation) {
 
-        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+        String path = null;
+        if(file != null) {
+            path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+        }
 
         DBFunctionImplementation dbFunctionImplementation = new DBFunctionImplementation();
         dbFunctionImplementation.setFilePath(path);
@@ -51,6 +54,8 @@ public class FunctionImplementationService {
         dbFunctionImplementation.setFunctionType(dbFunctionType);
 
         this.functionImplementationRepository.save(dbFunctionImplementation);
+
+        return APIFunctionImplementation.fromDBFunctionImplementation(dbFunctionImplementation);
 
     }
 

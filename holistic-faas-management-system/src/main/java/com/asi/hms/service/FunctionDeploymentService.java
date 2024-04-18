@@ -50,7 +50,7 @@ public class FunctionDeploymentService {
 
     }
 
-    public void add(APIFunctionDeployment apiFunctionDeployment) {
+    public APIFunctionDeployment add(APIFunctionDeployment apiFunctionDeployment) {
 
         DBUser user = this.userRepository
                 .findById(apiFunctionDeployment.getUserId())
@@ -67,6 +67,8 @@ public class FunctionDeploymentService {
         );
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+        return APIFunctionDeployment.fromDBFunctionDeployment(dbFunctionDeployment);
 
     }
 

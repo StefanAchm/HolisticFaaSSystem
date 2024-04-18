@@ -69,10 +69,14 @@ public class APIFunctionImplementation {
 
         apiFunctionImplementation.setFunctionDeployments(new ArrayList<>());
 
-        // TODO
-        dbFunctionImplementation.getFunctionDeployments().stream()
-                .map(APIFunctionDeployment::fromDBFunctionDeployment)
-                .forEach(apiFunctionImplementation.getFunctionDeployments()::add);
+        if(dbFunctionImplementation.getFunctionDeployments() != null) {
+
+            dbFunctionImplementation.getFunctionDeployments()
+                    .stream()
+                    .map(APIFunctionDeployment::fromDBFunctionDeployment)
+                    .forEach(apiFunctionImplementation.getFunctionDeployments()::add);
+
+        }
 
         return apiFunctionImplementation;
 

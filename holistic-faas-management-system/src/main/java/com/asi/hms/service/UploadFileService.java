@@ -2,6 +2,7 @@ package com.asi.hms.service;
 
 import com.asi.hms.config.properties.FileStorageProperties;
 import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.utils.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UploadFileService {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileService.class);
 
     public static final String FUNCTIONS_DIR = "functions";
+    public static final String UPLOADS_DIR = "deployments";
     public static final String CREDENTIALS_DIR = "credentials";
 
     private final FileStorageProperties fileStorageProperties;
@@ -27,6 +29,16 @@ public class UploadFileService {
     public UploadFileService(FileStorageProperties fileStorageProperties) {
         this.fileStorageProperties = fileStorageProperties;
     }
+
+    public String uploadZipFileAndNormalize(MultipartFile file, String subFolder) {
+
+        Path uploadedFilePath = uploadFile(file, subFolder);
+        Path unzipedFilePath = FileUtil.unzip(uploadedFilePath);
+
+        return unzipedFilePath.normalize().toString();
+
+    }
+
 
     public String uploadFileAndNormalize(MultipartFile file, String subFolder) {
 

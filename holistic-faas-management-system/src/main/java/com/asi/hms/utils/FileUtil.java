@@ -4,13 +4,15 @@ import com.asi.hms.exceptions.HolisticFaaSException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileUtil {
 
@@ -84,7 +86,66 @@ public class FileUtil {
 
     public static String getFileNameFromPath(String filePath) {
 
+        if(filePath == null) {
+            return null;
+        }
+
         return filePath.substring(filePath.lastIndexOf("\\") + 1);
+
+    }
+
+    public static String normalize(Path filePath) {
+        return filePath.normalize().toString();
+    }
+
+    public static Path unzip(Path filePath) {
+
+        String newFilePath = filePath.toString().replace(".zip", "");
+        Path path = Paths.get(newFilePath);
+
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            throw new HolisticFaaSException("Could not create directory " + path);
+        }
+
+        // TODO: This does only work, if the file is a zip file and has no subdirectories!!!
+
+        // Unpack the zip file
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(filePath.toFile()))) {
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                File newFile = newFile(path.toFile(), zipEntry);
+                try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                }
+                zipEntry = zis.getNextEntry();
+            }
+            zis.closeEntry();
+        } catch (IOException e) {
+            throw new HolisticFaaSException(e);
+        }
+
+        return path;
+
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
 
     }
 

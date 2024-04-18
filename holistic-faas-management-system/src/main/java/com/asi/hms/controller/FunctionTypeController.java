@@ -19,7 +19,7 @@ public class FunctionTypeController {
 
     @PostMapping(value = "/add")
     public void addFunctionType(@RequestBody APIFunctionType apiFunctionType) {
-        this.functionTypeService.addFunctionType(apiFunctionType);
+        this.functionTypeService.add(apiFunctionType);
     }
 
     @GetMapping(value = "/getAll")
