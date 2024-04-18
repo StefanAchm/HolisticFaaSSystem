@@ -2,16 +2,6 @@
 
   <v-app>
 
-    <!--    <v-app-bar-->
-    <!--        app-->
-    <!--    >-->
-
-    <!--&lt;!&ndash;      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;      <v-toolbar-title></v-toolbar-title>&ndash;&gt;-->
-    <!--      -->
-    <!--    </v-app-bar>-->
-
     <v-navigation-drawer
         app
         permanent
@@ -101,7 +91,7 @@
     <v-main>
 
       <!-- Provides the application the proper gutter -->
-      <v-container fluid>
+      <v-container>
         <router-view></router-view>
       </v-container>
 

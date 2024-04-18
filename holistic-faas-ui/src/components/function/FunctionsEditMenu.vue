@@ -21,13 +21,18 @@
         <v-btn
             color="primary"
             v-bind="attrs"
+            class="mx-2"
             v-on="on"
             :disabled="items.length === 0"
         >
 
-          <span>
-            Migrate ({{ items.length }})
-          </span>
+          <v-icon left>
+            mdi-swap-horizontal
+          </v-icon>
+
+
+          Migrate ({{ items.length }})
+
 
         </v-btn>
       </template>
@@ -36,30 +41,38 @@
         <v-list-item-group>
 
           <v-list-item>
-            <v-list-item-title
-                @click="migrateToMyAccount()"
-            >
+            <v-list-item-title @click="migrateToMyAccount()">
+              <v-list-item-icon>
+                <v-icon>mdi-account-arrow-left</v-icon>
+              </v-list-item-icon>
               to my account
             </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-title @click="migrateToProvider('AWS')">
+              <v-list-item-icon>
+                <v-icon>mdi-aws</v-icon>
+              </v-list-item-icon>
               to AWS
             </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-title @click="migrateToProvider('GCP')">
+              <v-list-item-icon>
+                <v-icon>mdi-google-cloud</v-icon>
+              </v-list-item-icon>
               to GCP
             </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title
-                @click="openMigrationDialog()"
-            >
-              custom
+            <v-list-item-title @click="openMigrationDialog()">
+              <v-list-item-icon>
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-list-item-icon>
+              Custom
             </v-list-item-title>
           </v-list-item>
 

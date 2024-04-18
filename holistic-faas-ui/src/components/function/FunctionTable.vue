@@ -20,60 +20,70 @@
 
         <v-spacer></v-spacer>
 
+
+        <!-- create a list of functionality for the user to interact with -->
+        <!-- The user can add functions, either per dialog or from a yaml file -->
+        <!-- The user can process the functions: edit, download, or migrate -->
+        <!-- The user can deploy the functions to a provider -->
+
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+                class="mx-2"
+            >
+              <v-icon
+                  left>
+                mdi-plus
+              </v-icon>
+              Add
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item>
+
+                <v-list-item-icon>
+                  <v-icon>mdi-lambda</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-title @click="functionDialogVisible = true;">Function</v-list-item-title>
+
+              </v-list-item>
+              <v-list-item>
+
+                <v-list-item-icon>
+                  <v-icon>mdi-file-document-outline</v-icon>
+                </v-list-item-icon>
+
+                <input
+                    type="file"
+                    ref="fileInput"
+                    @change="onFileSelected"
+                    style="display: none"
+                    accept=".yaml,.yml"
+                />
+                <v-list-item-title @click="onButtonClick">from YAML</v-list-item-title>
+
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+
         <v-btn
             color="primary"
             class="mx-2"
-            @click="functionDialogVisible = true">
-
-          Add Functiontype
-
-        </v-btn>
-
-        <v-btn
-            color="primary"
-            class="mx-2"
+            :disabled="selected.length === 0"
             @click="downloadYaml">
 
-          Download YAML
+          <v-icon
+              left>
+            mdi-download
+          </v-icon>
 
-        </v-btn>
-
-<!--        <v-file-input-->
-<!--            truncate-length="60"-->
-<!--            @change="selectFile"-->
-<!--        ></v-file-input>-->
-
-<!--        <v-btn-->
-<!--            color="primary"-->
-<!--            class="mx-2"-->
-<!--            @click="uploadPackage">-->
-
-<!--          Upload Package-->
-
-<!--        </v-btn>-->
-
-        <div>
-          <input
-              type="file"
-              ref="fileInput"
-              @change="onFileSelected"
-              style="display: none"
-              accept=".yaml,.yml"
-          />
-          <v-btn
-              color="primary"
-              @click="onButtonClick">Upload YAML</v-btn>
-        </div>
-
-        <v-spacer></v-spacer>
-
-        <v-btn
-            :disabled="selected.length === 0"
-            color="primary"
-            class="mx-2"
-            @click="deployAll">
-
-          Deploy ({{ selected.length }})
+          Download
 
         </v-btn>
 
@@ -81,6 +91,85 @@
             :items="selected"
             @menu-closed="init"
         />
+
+        <v-btn
+            :disabled="selected.length === 0"
+            color="primary"
+            class="mx-2"
+            @click="deployAll">
+
+          <v-icon
+              left>
+            mdi-rocket-launch
+          </v-icon>
+
+          Deploy ({{ selected.length }})
+
+        </v-btn>
+
+
+        <!--          <v-btn-->
+        <!--              color="primary"-->
+        <!--              class="mx-2"-->
+        <!--              @click="functionDialogVisible = true">-->
+
+        <!--            Add Functiontype-->
+
+        <!--          </v-btn>-->
+
+        <!--          <v-btn-->
+        <!--              color="primary"-->
+        <!--              class="mx-2"-->
+        <!--              @click="downloadYaml">-->
+
+        <!--            Download YAML-->
+
+        <!--          </v-btn>-->
+
+        <!--        <v-file-input-->
+        <!--            truncate-length="60"-->
+        <!--            @change="selectFile"-->
+        <!--        ></v-file-input>-->
+
+        <!--        <v-btn-->
+        <!--            color="primary"-->
+        <!--            class="mx-2"-->
+        <!--            @click="uploadPackage">-->
+
+        <!--          Upload Package-->
+
+        <!--        </v-btn>-->
+
+        <!--          <div>-->
+        <!--            <input-->
+        <!--                type="file"-->
+        <!--                ref="fileInput"-->
+        <!--                @change="onFileSelected"-->
+        <!--                style="display: none"-->
+        <!--                accept=".yaml,.yml"-->
+        <!--            />-->
+        <!--            <v-btn-->
+        <!--                color="primary"-->
+        <!--                @click="onButtonClick">Upload YAML-->
+        <!--            </v-btn>-->
+        <!--          </div>-->
+
+        <!--          <v-spacer></v-spacer>-->
+
+        <!--          <v-btn-->
+        <!--              :disabled="selected.length === 0"-->
+        <!--              color="primary"-->
+        <!--              class="mx-2"-->
+        <!--              @click="deployAll">-->
+
+        <!--            Deploy ({{ selected.length }})-->
+
+        <!--          </v-btn>-->
+
+        <!--          <FunctionsEditMenu-->
+        <!--              :items="selected"-->
+        <!--              @menu-closed="init"-->
+        <!--          />-->
 
         <FunctionTypeDialog
             :dialog.sync="functionDialogVisible"
@@ -195,7 +284,7 @@
 
     </template>
 
-    <template v-slot:[`item.edit`]="{ item }">
+    <template v-slot:[`item.edit2`]="{ item }">
 
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
@@ -248,6 +337,77 @@
 
     </template>
 
+    <template v-slot:[`item.actions`]="{ item }">
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              icon
+              color="secondary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+          >
+
+            <v-icon>mdi-plus-circle</v-icon>
+
+          </v-btn>
+        </template>
+        <v-list>
+
+          <v-list-item-group
+              v-model="selectedMenuItem"
+          >
+
+            <v-list-item>
+              <v-list-item-title @click="addImplementation(item)">Implementation</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="item.functionImplementation">
+              <v-list-item-title @click="addDeployment(item)">Deployment</v-list-item-title>
+            </v-list-item>
+
+          </v-list-item-group>
+
+        </v-list>
+      </v-menu>
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              icon
+              color="secondary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+          >
+
+            <v-icon>mdi-pencil-circle</v-icon>
+
+          </v-btn>
+        </template>
+        <v-list>
+
+          <v-list-item-group
+              v-model="selectedMenuItem"
+          >
+
+            <v-list-item>
+              <v-list-item-title @click="editImplementation(item)">Implementation</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="item.functionImplementation">
+              <v-list-item-title @click="editDeployment(item)">Deployment</v-list-item-title>
+            </v-list-item>
+
+
+          </v-list-item-group>
+
+        </v-list>
+      </v-menu>
+
+    </template>
+
     <template v-slot:[`item.status`]="{ item }">
 
       <v-tooltip bottom>
@@ -289,11 +449,12 @@
               v-on="on"
               v-bind="attrs"
               @click="openNewTab(item)"
-          >mdi-open-in-new</v-icon>
+          >mdi-open-in-new
+          </v-icon>
 
         </template>
 
-        <span>Open in {{item.functionDeployment?.provider}} console</span>
+        <span>Open in {{ item.functionDeployment?.provider }} console</span>
 
       </v-tooltip>
 
@@ -311,8 +472,8 @@ import HfApi from "@/utils/hf-api";
 import FunctionTypeDialog from "@/components/function/dialogs/FunctionTypeDialog.vue";
 import FunctionImplementationDialog from "@/components/function/dialogs/FunctionImplementationDialog.vue";
 import FunctionDeploymentDialog from "@/components/function/dialogs/FunctionDeploymentDialog.vue";
-import FunctionsEditMenu from "@/components/function/FunctionsEditMenu.vue";
 import hfWebsocket from "@/utils/hf-websocket";
+import FunctionsEditMenu from "@/components/function/FunctionsEditMenu.vue";
 
 export default {
 
@@ -348,7 +509,7 @@ export default {
       {text: 'Runtime', value: 'runtime', sortable: true},
       {text: 'User', value: 'userName', sortable: true},
 
-      {text: '', value: 'edit', sortable: false},
+      {text: '', value: 'actions', sortable: false},
 
       {text: '', value: 'link', sortable: false},
 
@@ -435,7 +596,7 @@ export default {
 
     addDeployment(item) {
       this.editItem = item;
-      if(this.editItem.functionDeployment) {
+      if (this.editItem.functionDeployment) {
         this.editItem.functionDeployment.id = null;
       }
       this.functionDeploymentDialogVisible = true;
@@ -586,14 +747,10 @@ export default {
     },
 
     onButtonClick() {
-      // Trigger the click event on the hidden file input when the button is clicked
       this.$refs.fileInput.click();
     },
     onFileSelected(event) {
-      // Handle the file selected by the user
-      const file = event.target.files[0];
-
-      HfApi.uploadYaml(file, this.$store.state.userId)
+      HfApi.uploadYaml(event.target.files[0], this.$store.state.userId)
           .then(() => {
             this.init()
           })
@@ -623,4 +780,11 @@ export default {
     transform: scale(0.9);
   }
 }
+
+.custom-app-bar {
+  position: relative;
+  top: -12px;
+  left: -12px !important;
+}
+
 </style>
