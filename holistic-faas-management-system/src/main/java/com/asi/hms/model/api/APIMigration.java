@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class APIMigration {
 
+    // These 3 fields just serve as information in the response!
     private Set<APIMigrationObject> userMigrations;
     private Set<APIMigrationObject> regionMigrations;
     private Set<APIMigrationObject> runtimeMigrations;

@@ -1,9 +1,11 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.enums.MigrationType;
+import com.asi.hms.model.api.APIUser;
+
+import java.util.List;
 
 public class MigrationRunner {
 
@@ -12,22 +14,20 @@ public class MigrationRunner {
     private MigrationRunner() {
     }
 
-    public static MigrationRunner getMigrationRunner(MigrationType migrationType) {
+    public static MigrationRunner getMigrationRunner(MigrationType migrationType, List<APIUser> users) {
 
         MigrationRunner migrationRunner = new MigrationRunner();
 
-        switch (migrationType) {
-            case FUNCTION_PROVIDER -> migrationRunner.setMigrationInterface(new MigrationImplProvider());
-            case FUNCTION_REGION -> migrationRunner.setMigrationInterface(new MigrationImplRegion());
-            case FUNCTION_USER -> migrationRunner.setMigrationInterface(new MigrationImplUser());
-            default -> throw new HolisticFaaSException("Invalid migration type: " + migrationType);
-        }
+        migrationRunner.migrationInterface =
+                switch (migrationType) {
+                    case FUNCTION_PROVIDER -> new MigrationImplProvider();
+                    case FUNCTION_REGION -> new MigrationImplRegion();
+                    case FUNCTION_USER -> new MigrationImplUser(users);
+                    case FUNCTION_CUSTOM -> new MigrationImplCustom();
+                };
 
         return migrationRunner;
-    }
 
-    private void setMigrationInterface(MigrationInterface migrationInterface) {
-        this.migrationInterface = migrationInterface;
     }
 
     public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {

@@ -16,12 +16,16 @@ public class FunctionService {
 
     private final FunctionDeploymentService functionDeploymentService;
     private final FunctionTypeRepository functionTypeRepository;
+    private final UserService userService;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
-                           FunctionTypeRepository functionTypeRepository) {
+                           FunctionTypeRepository functionTypeRepository,
+                            UserService userService
+    ) {
 
         this.functionDeploymentService = functionDeploymentService;
         this.functionTypeRepository = functionTypeRepository;
+        this.userService = userService;
 
     }
 
@@ -80,8 +84,10 @@ public class FunctionService {
 
     public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
 
+        List<APIUser> users = this.userService.getAllUser();
+
         return MigrationRunner
-                .getMigrationRunner(apiMigrationPreparation.getMigrationType())
+                .getMigrationRunner(apiMigrationPreparation.getMigrationType(), users)
                 .prepareMigration(apiMigrationPreparation);
 
     }

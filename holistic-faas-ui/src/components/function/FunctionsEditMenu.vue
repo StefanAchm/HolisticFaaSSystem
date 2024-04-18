@@ -6,6 +6,12 @@
         :items="items"
     />
 
+    <FunctionMigrationTable
+        :dialog.sync="functionMigrationDialog"
+        @dialog-closed="close"
+        :items="items"
+    />
+
     <v-menu
         :disabled="items.length === 0"
         offset-y
@@ -51,9 +57,9 @@
 
           <v-list-item>
             <v-list-item-title
-                @click="migrateToMyAccount()"
+                @click="openMigrationDialog()"
             >
-              to another Region
+              custom
             </v-list-item-title>
           </v-list-item>
 
@@ -68,10 +74,11 @@
 
 import FunctionMigrationProviderDialog from "@/components/function/dialogs/FunctionMigrationProviderDialog.vue";
 import HfApi from "@/utils/hf-api";
+import FunctionMigrationTable from "@/components/function/dialogs/FunctionMigrationTable.vue";
 
 export default {
 
-  components: {FunctionMigrationProviderDialog},
+  components: {FunctionMigrationTable, FunctionMigrationProviderDialog},
 
   props: {
     items: {
@@ -83,10 +90,15 @@ export default {
   data: () => ({
 
     functionMigrationProviderDialog: false,
+    functionMigrationDialog: false,
 
   }),
 
   methods: {
+
+    close() {
+      this.$emit('menu-closed')
+    },
 
     getMigrateRequest() {
       // Items consists of a list of {id, functionDeployment, functionImplementation and functionType}
@@ -107,7 +119,7 @@ export default {
           .then((response) => {
             HfApi.migrateFunctions(response.data)
                 .then(() => {
-                  this.$emit('menu-closed')
+                  this.close()
                 })
 
           })
@@ -120,11 +132,15 @@ export default {
           .then((response) => {
             HfApi.migrateFunctions(response.data)
                 .then(() => {
-                  this.$emit('menu-closed')
+                  this.close()
                 })
 
           })
 
+    },
+
+    openMigrationDialog() {
+      this.functionMigrationDialog = true
     }
 
   }
