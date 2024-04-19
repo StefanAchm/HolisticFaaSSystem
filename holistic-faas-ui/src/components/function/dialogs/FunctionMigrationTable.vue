@@ -41,7 +41,7 @@
                   class="column-name"
                   type="text"
                   v-model="common.functionType.name"
-                  disabled="true"
+                  disabled
               ></v-text-field>
             </td>
 
@@ -51,7 +51,7 @@
                   class="column-implementation"
                   type="text"
                   v-model="common.functionImplementation.fileName"
-                  disabled="true"
+                  disabled
               ></v-text-field>
             </td>
 
@@ -125,7 +125,7 @@
                   class="column-username"
                   type="text"
                   v-model="common.functionDeployment.userName"
-                  disabled="true"
+                  disabled
               ></v-text-field>
             </td>
 
@@ -142,7 +142,7 @@
                   class="column-name"
                   type="text"
                   v-model="item.functionType.name"
-                  disabled="true"></v-text-field>
+                  disabled></v-text-field>
             </td>
 
             <td>
@@ -151,7 +151,7 @@
                   class="column-implementation"
                   type="text"
                   v-model="item.functionImplementation.fileName"
-                  disabled="true"></v-text-field>
+                  disabled></v-text-field>
             </td>
 
             <td>
@@ -218,7 +218,7 @@
                   class="column-username"
                   type="text"
                   v-model="item.functionDeployment.userName"
-                  disabled="true"></v-text-field>
+                  disabled></v-text-field>
             </td>
 
           </tr>

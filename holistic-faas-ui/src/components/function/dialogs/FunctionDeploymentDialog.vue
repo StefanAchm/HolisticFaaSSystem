@@ -54,7 +54,7 @@
               <v-text-field
                   type="number"
                   v-model="editItemLocal.functionDeployment.timeoutSecs"
-                  label="TimeoutSecs"></v-text-field>
+                  label="Timeout"></v-text-field>
             </v-col>
 
           </v-row>
@@ -122,8 +122,6 @@
 
 import common from '../../../utils/common'
 
-import {CloudFunction} from "@/models/CloudFunction";
-
 import HfApi from "@/utils/hf-api";
 
 export default {
@@ -132,7 +130,7 @@ export default {
 
   props: {
     dialog: Boolean,
-    editItem: CloudFunction,
+    editItem: {},
   },
 
   data() {
@@ -242,7 +240,7 @@ export default {
     },
 
     formSubtitle() {
-      return 'Function: ' + this.editItemLocal.functionImplementation?.id
+      return 'Function implementation id: ' + this.editItemLocal.functionImplementation?.id
     },
 
     dialogLocal: {

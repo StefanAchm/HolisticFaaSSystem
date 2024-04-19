@@ -31,6 +31,8 @@
             :key="item.title"
             link
             @click="navigateTo(item.route)"
+            :to="item.route"
+            active-class="primary--text"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>

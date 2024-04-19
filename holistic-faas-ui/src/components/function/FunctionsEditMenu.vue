@@ -1,11 +1,6 @@
 <template>
   <div class="text-center">
 
-    <FunctionMigrationProviderDialog
-        :dialog.sync="functionMigrationProviderDialog"
-        :items="items"
-    />
-
     <FunctionMigrationTable
         :dialog.sync="functionMigrationDialog"
         @dialog-closed="close"
@@ -85,13 +80,12 @@
 
 <script>
 
-import FunctionMigrationProviderDialog from "@/components/function/dialogs/FunctionMigrationProviderDialog.vue";
 import HfApi from "@/utils/hf-api";
 import FunctionMigrationTable from "@/components/function/dialogs/FunctionMigrationTable.vue";
 
 export default {
 
-  components: {FunctionMigrationTable, FunctionMigrationProviderDialog},
+  components: {FunctionMigrationTable},
 
   props: {
     items: {
@@ -102,7 +96,6 @@ export default {
 
   data: () => ({
 
-    functionMigrationProviderDialog: false,
     functionMigrationDialog: false,
 
   }),

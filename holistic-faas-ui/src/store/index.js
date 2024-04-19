@@ -8,7 +8,8 @@ export default new Vuex.Store({
     state: {
         token: null,
         username: null,
-        userId: null
+        userId: null,
+        treeView: false
     },
 
     mutations: {
@@ -21,6 +22,10 @@ export default new Vuex.Store({
 
         setToken(state, token) {
             state.token = token;
+        },
+
+        setTreeView(state, value) {
+            state.treeView = value;
         }
 
     },

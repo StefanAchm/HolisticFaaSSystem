@@ -12,6 +12,12 @@
         <span class="text-h5">{{ formTitle }}</span>
       </v-card-title>
 
+      <v-spacer></v-spacer>
+
+      <v-card-subtitle>
+        <span class="text-h7">{{ formSubtitle }}</span>
+      </v-card-subtitle>
+
       <v-card-text>
 
         <v-file-input
@@ -71,6 +77,11 @@ export default  {
         this.$emit('update:dialog', value)
       }
     },
+
+    formSubtitle() {
+      return 'Function type id: ' + this.editItemLocal.functionType?.id
+    },
+
     formTitle() {
       return this.editItemLocal.functionImplementation?.id ? 'Edit Functionimplementation' : 'Add Functionimplementation'
     }
@@ -97,7 +108,7 @@ export default  {
 
     save() {
 
-      if(this.editItemLocal.functionImplementation.id) {
+      if(this.editItemLocal.functionImplementation?.id) {
 
         HfApi.updateFunction(this.currentFile, this.editItemLocal.functionImplementation)
             .then(() => {

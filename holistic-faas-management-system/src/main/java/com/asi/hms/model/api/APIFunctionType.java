@@ -2,6 +2,7 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBFunctionType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,9 +39,24 @@ public class APIFunctionType {
     }
 
     public static APIFunctionType fromDBFunctionType(DBFunctionType dbFunctionType) {
+
         APIFunctionType apiFunctionType = new APIFunctionType();
+
         apiFunctionType.setId(dbFunctionType.getId());
         apiFunctionType.setName(dbFunctionType.getName());
+
+        apiFunctionType.setFunctionImplementations(new ArrayList<>());
+        if(dbFunctionType.getFunctionImplementations() != null) {
+
+            dbFunctionType.getFunctionImplementations()
+                    .stream()
+                    .map(APIFunctionImplementation::fromDBFunctionImplementation)
+                    .forEach(apiFunctionType.getFunctionImplementations()::add);
+
+        }
+
         return apiFunctionType;
+
     }
+
 }
