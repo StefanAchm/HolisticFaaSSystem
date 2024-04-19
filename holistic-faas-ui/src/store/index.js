@@ -18,6 +18,7 @@ export default new Vuex.Store({
             state.token = localStorage.getItem('token');
             state.username = localStorage.getItem('username');
             state.userId = localStorage.getItem('userId');
+            state.treeView = localStorage.getItem('treeView') === 'true';
         },
 
         setToken(state, token) {
@@ -26,11 +27,13 @@ export default new Vuex.Store({
 
         setTreeView(state, value) {
             state.treeView = value;
+            localStorage.setItem('treeView', value);
         }
 
     },
 
     actions: {
+
         login({commit}, data) {
             commit('setToken', data.token);
             // Optionally, store the token in localStorage for persistent login
@@ -44,9 +47,11 @@ export default new Vuex.Store({
             localStorage.removeItem('username');
             localStorage.removeItem('userId');
         }
+
     },
 
     getters: {
+
         isAuthenticated(state) {
             return state.token != null;
         },
