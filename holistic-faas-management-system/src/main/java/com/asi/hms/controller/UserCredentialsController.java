@@ -1,6 +1,5 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.model.api.APIUser;
 import com.asi.hms.model.api.APIUserCredentials;
 import com.asi.hms.service.UserCredentialsService;
 import org.springframework.http.ResponseEntity;

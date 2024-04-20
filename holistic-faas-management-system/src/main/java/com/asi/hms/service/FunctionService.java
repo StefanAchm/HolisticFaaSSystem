@@ -9,7 +9,6 @@ import com.asi.hms.utils.cloudproviderutils.YamlParser;
 import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -25,15 +24,13 @@ public class FunctionService {
     private final FunctionTypeRepository functionTypeRepository;
     private final UserService userService;
     private final UploadFileService uploadFileService;
-    private final Docket api;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
                            FunctionImplementationService functionImplementationService,
                            FunctionTypeService functionTypeService,
                            FunctionTypeRepository functionTypeRepository,
                            UserService userService,
-                           UploadFileService uploadFileService,
-                           Docket api) {
+                           UploadFileService uploadFileService) {
 
         this.functionDeploymentService = functionDeploymentService;
         this.functionImplementationService = functionImplementationService;
@@ -42,7 +39,7 @@ public class FunctionService {
         this.functionTypeRepository = functionTypeRepository;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
-        this.api = api;
+
     }
 
     public List<APIFunction> getAllFunctions() {

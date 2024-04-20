@@ -156,7 +156,7 @@ export default {
     deployAll() {
 
       this.selected.forEach(item => {
-        HfApi.deployFunctionDeploy(item.functionDeployment.id)
+        HfApi.deployFunctionDeployment(item.functionDeployment.id)
       })
       this.close()
     },
