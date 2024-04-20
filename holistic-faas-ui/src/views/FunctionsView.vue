@@ -84,7 +84,7 @@ export default {
       this.search = search
       // this.$refs.functionTable.init()
       // this.$refs.functionTree.init()
-      this.init()
+      // this.init()
     },
 
     init() {

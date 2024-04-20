@@ -65,26 +65,26 @@
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-provider"
                   v-model="common.functionDeployment.provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
                   @change="updateEditItemsForProvider"
-              ></v-select>
+              ></v-autocomplete>
 
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-region"
                   v-model="common.functionDeployment.region"
                   :items="common.functionDeployment.regions"
                   item-text="title"
                   item-value="value"
                   @change="updateEditItemsForRegion"
-              ></v-select>
+              ></v-autocomplete>
             </td>
 
 
@@ -109,14 +109,14 @@
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-runtime"
                   v-model="common.functionDeployment.runtime"
                   :items="common.functionDeployment.runtimes"
                   item-text="title"
                   item-value="value"
                   @change="updateEditItemsForRuntimes"
-              ></v-select>
+              ></v-autocomplete>
             </td>
 
             <td>
@@ -163,24 +163,24 @@
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-provider"
                   v-model="item.functionDeployment.provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
-              ></v-select>
+              ></v-autocomplete>
 
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-region"
                   v-model="item.functionDeployment.region"
                   :items="item.functionDeployment.regions"
                   item-text="title"
                   item-value="value"
-              ></v-select>
+              ></v-autocomplete>
             </td>
 
 
@@ -203,13 +203,13 @@
             </td>
 
             <td>
-              <v-select
+              <v-autocomplete
                   class="column-runtime"
                   v-model="item.functionDeployment.runtime"
                   :items="item.functionDeployment.runtimes"
                   item-text="title"
                   item-value="value"
-              ></v-select>
+              ></v-autocomplete>
             </td>
 
             <td>

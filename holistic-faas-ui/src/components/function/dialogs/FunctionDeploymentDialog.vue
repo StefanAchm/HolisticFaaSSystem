@@ -25,13 +25,13 @@
 
             <v-col>
 
-              <v-select
+              <v-autocomplete
                   v-model="editItemLocal.functionDeployment.provider"
                   :items="providers"
                   item-text="title"
                   item-value="value"
                   label="Provider"
-              ></v-select>
+              ></v-autocomplete>
 
             </v-col>
 
@@ -74,13 +74,13 @@
 
             <v-col>
 
-              <v-select
+              <v-autocomplete
                   v-model="editItemLocal.functionDeployment.region"
                   :items="regions"
                   item-text="title"
                   item-value="value"
                   label="Region"
-              ></v-select>
+              ></v-autocomplete>
 
 
             </v-col>
@@ -91,13 +91,13 @@
 
             <v-col>
 
-              <v-select
+              <v-autocomplete
                   v-model="editItemLocal.functionDeployment.runtime"
                   :items="runtimes"
                   item-text="title"
                   item-value="value"
                   label="Runtime"
-              ></v-select>
+              ></v-autocomplete>
 
             </v-col>
 

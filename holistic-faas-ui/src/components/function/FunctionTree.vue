@@ -202,11 +202,11 @@ export default {
         if (!functionImplementation) {
           functionImplementation = {
             id: f.functionImplementation.id,
-            name: f.functionImplementation.fileName,
+            name: f.functionImplementation.fileName? f.functionImplementation.fileName : '',
             icon: 'mdi-file-code-outline',
             children: [],
             type: 'functionImplementation',
-            actualFunctionDeployment: f
+            actualFunctionDeployment: f,
           }
           functionType.children.push(functionImplementation)
 

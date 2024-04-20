@@ -36,13 +36,13 @@
 
                   <v-col>
 
-                    <v-select
+                    <v-autocomplete
                         v-model="editedItem.provider"
                         :items="providers"
                         item-text="title"
                         item-value="value"
                         label="Provider"
-                    ></v-select>
+                    ></v-autocomplete>
 
                   </v-col>
 

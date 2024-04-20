@@ -167,16 +167,15 @@ export default {
 
     onButtonClick() {
       this.$refs.fileInput.click();
-    }
-    ,
+    },
+
     onFileSelected(event) {
       HfApi.uploadYaml(event.target.files[0], this.$store.state.userId)
           .then(() => {
             this.close()
           })
 
-    }
-    ,
+    },
 
     downloadYaml() {
       HfApi.downloadYaml(this.selected)
@@ -202,8 +201,7 @@ export default {
             // Remove the link from the DOM
             document.body.removeChild(link);
           });
-    }
-    ,
+    },
 
 
   }
