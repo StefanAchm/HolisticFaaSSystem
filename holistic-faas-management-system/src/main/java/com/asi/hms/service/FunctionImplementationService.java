@@ -8,7 +8,6 @@ import com.asi.hms.repository.FunctionImplementationRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class FunctionImplementationService {
 
     public FunctionImplementationService(FunctionImplementationRepository functionImplementationRepository,
                                          FunctionTypeRepository functionTypeRepository,
-                                         UploadFileService uploadFileService, Docket api) {
+                                         UploadFileService uploadFileService) {
 
         this.functionImplementationRepository = functionImplementationRepository;
         this.functionTypeRepository = functionTypeRepository;

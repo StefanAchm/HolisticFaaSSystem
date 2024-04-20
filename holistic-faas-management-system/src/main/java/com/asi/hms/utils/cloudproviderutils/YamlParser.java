@@ -3,12 +3,10 @@ package com.asi.hms.utils.cloudproviderutils;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIFunctionType;
-import com.asi.hms.model.yaml.YamlFunctionDeployment;
-import com.asi.hms.model.yaml.YamlFunctionImplementation;
-import com.asi.hms.model.yaml.YamlFunctionType;
-import com.asi.hms.model.yaml.YamlRoot;
+import com.asi.hms.model.yaml.*;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.FileInputStream;
@@ -29,9 +27,14 @@ public class YamlParser {
             super(options);
 
             this.representers.put(YamlRoot.class, data -> represent(((YamlRoot) data).toMap()));
+
             this.representers.put(YamlFunctionType.class, data -> represent(((YamlFunctionType) data).toMap()));
+
             this.representers.put(YamlFunctionImplementation.class, data -> represent(((YamlFunctionImplementation) data).toMap()));
+
             this.representers.put(YamlFunctionDeployment.class, data -> represent(((YamlFunctionDeployment) data).toMap()));
+
+            this.representers.put(YamlFilePath.class, data -> representScalar(Tag.STR, ((YamlFilePath) data).getPath(), DumperOptions.ScalarStyle.SINGLE_QUOTED));
 
         }
 

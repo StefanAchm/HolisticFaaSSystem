@@ -2,6 +2,7 @@
 
   <v-card
       class="mx-auto mt-5"
+      width="700px"
       max-width="70%">
 
     <v-card-title>
@@ -26,8 +27,8 @@
             <strong>Credentials for {{ provider.name }}:</strong>
           </v-col>
 
-          <v-col :cols="8" class="align-self-center" :class="{
-            'blue--text text--lighten-1': provider.inputFile,
+          <v-col class="align-self-center" :class="{
+            'info--text': provider.inputFile,
             }">
 
             {{ provider.fileName }}
@@ -38,7 +39,7 @@
 
           </v-col>
 
-          <v-col>
+          <v-col :cols="1">
 
             <v-file-input
                 class="pt-0 mt-0"

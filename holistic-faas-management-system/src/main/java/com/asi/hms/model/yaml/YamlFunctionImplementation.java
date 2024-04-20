@@ -16,7 +16,7 @@ public class YamlFunctionImplementation {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("path", path);
+        map.put("path", new YamlFilePath(path));
         map.put("deployments", deployments);
         return map;
     }
