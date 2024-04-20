@@ -60,15 +60,15 @@
         <v-card>
 
           <v-card-title>
-            <span class="text-h5">Users</span>
+            <span class="text-h5">Profile</span>
           </v-card-title>
 
           <v-card-text>
-            Add user credentials
+            Manage your user account
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="primary" text @click="$router.push({ path: '/users'})">Explore</v-btn>
+            <v-btn color="primary" text @click="$router.push({ path: '/profile'})">Explore</v-btn>
           </v-card-actions>
 
         </v-card>

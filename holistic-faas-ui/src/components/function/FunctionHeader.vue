@@ -40,6 +40,7 @@
             <v-list-item-title @click="functionDialogVisible = true;">Function</v-list-item-title>
 
           </v-list-item>
+
           <v-list-item>
 
             <v-list-item-icon>
@@ -48,14 +49,32 @@
 
             <input
                 type="file"
-                ref="fileInput"
+                ref="fileInput1"
                 @change="onFileSelected"
                 style="display: none"
                 accept=".yaml,.yml"
             />
-            <v-list-item-title @click="onButtonClick">from YAML</v-list-item-title>
+            <v-list-item-title @click="openFileSelect">YAML</v-list-item-title>
 
           </v-list-item>
+
+          <v-list-item>
+
+            <v-list-item-icon>
+              <v-icon>mdi-folder-zip</v-icon>
+            </v-list-item-icon>
+
+            <input
+                type="file"
+                ref="fileInput2"
+                @change="onDeploymentSelected"
+                style="display: none"
+                accept=".zip"
+            />
+            <v-list-item-title @click="openDeploymentSelect">Deployment</v-list-item-title>
+
+          </v-list-item>
+
         </v-list-item-group>
       </v-list>
     </v-menu>
@@ -167,12 +186,24 @@ export default {
       this.$emit('dialog-closed')
     },
 
-    onButtonClick() {
-      this.$refs.fileInput.click();
+    openFileSelect() {
+      this.$refs.fileInput1.click()
     },
 
     onFileSelected(event) {
       HfApi.uploadYaml(event.target.files[0], this.$store.state.userId)
+          .then(() => {
+            this.close()
+          })
+
+    },
+
+    openDeploymentSelect() {
+      this.$refs.fileInput2.click()
+    },
+
+    onDeploymentSelected(event) {
+      HfApi.uploadPackage(event.target.files[0], this.$store.state.userId)
           .then(() => {
             this.close()
           })

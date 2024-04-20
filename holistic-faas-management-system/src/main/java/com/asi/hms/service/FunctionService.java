@@ -1,15 +1,20 @@
 package com.asi.hms.service;
 
+import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.PackageImport;
 import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBFunctionImplementation;
 import com.asi.hms.model.db.DBFunctionType;
 import com.asi.hms.repository.FunctionTypeRepository;
+import com.asi.hms.utils.FileUtil;
 import com.asi.hms.utils.cloudproviderutils.YamlParser;
 import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.plugins.Docket;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +29,14 @@ public class FunctionService {
     private final FunctionTypeRepository functionTypeRepository;
     private final UserService userService;
     private final UploadFileService uploadFileService;
+    private final Docket api;
 
     public FunctionService(FunctionDeploymentService functionDeploymentService,
                            FunctionImplementationService functionImplementationService,
                            FunctionTypeService functionTypeService,
                            FunctionTypeRepository functionTypeRepository,
                            UserService userService,
-                           UploadFileService uploadFileService) {
+                           UploadFileService uploadFileService, Docket api) {
 
         this.functionDeploymentService = functionDeploymentService;
         this.functionImplementationService = functionImplementationService;
@@ -39,7 +45,7 @@ public class FunctionService {
         this.functionTypeRepository = functionTypeRepository;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
-
+        this.api = api;
     }
 
     public List<APIFunction> getAllFunctions() {
@@ -136,6 +142,25 @@ public class FunctionService {
 
     }
 
+
+    public List<APIFunctionType> uploadPackage(MultipartFile file, UUID userId) {
+
+        Path path;
+
+        try {
+            path = this.uploadFileService.uploadZipFile(file, UploadFileService.UPLOADS_DIR);
+        } catch (Exception e) {
+            throw new HolisticFaaSException("Can not upload package");
+        }
+
+        PackageImport packageImport = PackageImport.getPackageImport(path);
+
+        this.addAll(packageImport.getApiFunctionTypes(), userId);
+
+        return packageImport.getApiFunctionTypes();
+
+    }
+
     private void addAll(List<APIFunctionType> apiFunctionTypes, UUID userID) {
 
         for (APIFunctionType apiFunctionType : apiFunctionTypes) {
@@ -145,10 +170,7 @@ public class FunctionService {
             for (APIFunctionImplementation apiFunctionImplementation : apiFunctionType.getFunctionImplementations()) {
 
                 apiFunctionImplementation.setFunctionTypeId(addedFunctionType.getId());
-                APIFunctionImplementation addedFunctionImplementation = this.functionImplementationService.add(
-                        null,
-                        apiFunctionImplementation
-                );
+                APIFunctionImplementation addedFunctionImplementation = this.functionImplementationService.add(apiFunctionImplementation);
 
                 for (APIFunctionDeployment apiFunctionDeployment : apiFunctionImplementation.getFunctionDeployments()) {
 
@@ -164,15 +186,27 @@ public class FunctionService {
 
     }
 
-    public List<APIFunction> uploadPackage(MultipartFile file) {
+    public List<APIFunctionType> upload(MultipartFile file, UUID userId) {
 
-        this.uploadFileService.uploadZipFileAndNormalize(file, UploadFileService.UPLOADS_DIR);
+        if(file == null || file.isEmpty()) {
+            throw new HolisticFaaSException("File is empty");
+        }
 
-        return List.of();
+        String originalFilename = file.getOriginalFilename();
 
+        if(originalFilename == null) {
+            throw new HolisticFaaSException("File name is null");
+        }
 
-//        return YamlParser.readYaml(yamlString);
+        // If it is a zip file, then upload it as a package, else upload it as a yaml file
+        if (originalFilename.endsWith(".zip")) {
+            return uploadPackage(file, userId);
+        } else if (originalFilename.endsWith(".yaml") || originalFilename.endsWith(".yml")) {
+            return uploadYaml(file, userId);
+        }
 
+        throw new HolisticFaaSException("File type not supported: " + originalFilename);
 
     }
+
 }

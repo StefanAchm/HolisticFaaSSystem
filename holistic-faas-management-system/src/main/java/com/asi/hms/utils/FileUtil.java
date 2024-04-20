@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -146,6 +147,29 @@ public class FileUtil {
         }
 
         return destFile;
+
+    }
+
+    public static File getFileWithExtension(File rootPath, List<String> yaml) {
+
+        // Get all files in the directory
+        File[] files = rootPath.listFiles();
+
+        if (files == null) {
+            throw new HolisticFaaSException("No files found in directory: " + rootPath.getAbsolutePath());
+        }
+
+        for (File file : files) {
+            if (file.isFile()) {
+                for (String extension : yaml) {
+                    if (file.getName().endsWith(extension)) {
+                        return file;
+                    }
+                }
+            }
+        }
+
+        throw new HolisticFaaSException("No files with extension " + yaml + " found in directory: " + rootPath.getAbsolutePath());
 
     }
 

@@ -30,12 +30,10 @@ public class UploadFileService {
         this.fileStorageProperties = fileStorageProperties;
     }
 
-    public String uploadZipFileAndNormalize(MultipartFile file, String subFolder) {
+    public Path uploadZipFile(MultipartFile file, String subFolder) {
 
         Path uploadedFilePath = uploadFile(file, subFolder);
-        Path unzipedFilePath = FileUtil.unzip(uploadedFilePath);
-
-        return unzipedFilePath.normalize().toString();
+        return FileUtil.unzip(uploadedFilePath);
 
     }
 

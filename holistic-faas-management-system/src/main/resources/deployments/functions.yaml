@@ -1,0 +1,24 @@
+date: '2024-04-18'
+functions:
+- name: function53
+  implementations:
+  - path: aws.zip
+    deployments:
+    - handler: com.asi.hsg.HelloWorldHandler::handleRequest
+      memory: 135
+      provider: AWS
+      runtime: java17
+      region: eu-west-2
+      timeoutSecs: 10
+    - handler: com.asi.hsg.HelloWorldHandler::handleRequest
+      memory: 133
+      provider: AWS
+      runtime: java17
+      region: eu-west-2
+      timeoutSecs: 4
+    - handler: com.asi.hsg.HelloWorldHandler::handleRequest
+      memory: 137
+      provider: AWS
+      runtime: java17
+      region: eu-west-2
+      timeoutSecs: 9

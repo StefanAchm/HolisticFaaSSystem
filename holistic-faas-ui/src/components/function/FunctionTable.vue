@@ -7,7 +7,7 @@
       :single-select="false"
       item-key="id"
       show-select
-      :items-per-page="15"
+      :items-per-page="10"
       :search="search"
   >
 

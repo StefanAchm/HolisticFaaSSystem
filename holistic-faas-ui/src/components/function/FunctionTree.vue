@@ -20,7 +20,6 @@
         :edit-item="editItem"
     />
 
-
     <v-treeview
         v-model="selected"
         :items="items"
@@ -30,11 +29,10 @@
     >
 
 
-<!--      <template v-slot:prepend="{ item }">-->
+      <!--      <template v-slot:prepend="{ item }">-->
 
 
-
-<!--      </template>-->
+      <!--      </template>-->
 
       <template v-slot:label="{ item }">
 
@@ -56,24 +54,33 @@
           </v-icon>
 
           {{ item.name }}
+
         </v-btn>
 
 
         <span v-else>
 
-        {{ item.name }}
+          <span>
+            {{ item.name }}
+          </span>
 
-        <DeploymentIcon
-            v-if="item.type === 'functionDeployment'"
-            :item=item.actualFunctionDeployment
-        />
+          <span class="ml-4">
+            <DeploymentIcon
+                v-if="item.type === 'functionDeployment'"
+                :item=item.actualFunctionDeployment
+            />
 
-      <LinkIcon
-          v-if="item.type === 'functionDeployment'"
-          :item=item.actualFunctionDeployment
-      />
+          </span>
 
-      </span>
+          <span class="ml-2">
+            <LinkIcon
+                v-if="item.type === 'functionDeployment'"
+                :item=item.actualFunctionDeployment
+            />
+
+          </span>
+
+        </span>
 
       </template>
 
@@ -156,6 +163,8 @@ export default {
         functionDeployment: {}
       };
 
+      this.selected = []
+
       this.items = []
 
       this.items.push({
@@ -202,7 +211,7 @@ export default {
         if (!functionImplementation) {
           functionImplementation = {
             id: f.functionImplementation.id,
-            name: f.functionImplementation.fileName? f.functionImplementation.fileName : '',
+            name: f.functionImplementation.fileName ? f.functionImplementation.fileName : '',
             icon: 'mdi-file-code-outline',
             children: [],
             type: 'functionImplementation',

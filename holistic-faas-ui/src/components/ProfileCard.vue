@@ -5,13 +5,13 @@
       max-width="70%">
 
     <v-card-title>
-      <span class="text-h4"> {{ username }}</span>
+      <span class="text-h4">Profile</span>
     </v-card-title>
 
     <v-spacer></v-spacer>
 
     <v-card-subtitle>
-      <span class="text-h6">Manage your credentials</span>
+      <span class="text-h6"><strong>Username: </strong> {{ username }}</span>
     </v-card-subtitle>
 
     <v-divider></v-divider>

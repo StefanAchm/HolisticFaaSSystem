@@ -153,6 +153,19 @@ export default {
         });
     },
 
+    uploadAny(file, userId) {
+
+        let formData = new FormData();
+
+        formData.append('file', file);
+
+        return apiClient.post('/function/upload', formData, {
+            headers: {'Content-Type': 'multipart/form-data'},
+            params: {userId: userId}
+        });
+
+    },
+
     uploadYaml(file, userId) {
 
         let formData = new FormData();
@@ -166,9 +179,7 @@ export default {
 
     },
 
-    uploadPackage(file) {
-
-        // TODO: add user id!
+    uploadPackage(file, userId) {
 
         let formData = new FormData();
 
@@ -176,9 +187,8 @@ export default {
         // formData.append('apiFunction', new Blob([JSON.stringify(data)], {type: 'application/json'}));
 
         return apiClient.post('/function/uploadPackage', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+            headers: {'Content-Type': 'multipart/form-data'},
+            params: {userId: userId}
         });
 
     },

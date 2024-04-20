@@ -129,7 +129,8 @@ export default {
       items: [
         {title: 'Home', icon: 'mdi-bank', route: '/'},
         {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
-        {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
+          // TODO: Should only be a admin view?
+        // {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
         {title: 'Profile', icon: 'mdi-card-account-details-outline', route: '/profile'},
       ],
       right: null,

@@ -2,14 +2,16 @@
 
   <v-card>
 
+    <FileDropOverlay
+        v-if="withFileDrop"
+        @file-dropped="onFileDropped" />
+
     <FunctionHeader
         :selected="selected"
-        @dialog-closed="updateSearch"
+        @dialog-closed="init"
     />
 
-    <FunctionSearch
-        @update-search="updateSearch"
-    />
+    <FunctionSearch @update-search="updateSearch"/>
 
     <FunctionTree
         ref="functionTree"
@@ -40,14 +42,16 @@ import FunctionHeader from "@/components/function/FunctionHeader.vue";
 import FunctionSearch from "@/components/function/FunctionSearch.vue";
 import HfApi from "@/utils/hf-api";
 import hfWebsocket from "@/utils/hf-websocket";
+import FileDropOverlay from "@/components/FileDropOverlay.vue";
 
 export default {
-  components: {FunctionSearch, FunctionTable, FunctionTree, FunctionHeader},
+  components: {FileDropOverlay, FunctionSearch, FunctionTable, FunctionTree, FunctionHeader},
 
   data: () => ({
     selected: [],
     search: '',
-    functions: []
+    functions: [],
+    withFileDrop: false, // Because this does not work atm!
   }),
 
   created() {
@@ -82,9 +86,10 @@ export default {
 
     updateSearch(search) {
       this.search = search
-      // this.$refs.functionTable.init()
-      // this.$refs.functionTree.init()
-      // this.init()
+    },
+
+    onFileDropped() {
+      this.init()
     },
 
     init() {

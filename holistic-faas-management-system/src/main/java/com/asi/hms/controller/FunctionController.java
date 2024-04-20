@@ -73,9 +73,9 @@ public class FunctionController {
     }
 
     @PostMapping("/uploadPackage")
-    public ResponseEntity<List<APIFunction>> uploadPackage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<APIFunctionType>> uploadPackage(@RequestParam("file") MultipartFile file, @RequestParam UUID userId) {
 
-        List<APIFunction> functions = this.functionService.uploadPackage(file);
+        List<APIFunctionType> functions = this.functionService.uploadPackage(file, userId);
 
         return ResponseEntity.ok(functions);
 
@@ -85,6 +85,15 @@ public class FunctionController {
     public ResponseEntity<List<APIFunctionType>> uploadYaml(@RequestPart("file") MultipartFile file, @RequestParam UUID userId) {
 
         List<APIFunctionType> functions = this.functionService.uploadYaml(file, userId);
+
+        return ResponseEntity.ok(functions);
+
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<List<APIFunctionType>> upload(@RequestPart("file") MultipartFile file, @RequestParam UUID userId) {
+
+        List<APIFunctionType> functions = this.functionService.upload(file, userId);
 
         return ResponseEntity.ok(functions);
 
