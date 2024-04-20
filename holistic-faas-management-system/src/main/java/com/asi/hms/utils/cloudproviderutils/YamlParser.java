@@ -2,6 +2,7 @@ package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.yaml.YamlFunctionDeployment;
 import com.asi.hms.model.yaml.YamlFunctionImplementation;
 import com.asi.hms.model.yaml.YamlFunctionType;
@@ -52,7 +53,23 @@ public class YamlParser {
 
     }
 
-    public static List<APIFunction> readYaml(Path path) {
+    public static List<APIFunctionType> readYamlAsTree(Path path) {
+
+        Yaml yaml = new Yaml();
+
+        YamlRoot yamlRoot;
+
+        try {
+            yamlRoot = yaml.loadAs(new FileInputStream(path.toFile()), YamlRoot.class);
+        } catch (FileNotFoundException e) {
+            throw new HolisticFaaSException(e);
+        }
+
+        return YamlRoot.toApiFunctionTypes(yamlRoot);
+
+    }
+
+    public static List<APIFunction> readYamlAsList(Path path) {
 
         Yaml yaml = new Yaml();
 

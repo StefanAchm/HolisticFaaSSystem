@@ -14,6 +14,10 @@ public class APIFunctionType {
 
     private List<APIFunctionImplementation> functionImplementations;
 
+    public APIFunctionType() {
+        this.functionImplementations = new ArrayList<>();
+    }
+
     public UUID getId() {
         return id;
     }
@@ -45,7 +49,6 @@ public class APIFunctionType {
         apiFunctionType.setId(dbFunctionType.getId());
         apiFunctionType.setName(dbFunctionType.getName());
 
-        apiFunctionType.setFunctionImplementations(new ArrayList<>());
         if(dbFunctionType.getFunctionImplementations() != null) {
 
             dbFunctionType.getFunctionImplementations()

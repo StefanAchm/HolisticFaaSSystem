@@ -88,6 +88,44 @@ public class YamlRoot {
 
     }
 
+    public static List<APIFunctionType> toApiFunctionTypes(YamlRoot yamlRoot) {
+
+
+        List<APIFunctionType> functionTypes = new ArrayList<>();
+
+        for(YamlFunctionType yamlFunctionType : yamlRoot.functions) {
+
+            APIFunctionType functionType = new APIFunctionType();
+            functionType.setName(yamlFunctionType.getName());
+            functionTypes.add(functionType);
+
+            for(YamlFunctionImplementation yamlFunctionImplementation : yamlFunctionType.getImplementations()) {
+
+                APIFunctionImplementation functionImplementation = new APIFunctionImplementation();
+                functionImplementation.setFilePath(yamlFunctionImplementation.getPath());
+                functionType.getFunctionImplementations().add(functionImplementation);
+
+                for(YamlFunctionDeployment yamlFunctionDeployment : yamlFunctionImplementation.getDeployments()) {
+
+                    APIFunctionDeployment functionDeployment = new APIFunctionDeployment();
+                    functionDeployment.setHandler(yamlFunctionDeployment.getHandler());
+                    functionDeployment.setMemory(yamlFunctionDeployment.getMemory());
+                    functionDeployment.setProvider(Provider.valueOf(yamlFunctionDeployment.getProvider()));
+                    functionDeployment.setRegion(yamlFunctionDeployment.getRegion());
+                    functionDeployment.setRuntime(yamlFunctionDeployment.getRuntime());
+                    functionDeployment.setTimeoutSecs(yamlFunctionDeployment.getTimeoutSecs());
+                    functionImplementation.getFunctionDeployments().add(functionDeployment);
+
+                }
+
+            }
+
+        }
+
+        return functionTypes;
+
+    }
+
     public static List<APIFunction> toApiFunction(YamlRoot yamlRoot) {
 
         List<APIFunction> functions = new ArrayList<>();

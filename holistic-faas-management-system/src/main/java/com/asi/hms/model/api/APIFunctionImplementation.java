@@ -19,6 +19,7 @@ public class APIFunctionImplementation {
     private List<APIFunctionDeployment> functionDeployments;
 
     public APIFunctionImplementation() {
+        this.functionDeployments = new ArrayList<>();
     }
 
     public UUID getId() {
@@ -66,8 +67,6 @@ public class APIFunctionImplementation {
         apiFunctionImplementation.setFilePath(dbFunctionImplementation.getFilePath());
 
         apiFunctionImplementation.setFunctionTypeId(dbFunctionImplementation.getFunctionType().getId());
-
-        apiFunctionImplementation.setFunctionDeployments(new ArrayList<>());
 
         if(dbFunctionImplementation.getFunctionDeployments() != null) {
 

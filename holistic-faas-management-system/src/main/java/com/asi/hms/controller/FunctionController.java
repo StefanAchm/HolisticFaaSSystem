@@ -1,6 +1,7 @@
 package com.asi.hms.controller;
 
 import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.service.FunctionService;
@@ -81,9 +82,9 @@ public class FunctionController {
     }
 
     @PostMapping("/uploadYaml")
-    public ResponseEntity<List<APIFunction>> uploadYaml(@RequestPart("file") MultipartFile file, @RequestParam UUID userId) {
+    public ResponseEntity<List<APIFunctionType>> uploadYaml(@RequestPart("file") MultipartFile file, @RequestParam UUID userId) {
 
-        List<APIFunction> functions = this.functionService.uploadYaml(file, userId);
+        List<APIFunctionType> functions = this.functionService.uploadYaml(file, userId);
 
         return ResponseEntity.ok(functions);
 

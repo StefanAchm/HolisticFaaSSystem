@@ -95,22 +95,6 @@ public class FunctionService {
 
     }
 
-    public void addAll(List<APIFunction> apiFunctions) {
-
-        for (APIFunction apiFunction : apiFunctions) {
-
-            // TODO: handle duplicates!?
-
-            APIFunctionType apiFunctionType = this.functionTypeService.add(apiFunction.getFunctionType());
-            apiFunction.getFunctionImplementation().setFunctionTypeId(apiFunctionType.getId());
-            APIFunctionImplementation apiFunctionImplementation = this.functionImplementationService.add(null, apiFunction.getFunctionImplementation());
-            apiFunction.getFunctionDeployment().setFunctionImplementationId(apiFunctionImplementation.getId());
-            this.functionDeploymentService.add(apiFunction.getFunctionDeployment());
-
-        }
-
-    }
-
     public APIMigration prepareMigration(APIMigrationPreparation apiMigrationPreparation) {
 
         List<APIUser> users = this.userService.getAllUser();
@@ -138,19 +122,45 @@ public class FunctionService {
         return YamlParser.writeYaml(functions);
     }
 
-    public List<APIFunction> uploadYaml(MultipartFile file, UUID userID) {
+    public List<APIFunctionType> uploadYaml(MultipartFile file, UUID userID) {
 
         // TODO: probably only a temp file needed?
 
         Path path = this.uploadFileService.uploadFile(file, UploadFileService.UPLOADS_DIR);
 
-        List<APIFunction> apiFunctions = YamlParser.readYaml(path);
+        List<APIFunctionType> apiFunctions = YamlParser.readYamlAsTree(path);
 
-        apiFunctions.forEach(apiFunction -> apiFunction.getFunctionDeployment().setUserId(userID));
-
-        this.addAll(apiFunctions);
+        this.addAll(apiFunctions, userID);
 
         return apiFunctions;
+
+    }
+
+    private void addAll(List<APIFunctionType> apiFunctionTypes, UUID userID) {
+
+        for (APIFunctionType apiFunctionType : apiFunctionTypes) {
+
+            APIFunctionType addedFunctionType = this.functionTypeService.add(apiFunctionType);
+
+            for (APIFunctionImplementation apiFunctionImplementation : apiFunctionType.getFunctionImplementations()) {
+
+                apiFunctionImplementation.setFunctionTypeId(addedFunctionType.getId());
+                APIFunctionImplementation addedFunctionImplementation = this.functionImplementationService.add(
+                        null,
+                        apiFunctionImplementation
+                );
+
+                for (APIFunctionDeployment apiFunctionDeployment : apiFunctionImplementation.getFunctionDeployments()) {
+
+                    apiFunctionDeployment.setFunctionImplementationId(addedFunctionImplementation.getId());
+                    apiFunctionDeployment.setUserId(userID);
+                    this.functionDeploymentService.add(apiFunctionDeployment);
+
+                }
+
+            }
+
+        }
 
     }
 
