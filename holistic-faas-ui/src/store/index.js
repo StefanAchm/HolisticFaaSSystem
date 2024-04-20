@@ -9,7 +9,8 @@ export default new Vuex.Store({
         token: null,
         username: null,
         userId: null,
-        treeView: false
+        treeView: false,
+        miniVariant: false
     },
 
     mutations: {
@@ -19,6 +20,8 @@ export default new Vuex.Store({
             state.username = localStorage.getItem('username');
             state.userId = localStorage.getItem('userId');
             state.treeView = localStorage.getItem('treeView') === 'true';
+            state.miniVariant = localStorage.getItem('miniVariant') === 'true';
+
         },
 
         setToken(state, token) {
@@ -28,6 +31,11 @@ export default new Vuex.Store({
         setTreeView(state, value) {
             state.treeView = value;
             localStorage.setItem('treeView', value);
+        },
+
+        setMiniVariant(state, value) {
+            state.miniVariant = value;
+            localStorage.setItem('miniVariant', value);
         }
 
     },

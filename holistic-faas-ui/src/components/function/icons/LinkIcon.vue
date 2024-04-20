@@ -10,6 +10,7 @@
           v-on="on"
           v-bind="attrs"
           @click="openNewTab(item)"
+          color="secondary"
       >mdi-open-in-new
       </v-icon>
 

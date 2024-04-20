@@ -98,9 +98,11 @@
     <v-spacer></v-spacer>
 
     <v-switch
+        class="pl-10"
         append-icon="mdi-file-tree"
         v-model="treeView"
         prepend-icon="mdi-view-list"
+        color="none"
     >
 
     </v-switch>
@@ -209,3 +211,7 @@ export default {
 }
 
 </script>
+
+<style>
+
+</style>

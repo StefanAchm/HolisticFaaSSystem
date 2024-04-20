@@ -65,21 +65,21 @@ export default {
     getColor(item) {
 
       if (item.functionDeployment === null) {
-        return 'grey'
+        return 'neutral'
       }
 
       let status = item.functionDeployment.status
 
       if (status === 'DEPLOYED') {
-        return 'green'
+        return 'success'
       } else if (status === 'FAILED') {
-        return 'red'
+        return 'error'
       } else if (status === 'STARTED') {
-        return 'blue'
+        return 'info'
       } else if (status === 'CREATED') {
-        return 'orange'
+        return 'warning'
       } else if (status === 'CHANGED') {
-        return 'orange'
+        return 'warning'
       } else {
         return ''
       }

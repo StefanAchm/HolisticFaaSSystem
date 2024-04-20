@@ -29,7 +29,7 @@
 
       <div v-if="item.functionImplementation === null || !item.functionImplementation.fileName">
         No Implementation
-        <v-icon color="red" small>mdi-alert-circle-outline</v-icon>
+        <v-icon color="error" small>mdi-alert-circle-outline</v-icon>
       </div>
 
       <div v-else>
@@ -52,7 +52,7 @@
 
       <div v-if="item.functionDeployment === null">
         No Deployment
-        <v-icon color="red" small>mdi-alert-circle-outline</v-icon>
+        <v-icon color="error" small>mdi-alert-circle-outline</v-icon>
       </div>
 
       <div v-else>
@@ -77,7 +77,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
               icon
-              color="secondary"
+              color="primary"
               dark
               v-bind="attrs"
               v-on="on"
@@ -105,40 +105,6 @@
 
         </v-list>
       </v-menu>
-
-<!--      <v-menu offset-y>-->
-<!--        <template v-slot:activator="{ on, attrs }">-->
-<!--          <v-btn-->
-<!--              icon-->
-<!--              color="secondary"-->
-<!--              dark-->
-<!--              v-bind="attrs"-->
-<!--              v-on="on"-->
-<!--          >-->
-
-<!--            <v-icon>mdi-pencil-circle</v-icon>-->
-
-<!--          </v-btn>-->
-<!--        </template>-->
-<!--        <v-list>-->
-
-<!--          <v-list-item-group-->
-<!--              v-model="selectedMenuItem"-->
-<!--          >-->
-
-<!--            <v-list-item>-->
-<!--              <v-list-item-title @click="editImplementation(item)">Implementation</v-list-item-title>-->
-<!--            </v-list-item>-->
-
-<!--            <v-list-item v-if="item.functionImplementation">-->
-<!--              <v-list-item-title @click="editDeployment(item)">Deployment</v-list-item-title>-->
-<!--            </v-list-item>-->
-
-
-<!--          </v-list-item-group>-->
-
-<!--        </v-list>-->
-<!--      </v-menu>-->
 
     </template>
 

@@ -5,7 +5,7 @@
       max-width="70%">
 
     <v-card-title>
-      <span class="text-h4"> <strong>User Profile for </strong> {{ username }}</span>
+      <span class="text-h4"> {{ username }}</span>
     </v-card-title>
 
     <v-spacer></v-spacer>
@@ -32,9 +32,9 @@
 
             {{ provider.fileName }}
 
-            <v-icon color="blue" v-if="provider.inputFile" small>mdi-alert-circle-outline</v-icon>
-            <v-icon color="green" v-else-if="provider.path" small>mdi-check-circle-outline</v-icon>
-            <v-icon color="red" v-else small>mdi-alert-circle-outline</v-icon>
+            <v-icon color="info" v-if="provider.inputFile" small>mdi-alert-circle-outline</v-icon>
+            <v-icon color="success" v-else-if="provider.path" small>mdi-check-circle-outline</v-icon>
+            <v-icon color="error" v-else small>mdi-alert-circle-outline</v-icon>
 
           </v-col>
 
@@ -58,19 +58,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-          :disabled="!hasChanged()"
-          color="blue darken-1"
-          text
-          @click="init()">Cancel
-      </v-btn>
-
-      <v-btn
-          :disabled="!hasChanged()"
-          color="blue darken-1"
-          text
-          @click="save">Save
-      </v-btn>
+      <v-btn :disabled="!hasChanged()" color="neutral" @click="init()">Cancel</v-btn>
+      <v-btn :disabled="!hasChanged()" color="primary" @click="save">Save</v-btn>
 
     </v-card-actions>
 

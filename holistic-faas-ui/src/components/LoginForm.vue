@@ -65,8 +65,7 @@
               <v-btn
                   width="100%"
                   x-small
-                  color="blue darken-1"
-                  text
+                  color="neutral"
                   @click="changeForm()">
                 Register here
               </v-btn>
@@ -102,8 +101,7 @@
               <v-btn
                   width="100%"
                   x-small
-                  color="blue darken-1"
-                  text
+                  color="neutral"
                   @click="changeForm()">
                 Go to login
               </v-btn>
