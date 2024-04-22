@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @Component
 public class DatabaseInitializer {
@@ -36,13 +37,19 @@ public class DatabaseInitializer {
     private final FunctionTypeRepository functionTypeRepository;
     private final UserCredentialsRepository userCredentialsRepository;
     private final UserRepository userRepository;
+    private final WorkflowRepository workflowRepository;
+    private final WorkflowFunctionRepository workflowFunctionRepository;
+    private final WorkflowDeploymentRepository workflowDeploymentRepository;
 
     public DatabaseInitializer(PasswordEncoder passwordEncoder,
                                FunctionDeploymentRepository functionDeploymentRepository,
                                FunctionImplementationRepository functionImplementationRepository,
                                FunctionTypeRepository functionTypeRepository,
                                UserCredentialsRepository userCredentialsRepository,
-                               UserRepository userRepository
+                               UserRepository userRepository,
+                               WorkflowRepository workflowRepository,
+                               WorkflowFunctionRepository workflowFunctionRepository,
+                               WorkflowDeploymentRepository workflowDeploymentRepository
     ) {
 
         this.passwordEncoder = passwordEncoder;
@@ -53,6 +60,10 @@ public class DatabaseInitializer {
 
         this.userCredentialsRepository = userCredentialsRepository;
         this.userRepository = userRepository;
+
+        this.workflowRepository = workflowRepository;
+        this.workflowFunctionRepository = workflowFunctionRepository;
+        this.workflowDeploymentRepository = workflowDeploymentRepository;
 
     }
 
@@ -72,7 +83,64 @@ public class DatabaseInitializer {
 
         DBUser user3 = addUser("user3", "password");
 
+        addAbstractWorkflow("workflow1", Map.of("function1", "type1"));
+        addAbstractWorkflow("workflow2", Map.of("function1", "type2", "function2", "type2"));
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Workflows
+
+    private void addAbstractWorkflow(String workflowName, Map<String, String> functions) {
+
+        DBWorkflow workflow = addWorkflow(workflowName);
+
+        functions.forEach((functionName, functionType) -> {
+
+            DBWorkflowFunction workflowFunction = addWorkflowFunction(workflow, functionName);
+            DBFunctionType dbFunctionType = addFunctionType(workflow, functionType);
+
+        });
+
+    }
+
+    private DBWorkflow addWorkflow(String workflowName) {
+
+        DBWorkflow workflow = new DBWorkflow();
+        workflow.setName(workflowName);
+        workflow.setDescription("description1");
+
+        workflowRepository.save(workflow);
+
+        return workflow;
+
+    }
+
+    private DBWorkflowFunction addWorkflowFunction(DBWorkflow workflow, String functionName) {
+
+        DBWorkflowFunction workflowFunction = new DBWorkflowFunction();
+        workflowFunction.setName(functionName);
+        workflowFunction.setWorkflow(workflow);
+
+        workflowFunctionRepository.save(workflowFunction);
+
+        return workflowFunction;
+
+    }
+
+    private DBFunctionType addFunctionType(DBWorkflow workflow, String functionType) {
+
+        DBFunctionType dbFunctionType = new DBFunctionType();
+        dbFunctionType.setName(functionType);
+        dbFunctionType.setWorkflow(workflow);
+
+        functionTypeRepository.save(dbFunctionType);
+
+        return dbFunctionType;
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Users
 
     private DBUser addUser(String username, String password) {
 
@@ -97,6 +165,8 @@ public class DatabaseInitializer {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions
 
     private void addFunction(DBUser user,
                              String functionName,
