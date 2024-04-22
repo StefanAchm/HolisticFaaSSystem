@@ -48,6 +48,8 @@ public class FunctionService {
 
         List<DBFunctionType> functionTypes = this.functionTypeRepository.findAll().stream().toList();
 
+        List<DBFunctionImplementation> functionImplementations = functionTypes.get(0).getFunctionImplementations();
+
         List<APIFunction> apiFunctions = new ArrayList<>();
 
         for (DBFunctionType functionType : functionTypes) {
@@ -59,7 +61,6 @@ public class FunctionService {
                 apiFunction.setFunctionImplementation(null);
                 apiFunction.setFunctionDeployment(null);
                 apiFunctions.add(apiFunction);
-
 
             }
 

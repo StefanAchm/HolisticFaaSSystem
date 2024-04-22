@@ -16,10 +16,10 @@ public class DBWorkflow {
 
     private String description;
 
-    @OneToMany
-    private List<DBWorkflowFunction> functions;
+    @OneToMany(mappedBy = "workflow")
+    private List<DBFunction> functions;
 
-    @OneToMany
+    @OneToMany(mappedBy = "workflow")
     private List<DBFunctionType> functionTypes;
 
     public DBWorkflow() {
@@ -49,11 +49,11 @@ public class DBWorkflow {
         this.id = id;
     }
 
-    public List<DBWorkflowFunction> getFunctions() {
+    public List<DBFunction> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(List<DBWorkflowFunction> functions) {
+    public void setFunctions(List<DBFunction> functions) {
         this.functions = functions;
     }
 

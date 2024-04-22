@@ -44,6 +44,14 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     @JoinColumn(name = "user_id")
     private DBUser user;
 
+    @ManyToOne
+    @JoinColumn(name = "function_id")
+    private DBFunction function;
+
+    @ManyToOne
+    @JoinColumn(name = "workflow_deployment_id")
+    private DBWorkflowDeployment workflowDeployment;
+
     public DBFunctionDeployment() {
         this.status = DeployStatus.CREATED;
         this.statusMessage = "Deployment not started";
@@ -167,4 +175,20 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
         return this.getFunctionImplementation().getFunctionType().getName() + "-" + this.id;
     }
 
+    // Todo: Use this functionname instead of uniqueName!
+    public DBFunction getFunction() {
+        return function;
+    }
+
+    public void setFunction(DBFunction function) {
+        this.function = function;
+    }
+
+    public DBWorkflowDeployment getWorkflowDeployment() {
+        return workflowDeployment;
+    }
+
+    public void setWorkflowDeployment(DBWorkflowDeployment workflowDeployment) {
+        this.workflowDeployment = workflowDeployment;
+    }
 }

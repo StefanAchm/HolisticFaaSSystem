@@ -1,6 +1,7 @@
 package com.asi.hms.model.db;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,13 +16,8 @@ public class DBWorkflowDeployment {
     @JoinColumn(name = "workflow_id")
     private DBWorkflow workflow;
 
-    @ManyToOne
-    @JoinColumn(name = "function_deployment_id")
-    private DBFunctionDeployment functionDeployment;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private DBUser user; // TODO: Problem with user in functionDeployment
+    @OneToMany(mappedBy = "workflowDeployment")
+    private List<DBFunctionDeployment> functionDeployments;
 
     public DBWorkflowDeployment() {
     }
@@ -38,19 +34,11 @@ public class DBWorkflowDeployment {
         this.workflow = workflow;
     }
 
-    public DBFunctionDeployment getFunctionDeployment() {
-        return functionDeployment;
+    public List<DBFunctionDeployment> getFunctionDeployments() {
+        return functionDeployments;
     }
 
-    public void setFunctionDeployment(DBFunctionDeployment functionDeployment) {
-        this.functionDeployment = functionDeployment;
-    }
-
-    public DBUser getUser() {
-        return user;
-    }
-
-    public void setUser(DBUser user) {
-        this.user = user;
+    public void setFunctionDeployments(List<DBFunctionDeployment> functionDeployments) {
+        this.functionDeployments = functionDeployments;
     }
 }

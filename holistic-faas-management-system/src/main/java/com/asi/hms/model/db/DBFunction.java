@@ -5,7 +5,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "functions")
-public class DBWorkflowFunction {
+public class DBFunction {
 
     @Id
     @GeneratedValue
@@ -17,7 +17,11 @@ public class DBWorkflowFunction {
     @JoinColumn(name = "workflow_id")
     private DBWorkflow workflow;
 
-    public DBWorkflowFunction() {
+    @ManyToOne
+    @JoinColumn(name = "function_type_id")
+    private DBFunctionType functionType;
+
+    public DBFunction() {
     }
 
     public UUID getId() {
@@ -38,5 +42,13 @@ public class DBWorkflowFunction {
 
     public void setWorkflow(DBWorkflow workflow) {
         this.workflow = workflow;
+    }
+
+    public DBFunctionType getFunctionType() {
+        return functionType;
+    }
+
+    public void setFunctionType(DBFunctionType functionType) {
+        this.functionType = functionType;
     }
 }
