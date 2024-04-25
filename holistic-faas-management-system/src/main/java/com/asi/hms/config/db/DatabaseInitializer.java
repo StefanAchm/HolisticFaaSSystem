@@ -1,7 +1,6 @@
 package com.asi.hms.config.db;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
 import com.asi.hms.enums.Provider;
@@ -10,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -80,43 +78,43 @@ public class DatabaseInitializer {
     @PostConstruct
     public void init() {
 
-        DBUser user1 = addUser("user1", "password");
-
-        addUserCredentials(user1, "AWS", credentials[0]);
-        addUserCredentials(user1, "GCP", credentials[1]);
-
-        addFunction(user1, "helloWorld1", implementations[0], handlers[0], Provider.AWS, 5, true);
-//        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
-
-//        List<APIFunction> allFunctions = this.functionService.getAllFunctions();
-
-        DBUser user2 = addUser("user2", "password");
-        addUserCredentials(user2, "AWS", credentials[0]);
-
-        DBUser user3 = addUser("user3", "password");
-
-        DBWorkflow workflow1 = addAbstractWorkflow("workflow1", Map.of("function1", "type1"));
-        DBWorkflow workflow2 = addAbstractWorkflow("workflow2", Map.of("function1", "type2", "function2", "type2"));
-
-        List<DBFunctionImplementation> dbFunctionImplementationsWf1 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
-        List<DBFunctionImplementation> dbFunctionImplementationsWf2 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
-
-        DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-        functionDeploymentRepository.save(dbFunctionDeployment1);
-        DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-        functionDeploymentRepository.save(dbFunctionDeployment2);
-        DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-        functionDeploymentRepository.save(dbFunctionDeployment3);
-
-
-        addWorkflowDeployment(workflow1, Map.of(
-                workflow1.getFunctions().get(0), dbFunctionDeployment1
-        ));
-
-        addWorkflowDeployment(workflow2, Map.of(
-                workflow2.getFunctions().get(0), dbFunctionDeployment2,
-                workflow2.getFunctions().get(1), dbFunctionDeployment3
-        ));
+//        DBUser user1 = addUser("user1", "password");
+//
+//        addUserCredentials(user1, "AWS", credentials[0]);
+//        addUserCredentials(user1, "GCP", credentials[1]);
+//
+//        addFunction(user1, "helloWorld1", implementations[0], handlers[0], Provider.AWS, 5, true);
+////        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
+//
+////        List<APIFunction> allFunctions = this.functionService.getAllFunctions();
+//
+//        DBUser user2 = addUser("user2", "password");
+//        addUserCredentials(user2, "AWS", credentials[0]);
+//
+//        DBUser user3 = addUser("user3", "password");
+//
+//        DBWorkflow workflow1 = addAbstractWorkflow("workflow1", Map.of("function1", "type1"));
+//        DBWorkflow workflow2 = addAbstractWorkflow("workflow2", Map.of("function1", "type2", "function2", "type2"));
+//
+//        List<DBFunctionImplementation> dbFunctionImplementationsWf1 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
+//        List<DBFunctionImplementation> dbFunctionImplementationsWf2 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
+//
+//        DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
+//        functionDeploymentRepository.save(dbFunctionDeployment1);
+//        DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
+//        functionDeploymentRepository.save(dbFunctionDeployment2);
+//        DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
+//        functionDeploymentRepository.save(dbFunctionDeployment3);
+//
+//
+//        addWorkflowDeployment(workflow1, Map.of(
+//                workflow1.getFunctions().get(0), dbFunctionDeployment1
+//        ));
+//
+//        addWorkflowDeployment(workflow2, Map.of(
+//                workflow2.getFunctions().get(0), dbFunctionDeployment2,
+//                workflow2.getFunctions().get(1), dbFunctionDeployment3
+//        ));
 
     }
 
@@ -146,6 +144,7 @@ public class DatabaseInitializer {
 
         DBWorkflowDeployment workflowDeployment = new DBWorkflowDeployment();
         workflowDeployment.setWorkflow(workflow);
+        workflowDeploymentRepository.save(workflowDeployment);
 
         functionDeployments.forEach((function, functionDeployment) -> {
 
@@ -155,8 +154,6 @@ public class DatabaseInitializer {
             functionDeploymentRepository.save(functionDeployment);
 
         });
-
-        workflowDeploymentRepository.save(workflowDeployment);
 
     }
 

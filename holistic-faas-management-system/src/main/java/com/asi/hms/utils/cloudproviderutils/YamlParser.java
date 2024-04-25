@@ -24,7 +24,7 @@ public class YamlParser {
 
         public CustomRepresenter(DumperOptions options) {
 
-//            super(options);
+            super(options);
 
             this.representers.put(YamlRoot.class, data -> represent(((YamlRoot) data).toMap()));
 
