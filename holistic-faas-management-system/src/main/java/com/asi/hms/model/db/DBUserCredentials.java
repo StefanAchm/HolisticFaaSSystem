@@ -20,9 +20,6 @@ public class DBUserCredentials {
     @JoinColumn(name = "user_id")
     private DBUser user;
 
-    @OneToMany(mappedBy = "user")
-    private List<DBFunctionDeployment> functionDeployments;
-
     public DBUserCredentials() {
     }
 
@@ -57,12 +54,5 @@ public class DBUserCredentials {
     public void setUser(DBUser user) {
         this.user = user;
     }
-
-    public List<DBFunctionDeployment> getFunctionDeployments() {
-        return functionDeployments;
-    }
-
-    public void setFunctionDeployments(List<DBFunctionDeployment> functionDeployments) {
-        this.functionDeployments = functionDeployments;
-    }
+    
 }

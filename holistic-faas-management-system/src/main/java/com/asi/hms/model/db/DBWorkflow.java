@@ -1,5 +1,7 @@
 package com.asi.hms.model.db;
 
+import com.asi.hms.model.api.APIWorkflow;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -20,9 +22,17 @@ public class DBWorkflow {
     private List<DBFunction> functions;
 
     @OneToMany(mappedBy = "workflow")
-    private List<DBFunctionType> functionTypes;
+    private List<DBWorkflowDeployment> workflowDeployments;
 
     public DBWorkflow() {
+    }
+
+    public static DBWorkflow fromAPIWorkflow(APIWorkflow workflow1) {
+        DBWorkflow dbWorkflow = new DBWorkflow();
+        dbWorkflow.setId(workflow1.getId());
+        dbWorkflow.setName(workflow1.getName());
+        dbWorkflow.setDescription(workflow1.getDescription());
+        return dbWorkflow;
     }
 
     public UUID getId() {
@@ -57,11 +67,11 @@ public class DBWorkflow {
         this.functions = functions;
     }
 
-    public List<DBFunctionType> getFunctionTypes() {
-        return functionTypes;
+    public List<DBWorkflowDeployment> getWorkflowDeployments() {
+        return workflowDeployments;
     }
 
-    public void setFunctionTypes(List<DBFunctionType> functionTypes) {
-        this.functionTypes = functionTypes;
+    public void setWorkflowDeployments(List<DBWorkflowDeployment> workflowDeployments) {
+        this.workflowDeployments = workflowDeployments;
     }
 }

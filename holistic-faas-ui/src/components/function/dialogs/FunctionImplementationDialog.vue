@@ -68,7 +68,7 @@ export default  {
     },
 
     formSubtitle() {
-      return 'Function type id: ' + this.editItemLocal.functionType?.id
+      return 'For functiontype: ' + this.editItemLocal.functionType?.name
     },
 
     formTitle() {
@@ -80,6 +80,7 @@ export default  {
     dialog(val) {
       if (val) {
         this.editItemLocal = Object.assign({}, this.editItem)
+        this.currentFile = null
       }
     }
   },

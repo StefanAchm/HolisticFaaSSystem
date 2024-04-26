@@ -22,9 +22,6 @@ public class DBFunctionType {
     @OneToMany(mappedBy = "functionType")
     private List<DBFunction> functions;
 
-    @ManyToOne
-    private DBWorkflow workflow;
-
     public static DBFunctionType fromAPIFunctionType(APIFunctionType apiFunctionType) {
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName(apiFunctionType.getName());
@@ -49,14 +46,6 @@ public class DBFunctionType {
 
     public void setFunctionImplementations(List<DBFunctionImplementation> functionImplementations) {
         this.functionImplementations = functionImplementations;
-    }
-
-    public DBWorkflow getWorkflow() {
-        return workflow;
-    }
-
-    public void setWorkflow(DBWorkflow workflow) {
-        this.workflow = workflow;
     }
 
     public List<DBFunction> getFunctions() {

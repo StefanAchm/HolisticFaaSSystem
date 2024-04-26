@@ -12,6 +12,8 @@ public class DBWorkflowDeployment {
     @GeneratedValue
     private UUID id;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "workflow_id")
     private DBWorkflow workflow;
@@ -19,11 +21,23 @@ public class DBWorkflowDeployment {
     @OneToMany(mappedBy = "workflowDeployment")
     private List<DBFunctionDeployment> functionDeployments;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private DBUser user;
+
     public DBWorkflowDeployment() {
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public DBWorkflow getWorkflow() {
@@ -40,5 +54,13 @@ public class DBWorkflowDeployment {
 
     public void setFunctionDeployments(List<DBFunctionDeployment> functionDeployments) {
         this.functionDeployments = functionDeployments;
+    }
+
+    public DBUser getUser() {
+        return user;
+    }
+
+    public void setUser(DBUser user) {
+        this.user = user;
     }
 }

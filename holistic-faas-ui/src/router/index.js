@@ -17,6 +17,11 @@ const routes = [
         component: () => import('../views/FunctionsView.vue')
     },
     {
+        path: '/workflows',
+        name: 'workflows',
+        component: () => import('../views/WorkflowsView.vue')
+    },
+    {
         path: '/users',
         name: 'users',
         component: () => import('../views/UserView.vue')
@@ -30,7 +35,18 @@ const routes = [
         path: '/login',
         name: 'login',
         component: () => import('../views/LoginView.vue')
+    },
+    {
+        path: '/workflows/:id',
+        name: 'workflow',
+        component: () => import('../views/WorkflowView.vue')
+    },
+    {
+        path: '/workflows/:id/deployments/:deploymentId',
+        name: 'deployments',
+        component: () => import('../views/WorkflowDeploymentsView.vue')
     }
+
 ]
 
 const router = new VueRouter({

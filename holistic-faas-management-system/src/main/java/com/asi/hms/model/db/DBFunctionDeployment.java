@@ -4,12 +4,8 @@ import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.model.api.APIFunctionDeployment;
 
 import javax.persistence.*;
-import java.net.URI;
 import java.util.UUID;
 
-/**
- * TODO: Add time of deployment
- */
 @Entity
 @Table(name = "function_deployments")
 public class DBFunctionDeployment implements ProgressObjectInterface {
@@ -43,10 +39,6 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private DBUser user;
-
-    @ManyToOne
-    @JoinColumn(name = "function_id")
-    private DBFunction function;
 
     @ManyToOne
     @JoinColumn(name = "workflow_deployment_id")
@@ -173,15 +165,6 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public String getUniqueName() {
         // TODO: setting a unique name for now, not sure if that is wanted!
         return this.getFunctionImplementation().getFunctionType().getName() + "-" + this.id;
-    }
-
-    // Todo: Use this functionname instead of uniqueName!
-    public DBFunction getFunction() {
-        return function;
-    }
-
-    public void setFunction(DBFunction function) {
-        this.function = function;
     }
 
     public DBWorkflowDeployment getWorkflowDeployment() {

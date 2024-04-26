@@ -1,10 +1,13 @@
 package com.asi.hms.config.db;
 
 import com.asi.hms.enums.DeployStatus;
+import com.asi.hms.model.api.APIFunction2;
+import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
 import com.asi.hms.enums.Provider;
 import com.asi.hms.service.FunctionService;
+import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +22,12 @@ public class DatabaseInitializer {
     private final String[] implementations = {
             "zips\\aws-helloworld-java-1.0-SNAPSHOT.zip",
             "zips\\gcp-helloworld-java-1.0-SNAPSHOT.zip",
-            "zips\\multi-helloworld-java-1.0-SNAPSHOT.zip"
+            "zips\\multi-helloworld-java-1.0-SNAPSHOT.zip",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\genome_individual.py",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\genome_individuals_merge.py",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\genome_sifting.py",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\mutual_overlap\\zip.py",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\frequency\\zip.py",
     };
 
     private final String[] handlers = {
@@ -32,12 +40,17 @@ public class DatabaseInitializer {
             "auth\\stefan01\\gcp.json"
     };
 
+    private final String[] workflows = {
+            "afcl_workflows\\genome\\genome.yaml"
+    };
+
     private final String resourcesPath = "C:\\Users\\Stefan\\Documents\\git\\HolisticFaaS\\holistic-faas-management-system\\src\\main\\resources\\";
 
     private final PasswordEncoder passwordEncoder;
     private final FunctionDeploymentRepository functionDeploymentRepository;
     private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionTypeRepository functionTypeRepository;
+    private final FunctionRepository functionRepository;
     private final UserCredentialsRepository userCredentialsRepository;
     private final UserRepository userRepository;
     private final WorkflowRepository workflowRepository;
@@ -50,6 +63,7 @@ public class DatabaseInitializer {
                                FunctionDeploymentRepository functionDeploymentRepository,
                                FunctionImplementationRepository functionImplementationRepository,
                                FunctionTypeRepository functionTypeRepository,
+                               FunctionRepository functionRepository,
                                UserCredentialsRepository userCredentialsRepository,
                                UserRepository userRepository,
                                WorkflowRepository workflowRepository,
@@ -63,6 +77,7 @@ public class DatabaseInitializer {
         this.functionDeploymentRepository = functionDeploymentRepository;
         this.functionImplementationRepository = functionImplementationRepository;
         this.functionTypeRepository = functionTypeRepository;
+        this.functionRepository = functionRepository;
 
         this.userCredentialsRepository = userCredentialsRepository;
         this.userRepository = userRepository;
@@ -78,43 +93,49 @@ public class DatabaseInitializer {
     @PostConstruct
     public void init() {
 
-//        DBUser user1 = addUser("user1", "password");
-//
-//        addUserCredentials(user1, "AWS", credentials[0]);
-//        addUserCredentials(user1, "GCP", credentials[1]);
-//
+        DBUser user1 = addUser("user1", "password");
+
+        addUserCredentials(user1, "AWS", credentials[0]);
+        addUserCredentials(user1, "GCP", credentials[1]);
+
 //        addFunction(user1, "helloWorld1", implementations[0], handlers[0], Provider.AWS, 5, true);
-////        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
-//
-////        List<APIFunction> allFunctions = this.functionService.getAllFunctions();
-//
-//        DBUser user2 = addUser("user2", "password");
-//        addUserCredentials(user2, "AWS", credentials[0]);
-//
-//        DBUser user3 = addUser("user3", "password");
-//
-//        DBWorkflow workflow1 = addAbstractWorkflow("workflow1", Map.of("function1", "type1"));
-//        DBWorkflow workflow2 = addAbstractWorkflow("workflow2", Map.of("function1", "type2", "function2", "type2"));
-//
-//        List<DBFunctionImplementation> dbFunctionImplementationsWf1 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
-//        List<DBFunctionImplementation> dbFunctionImplementationsWf2 = addWorkflowImplementations(Map.of(implementations[0], workflow1.getFunctionTypes().get(0)));
-//
-//        DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-//        functionDeploymentRepository.save(dbFunctionDeployment1);
-//        DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-//        functionDeploymentRepository.save(dbFunctionDeployment2);
-//        DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementationsWf1.get(0), true);
-//        functionDeploymentRepository.save(dbFunctionDeployment3);
-//
-//
-//        addWorkflowDeployment(workflow1, Map.of(
-//                workflow1.getFunctions().get(0), dbFunctionDeployment1
-//        ));
-//
-//        addWorkflowDeployment(workflow2, Map.of(
-//                workflow2.getFunctions().get(0), dbFunctionDeployment2,
-//                workflow2.getFunctions().get(1), dbFunctionDeployment3
-//        ));
+//        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
+
+//        List<APIFunction> allFunctions = this.functionService.getAllFunctions();
+
+        DBUser user2 = addUser("user2", "password");
+        addUserCredentials(user2, "AWS", credentials[0]);
+        addUserCredentials(user2, "GCP", credentials[1]);
+
+        DBUser user3 = addUser("user3", "password");
+
+        DBWorkflow workflow1 = addAbstractWorkflowFromFile(workflows[0]);
+        List<DBFunctionImplementation> dbFunctionImplementations = addWorkflowImplementations(Map.of(
+                        implementations[3], workflow1.getFunctions().get(0).getFunctionType(),
+                        implementations[4], workflow1.getFunctions().get(1).getFunctionType(),
+                        implementations[5], workflow1.getFunctions().get(2).getFunctionType(),
+                        implementations[6], workflow1.getFunctions().get(3).getFunctionType(),
+                        implementations[7], workflow1.getFunctions().get(4).getFunctionType()
+                )
+        );
+
+        DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(0), true);
+        DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(1), true);
+        DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(2), true);
+        DBFunctionDeployment dbFunctionDeployment4 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(3), true);
+        DBFunctionDeployment dbFunctionDeployment5 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(4), true);
+
+        for(int i = 0; i < 5; i++) {
+            addWorkflowDeployment("deployment" + i, user1, workflow1, Map.of(
+                    workflow1.getFunctions().get(0), dbFunctionDeployment1,
+                    workflow1.getFunctions().get(1), dbFunctionDeployment2,
+                    workflow1.getFunctions().get(2), dbFunctionDeployment3,
+                    workflow1.getFunctions().get(3), dbFunctionDeployment4,
+                    workflow1.getFunctions().get(4), dbFunctionDeployment5
+            ));
+        }
+
+
 
     }
 
@@ -140,15 +161,16 @@ public class DatabaseInitializer {
 
     }
 
-    private void addWorkflowDeployment(DBWorkflow workflow, Map<DBFunction, DBFunctionDeployment> functionDeployments) {
+    private void addWorkflowDeployment(String name, DBUser user1, DBWorkflow workflow, Map<DBFunction, DBFunctionDeployment> functionDeployments) {
 
         DBWorkflowDeployment workflowDeployment = new DBWorkflowDeployment();
         workflowDeployment.setWorkflow(workflow);
+        workflowDeployment.setName(name);
+        workflowDeployment.setUser(user1);
         workflowDeploymentRepository.save(workflowDeployment);
 
         functionDeployments.forEach((function, functionDeployment) -> {
 
-            functionDeployment.setFunction(function);
             functionDeployment.setWorkflowDeployment(workflowDeployment);
 
             functionDeploymentRepository.save(functionDeployment);
@@ -157,16 +179,43 @@ public class DatabaseInitializer {
 
     }
 
+    private DBWorkflow addAbstractWorkflowFromFile(String fileName) {
+
+        APIWorkflow workflow = AfclParser.getWorkflow(resourcesPath + fileName);
+
+        DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
+        this.workflowRepository.save(dbWorkflow);
+
+        dbWorkflow.setFunctions(new ArrayList<>());
+
+        for (APIFunction2 apiFunction : workflow.getFunctions()) {
+
+            DBFunctionType dbFunctionType = DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType());
+            this.functionTypeRepository.save(dbFunctionType);
+
+            DBFunction dbFunction = DBFunction.fromAPIFunction(apiFunction);
+            dbFunction.setWorkflow(dbWorkflow);
+            dbFunction.setFunctionType(dbFunctionType);
+            this.functionRepository.save(dbFunction);
+
+            dbFunction.setFunctionType(dbFunctionType);
+            dbWorkflow.getFunctions().add(dbFunction);
+
+        }
+
+        return dbWorkflow;
+
+    }
+
     private DBWorkflow addAbstractWorkflow(String workflowName, Map<String, String> functions) {
 
         DBWorkflow workflow = addWorkflow(workflowName);
-        workflow.setFunctionTypes(new ArrayList<>());
+
         workflow.setFunctions(new ArrayList<>());
 
         functions.forEach((functionName, functionType) -> {
 
             DBFunctionType dbFunctionType = addFunctionType(workflow, functionType);
-            workflow.getFunctionTypes().add(dbFunctionType);
 
             DBFunction workflowFunction = addWorkflowFunction(workflow, functionName, dbFunctionType);
             workflow.getFunctions().add(workflowFunction);
@@ -202,7 +251,7 @@ public class DatabaseInitializer {
 
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName(functionType);
-        dbFunctionType.setWorkflow(workflow);
+//        dbFunctionType.setWorkflow(workflow);
 
         return functionTypeRepository.save(dbFunctionType);
 

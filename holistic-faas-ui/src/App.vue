@@ -128,9 +128,9 @@ export default {
     return {
       items: [
         {title: 'Home', icon: 'mdi-bank', route: '/'},
+        {title: 'Workflows', icon: 'mdi-sitemap-outline', route: '/workflows'},
         {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
-          // TODO: Should only be a admin view?
-        // {title: 'Users', icon: 'mdi-account-multiple', route: '/users'},
+        // {title: 'Users', icon: 'mdi-account-multiple', route: '/users'}, // TODO: Should only be a admin view?
         {title: 'Profile', icon: 'mdi-card-account-details-outline', route: '/profile'},
       ],
       right: null,

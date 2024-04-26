@@ -22,7 +22,6 @@ apiClient.interceptors.request.use(
 export default {
 
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Function type
 
@@ -193,4 +192,41 @@ export default {
 
     },
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Provider options and functions
+
+    getAllWorkflows() {
+        return apiClient.get('/workflow/getAll');
+    },
+
+    getWorkflow(id) {
+        return apiClient.get('/workflow/get', {
+            params: {
+                id: id
+            }
+        });
+    },
+    getDeployments(id) {
+        return apiClient.get('/workflow/' + id +'/getDeployments');
+    },
+
+    uploadWorkflow(file) {
+
+        let formData = new FormData();
+
+        formData.append('file', file);
+
+        return apiClient.post('/workflow/add', formData, {
+            headers: {'Content-Type': 'multipart/form-data'},
+            // params: {userId: userId}
+        });
+    },
+
+    // @GetMapping(value = "/{workflowId}/implementations")
+    getWorkflowFunctionImplementations(id) {
+        return apiClient.get('/workflow/' + id + '/implementations');
+    },
+    createWorkflowDeployment(editItems) {
+        return apiClient.post('/workflow_deployment/add', editItems);
+    }
 }

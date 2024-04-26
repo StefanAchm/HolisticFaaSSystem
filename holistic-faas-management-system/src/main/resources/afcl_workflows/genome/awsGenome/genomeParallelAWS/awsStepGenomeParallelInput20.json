@@ -1,0 +1,186 @@
+{
+  "individual1": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 1,
+    "stop": 501,
+    "chromNr": 22
+  },
+  "individual2": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 501,
+    "stop": 1001,
+    "chromNr": 22
+  },
+  "individual3": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 1001,
+    "stop": 1501,
+    "chromNr": 22
+  },
+  "individual4": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 1501,
+    "stop": 2001,
+    "chromNr": 22
+  },
+  "individual5": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 2001,
+    "stop": 2501,
+    "chromNr": 22
+  },
+  "individual6": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 2501,
+    "stop": 3001,
+    "chromNr": 22
+  },
+  "individual7": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 3001,
+    "stop": 3501,
+    "chromNr": 22
+  },
+  "individual8": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 3501,
+    "stop": 4001,
+    "chromNr": 22
+  },
+  "individual9": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 4001,
+    "stop": 4501,
+    "chromNr": 22
+  },
+  "individual10": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 4501,
+    "stop": 5001,
+    "chromNr": 22
+  },
+  "individual11": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 5001,
+    "stop": 5501,
+    "chromNr": 22
+  },
+  "individual12": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 5501,
+    "stop": 6001,
+    "chromNr": 22
+  },
+  "individual13": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 6001,
+    "stop": 6501,
+    "chromNr": 22
+  },
+  "individual14": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 6501,
+    "stop": 7001,
+    "chromNr": 22
+  },
+  "individual15": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 7001,
+    "stop": 7501,
+    "chromNr": 22
+  },
+  "individual16": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 7501,
+    "stop": 8001,
+    "chromNr": 22
+  },
+  "individual17": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 8001,
+    "stop": 8501,
+    "chromNr": 22
+  },
+  "individual18": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 8501,
+    "stop": 9001,
+    "chromNr": 22
+  },
+  "individual19": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 9001,
+    "stop": 9501,
+    "chromNr": 22
+  },
+  "individual20": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 9501,
+    "stop": 10001,
+    "chromNr": 22
+  },
+  "individualsMerge": {
+    "keys": [
+      "chr22n-1-501.tar.gz",
+      "chr22n-501-1001.tar.gz",
+      "chr22n-1001-1501.tar.gz",
+      "chr22n-1501-2001.tar.gz",
+      "chr22n-2001-2501.tar.gz",
+      "chr22n-2501-3001.tar.gz",
+      "chr22n-3001-3501.tar.gz",
+      "chr22n-3501-4001.tar.gz",
+      "chr22n-4001-4501.tar.gz",
+      "chr22n-4501-5001.tar.gz",
+      "chr22n-5001-5501.tar.gz",
+      "chr22n-5501-6001.tar.gz",
+      "chr22n-6001-6501.tar.gz",
+      "chr22n-6501-7001.tar.gz",
+      "chr22n-7001-7501.tar.gz",
+      "chr22n-7501-8001.tar.gz",
+      "chr22n-8001-8501.tar.gz",
+      "chr22n-8501-9001.tar.gz",
+      "chr22n-9001-9501.tar.gz",
+      "chr22n-9501-10001.tar.gz"
+    ],
+    "chromNr": 22
+  },
+  "sifting": {
+    "key": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf.gz",
+    "chromNr": "22"
+  },
+  "popEUR": {
+    "chromNr": "22",
+    "POP": "EUR",
+    "bucketName": "genome-project"
+  },
+  "popAFR": {
+    "chromNr": "22",
+    "POP": "AFR",
+    "bucketName": "genome-project"
+  },
+  "popEAS": {
+    "chromNr": "22",
+    "POP": "EAS",
+    "bucketName": "genome-project"
+  },
+  "popALL": {
+    "chromNr": "22",
+    "POP": "ALL",
+    "bucketName": "genome-project"
+  },
+  "popGBR": {
+    "chromNr": "22",
+    "POP": "GBR",
+    "bucketName": "genome-project"
+  },
+  "popSAS": {
+    "chromNr": "22",
+    "POP": "SAS",
+    "bucketName": "genome-project"
+  },
+  "popAMR": {
+    "chromNr": "22",
+    "POP": "AMR",
+    "bucketName": "genome-project"
+  }
+}

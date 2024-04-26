@@ -1,0 +1,53 @@
+{
+  "individual1": {
+    "key_input": "ALL.chr22.80000.vcf.gz",
+    "counter": 1,
+    "stop": 10001,
+    "chromNr": 22
+  },
+  "individualsMerge": {
+    "keys": [
+      "chr22n-1-10001.tar.gz"
+    ],
+    "chromNr": 22
+  },
+  "sifting": {
+    "key": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf.gz",
+    "chromNr": "22"
+  },
+  "popEUR": {
+    "chromNr": "22",
+    "POP": "EUR",
+    "bucketName": "genome-project"
+  },
+  "popAFR": {
+    "chromNr": "22",
+    "POP": "AFR",
+    "bucketName": "genome-project"
+  },
+  "popEAS": {
+    "chromNr": "22",
+    "POP": "EAS",
+    "bucketName": "genome-project"
+  },
+  "popALL": {
+    "chromNr": "22",
+    "POP": "ALL",
+    "bucketName": "genome-project"
+  },
+  "popGBR": {
+    "chromNr": "22",
+    "POP": "GBR",
+    "bucketName": "genome-project"
+  },
+  "popSAS": {
+    "chromNr": "22",
+    "POP": "SAS",
+    "bucketName": "genome-project"
+  },
+  "popAMR": {
+    "chromNr": "22",
+    "POP": "AMR",
+    "bucketName": "genome-project"
+  }
+}
