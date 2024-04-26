@@ -13,6 +13,9 @@ java {
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs '../../AFCLCore/build/libs'
+    }
 }
 
 //task prepareKotlinBuildScriptModel {
@@ -65,9 +68,12 @@ dependencies {
 
     implementation 'org.yaml:snakeyaml:2.2'
 
-//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
 
-//    implementation project(':external')
+//    implementation project(':afclCore')
+
+    implementation 'at.uibk.dps:AFCLCore'
+    implementation 'com.github.java-json-tools:json-schema-validator:2.2.14'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

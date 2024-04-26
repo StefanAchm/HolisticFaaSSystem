@@ -1,6 +1,3 @@
 rootProject.name = 'holistic-faas-management-system'
 
-include ':external'
-project(':external').projectDir = new File('external')
-
-//includeBuild '../external'
+includeBuild('../../AFCLCore')
