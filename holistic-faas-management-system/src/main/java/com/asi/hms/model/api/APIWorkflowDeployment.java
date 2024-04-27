@@ -11,10 +11,12 @@ public class APIWorkflowDeployment {
 
     private UUID id;
     private String name;
-    private APIWorkflow workflow;
-    private APIUser user;
-    private List<APIFunctionDeployment> functionDeployments;
 
+    private APIWorkflow workflow;
+
+    private APIUser user;
+
+    private List<APIFunctionFlat> functionDefinitions;
 
     public UUID getId() {
         return id;
@@ -40,12 +42,12 @@ public class APIWorkflowDeployment {
         this.workflow = workflow;
     }
 
-    public List<APIFunctionDeployment> getFunctionDeployments() {
-        return functionDeployments;
+    public List<APIFunctionFlat> getFunctionDefinitions() {
+        return functionDefinitions;
     }
 
-    public void setFunctionDeployments(List<APIFunctionDeployment> functionDeployments) {
-        this.functionDeployments = functionDeployments;
+    public void setFunctionDefinitions(List<APIFunctionFlat> functionDefinitions) {
+        this.functionDefinitions = functionDefinitions;
     }
 
     public APIUser getUser() {
@@ -64,14 +66,17 @@ public class APIWorkflowDeployment {
         apiWorkflowDeployment.setName(dbWorkflowDeployment.getName());
         apiWorkflowDeployment.setWorkflow(APIWorkflow.fromDBWorkflow(dbWorkflowDeployment.getWorkflow()));
         apiWorkflowDeployment.setUser(APIUser.fromDBUser(dbWorkflowDeployment.getUser()));
-        apiWorkflowDeployment.setFunctionDeployments(new ArrayList<>());
+        apiWorkflowDeployment.setFunctionDefinitions(new ArrayList<>());
 
         if(dbWorkflowDeployment.getFunctionDeployments() != null) {
-            for (DBFunctionDeployment dbFunctionDeployment : dbWorkflowDeployment.getFunctionDeployments()) {
-                apiWorkflowDeployment.getFunctionDeployments().add(APIFunctionDeployment.fromDBFunctionDeployment(dbFunctionDeployment));
-            }
-        }
 
+            for (DBFunctionDeployment dbFunctionDeployment : dbWorkflowDeployment.getFunctionDeployments()) {
+
+                apiWorkflowDeployment.getFunctionDefinitions().add(APIFunctionFlat.fromDBFunction(dbFunctionDeployment));
+
+            }
+
+        }
 
         return apiWorkflowDeployment;
 

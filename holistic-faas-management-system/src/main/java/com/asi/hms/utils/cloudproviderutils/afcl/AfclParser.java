@@ -7,7 +7,7 @@ import at.uibk.dps.afcl.functions.*;
 import at.uibk.dps.afcl.functions.objects.Case;
 import at.uibk.dps.afcl.functions.objects.Section;
 import at.uibk.dps.afcl.utils.Utils;
-import com.asi.hms.model.api.APIFunction2;
+import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.api.APIWorkflow;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,13 +65,13 @@ public class AfclParser {
 
     }
 
-    private static List<APIFunction2> getAPIFunctions(Workflow workflow) {
+    private static List<APIFunction> getAPIFunctions(Workflow workflow) {
 
-        List<APIFunction2> apiFunctions = new ArrayList<>();
+        List<APIFunction> apiFunctions = new ArrayList<>();
 
         for (AtomicFunction af : getFunctionsFromWorkflow(workflow)) {
 
-            APIFunction2 apiFunction = new APIFunction2();
+            APIFunction apiFunction = new APIFunction();
             apiFunction.setName(af.getName());
 
             APIFunctionType apiFunctionType = new APIFunctionType();

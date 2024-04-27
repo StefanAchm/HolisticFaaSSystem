@@ -41,6 +41,10 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     private DBUser user;
 
     @ManyToOne
+    @JoinColumn(name = "function_id")
+    private DBFunction function;
+
+    @ManyToOne
     @JoinColumn(name = "workflow_deployment_id")
     private DBWorkflowDeployment workflowDeployment;
 
@@ -52,8 +56,8 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public static DBFunctionDeployment fromAPIFunctionDeployment(
             APIFunctionDeployment apiFunctionDeployment,
             DBUser dbUser,
-            DBFunctionImplementation dbFunctionImplementation
-
+            DBFunctionImplementation dbFunctionImplementation,
+            DBFunction dbFunction
     ) {
 
         DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
@@ -67,6 +71,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
         dbFunctionDeployment.setUser(dbUser);
         dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
+        dbFunctionDeployment.setFunction(dbFunction);
 
         return dbFunctionDeployment;
 
@@ -165,6 +170,14 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     public String getUniqueName() {
         // TODO: setting a unique name for now, not sure if that is wanted!
         return this.getFunctionImplementation().getFunctionType().getName() + "-" + this.id;
+    }
+
+    public DBFunction getFunction() {
+        return function;
+    }
+
+    public void setFunction(DBFunction function) {
+        this.function = function;
     }
 
     public DBWorkflowDeployment getWorkflowDeployment() {

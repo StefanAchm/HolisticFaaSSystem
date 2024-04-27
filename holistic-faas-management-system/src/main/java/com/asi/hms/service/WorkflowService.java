@@ -9,9 +9,11 @@ import com.asi.hms.repository.FunctionRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.repository.WorkflowRepository;
 import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +54,7 @@ public class WorkflowService {
         DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
         this.workflowRepository.save(dbWorkflow);
 
-        for (APIFunction2 apiFunction : workflow.getFunctions()) {
+        for (APIFunction apiFunction : workflow.getFunctions()) {
 
             DBFunctionType dbFunctionType = DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType());
             this.functionTypeRepository.save(dbFunctionType);
@@ -103,5 +105,37 @@ public class WorkflowService {
                 .stream()
                 .map(APIFunctionType::fromDBFunctionType)
                 .toList();
+    }
+
+    public APIWorkflowDeployment prepareWorkflowDeployment(UUID workflowId) {
+
+        APIWorkflowDeployment apiWorkflowDeployment = new APIWorkflowDeployment();
+        apiWorkflowDeployment.setFunctionDefinitions(new ArrayList<>());
+
+        DBWorkflow dbWorkflow = this.workflowRepository.findById(workflowId)
+                .orElseThrow(
+                () -> new RuntimeException("Workflow not found")
+        );
+
+        apiWorkflowDeployment.setWorkflow(APIWorkflow.fromDBWorkflow(dbWorkflow));
+
+        for(DBFunction dbFunction : dbWorkflow.getFunctions()) {
+
+            APIFunctionFlat apiFunctionDefinition = new APIFunctionFlat();
+
+            apiFunctionDefinition.setFunction(APIFunction.fromDBFunction(dbFunction));
+
+            apiFunctionDefinition.setFunctionType(APIFunctionType.fromDBFunctionType(dbFunction.getFunctionType()));
+
+            apiFunctionDefinition.setFunctionImplementation(new APIFunctionImplementation());
+
+            apiFunctionDefinition.setFunctionDeployment(new APIFunctionDeployment());
+
+            apiWorkflowDeployment.getFunctionDefinitions().add(apiFunctionDefinition);
+
+        }
+
+        return apiWorkflowDeployment;
+
     }
 }

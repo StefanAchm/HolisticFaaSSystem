@@ -12,7 +12,7 @@ public class APIMigration {
     private Set<APIMigrationObject> regionMigrations;
     private Set<APIMigrationObject> runtimeMigrations;
 
-    private List<APIFunction> functions;
+    private List<APIFunctionFlat> functions;
 
     public APIMigration() {
 
@@ -48,11 +48,11 @@ public class APIMigration {
         this.runtimeMigrations = runtimeMigrations;
     }
 
-    public List<APIFunction> getFunctions() {
+    public List<APIFunctionFlat> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(List<APIFunction> functions) {
+    public void setFunctions(List<APIFunctionFlat> functions) {
         this.functions = functions;
     }
 }

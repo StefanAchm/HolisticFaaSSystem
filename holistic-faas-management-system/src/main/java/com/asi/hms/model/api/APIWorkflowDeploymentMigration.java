@@ -2,14 +2,12 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.enums.MigrationType;
 
-import java.util.List;
-
-public class APIMigrationPreparation {
+public class APIWorkflowDeploymentMigration {
 
     private MigrationType migrationType;
     private String target;
 
-    private List<APIFunctionFlat> functions;
+    private APIWorkflowDeployment workflowDeployment;
 
     public MigrationType getMigrationType() {
         return migrationType;
@@ -27,12 +25,11 @@ public class APIMigrationPreparation {
         this.target = target;
     }
 
-
-    public List<APIFunctionFlat> getFunctions() {
-        return functions;
+    public APIWorkflowDeployment getWorkflowDeployment() {
+        return workflowDeployment;
     }
 
-    public void setFunctions(List<APIFunctionFlat> functions) {
-        this.functions = functions;
+    public void setWorkflowDeployment(APIWorkflowDeployment workflowDeployment) {
+        this.workflowDeployment = workflowDeployment;
     }
 }

@@ -2,8 +2,6 @@ package com.asi.hms.utils.cloudproviderutils.migrate;
 
 import com.asi.hms.enums.Provider;
 import com.asi.hms.model.api.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MigrationImplProvider implements MigrationInterface {
 
@@ -14,9 +12,9 @@ public class MigrationImplProvider implements MigrationInterface {
 
         APIMigration apiMigration = new APIMigration();
 
-        for (APIFunction apiFunction : migration.getFunctions()) {
+        for (APIFunctionFlat apiFunctionFlat : migration.getFunctions()) {
 
-            APIFunctionDeployment functionDeployment = apiFunction.getFunctionDeployment();
+            APIFunctionDeployment functionDeployment = apiFunctionFlat.getFunctionDeployment();
 
             APIMigrationObject regionMigration = RegionMigrationHelper.fromTo(
                     functionDeployment.getProvider().getRegionFromCode(functionDeployment.getRegion()),
@@ -34,7 +32,7 @@ public class MigrationImplProvider implements MigrationInterface {
 
             apiMigration.getRegionMigrations().add(regionMigration);
             apiMigration.getRuntimeMigrations().add(runtimeMigration);
-            apiMigration.getFunctions().add(apiFunction);
+            apiMigration.getFunctions().add(apiFunctionFlat);
 
         }
 

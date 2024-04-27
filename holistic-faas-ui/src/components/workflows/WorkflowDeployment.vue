@@ -44,9 +44,6 @@ export default {
   },
 
   watch: {
-    workflow() {
-      this.loadFunctions();
-    }
   },
 
   methods: {

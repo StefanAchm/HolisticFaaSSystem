@@ -25,7 +25,6 @@
       </v-card-text>
 
 
-
       <v-simple-table class="table-styling">
         <template v-slot:default>
 
@@ -33,6 +32,7 @@
 
           <tr>
             <th class="text-left">Name</th>
+            <th class="text-left">Type</th>
             <th class="text-left">Implementation</th>
             <th class="text-left">Handler</th>
             <th class="text-left">Provider</th>
@@ -40,7 +40,7 @@
             <th class="text-left">TimeoutSecs</th>
             <th class="text-left">Memory</th>
             <th class="text-left">Runtime</th>
-            <th class="text-left">User</th>
+            <!--            <th class="text-left">User</th>-->
           </tr>
           </thead>
 
@@ -51,21 +51,31 @@
           >
             <td>
 
-              <v-text-field
-                  class="column-name"
-                  type="text"
-                  v-model="common.function.name"
-                  disabled
-              ></v-text-field>
+              <!--              <v-text-field-->
+              <!--                  class="column-name"-->
+              <!--                  type="text"-->
+              <!--                  v-model="common.functionName"-->
+              <!--                  disabled-->
+              <!--              ></v-text-field>-->
             </td>
 
             <td>
 
-              <v-autocomplete
-                  class="column-implementation"
-                  type="text"
-                  v-model="common.functionImplementation.id"
-              ></v-autocomplete>
+              <!--              <v-text-field-->
+              <!--                  class="column-name"-->
+              <!--                  type="text"-->
+              <!--                  v-model="common.functionName"-->
+              <!--                  disabled-->
+              <!--              ></v-text-field>-->
+            </td>
+
+            <td>
+
+              <!--              <v-autocomplete-->
+              <!--                  class="column-implementation"-->
+              <!--                  type="text"-->
+              <!--                  v-model="common.functionImplementation.id"-->
+              <!--              ></v-autocomplete>-->
             </td>
 
             <td>
@@ -93,7 +103,7 @@
               <v-autocomplete
                   class="column-region"
                   v-model="common.functionDeployment.region"
-                  :items="common.functionDeployment.regions"
+                  :items="common.regions"
                   item-text="title"
                   item-value="value"
                   @change="updateEditItemsForRegion"
@@ -125,7 +135,7 @@
               <v-autocomplete
                   class="column-runtime"
                   v-model="common.functionDeployment.runtime"
-                  :items="common.functionDeployment.runtimes"
+                  :items="common.runtimes"
                   item-text="title"
                   item-value="value"
                   @change="updateEditItemsForRuntimes"
@@ -134,12 +144,13 @@
 
             <td>
 
-              <v-text-field
-                  class="column-username"
-                  type="text"
-                  v-model="common.functionDeployment.userName"
-                  disabled
-              ></v-text-field>
+              <!--              <v-text-field-->
+              <!--                  class="column-username"-->
+              <!--                  type="text"-->
+              <!--                  v-model="common.userName"-->
+              <!--                  disabled-->
+              <!--              ></v-text-field>-->
+
             </td>
 
           </tr>
@@ -155,6 +166,15 @@
                   class="column-name"
                   type="text"
                   v-model="item.function.name"
+                  disabled></v-text-field>
+            </td>
+
+            <td>
+
+              <v-text-field
+                  class="column-name"
+                  type="text"
+                  v-model="item.functionType.name"
                   disabled></v-text-field>
             </td>
 
@@ -194,7 +214,7 @@
               <v-autocomplete
                   class="column-region"
                   v-model="item.functionDeployment.region"
-                  :items="item.functionDeployment.regions"
+                  :items="item.regions"
                   item-text="title"
                   item-value="value"
               ></v-autocomplete>
@@ -223,7 +243,7 @@
               <v-autocomplete
                   class="column-runtime"
                   v-model="item.functionDeployment.runtime"
-                  :items="item.functionDeployment.runtimes"
+                  :items="item.runtimes"
                   item-text="title"
                   item-value="value"
               ></v-autocomplete>
@@ -231,11 +251,11 @@
 
             <td>
 
-              <v-text-field
-                  class="column-username"
-                  type="text"
-                  v-model="item.functionDeployment.userName"
-                  disabled></v-text-field>
+              <!--              <v-text-field-->
+              <!--                  class="column-username"-->
+              <!--                  type="text"-->
+              <!--                  v-model="item.userName"-->
+              <!--                  disabled></v-text-field>-->
             </td>
 
           </tr>
@@ -272,12 +292,13 @@ export default {
 
   props: {
     dialog: Boolean,
-    workflow: [],
+    workflowDeployment: [],
   },
 
   data: () => ({
     editItems: [],
     name: '',
+    functionImplementations: [],
     common: {
       function: {
         name: '',
@@ -304,54 +325,27 @@ export default {
 
     dialog(val) {
 
-      this.init();
-
       this.dialogLocal = val;
 
-      this.editItems = this.workflow.functions.map((item) => {
-        return {
-          id: item.id,
-          function: {
-            name: item.name
-          },
-          functionImplementations: item.functionType.functionImplementations?.map((fi) => {
-            return {
-              title: fi.fileName,
-              value: fi.id
-            }
-          }),
-          functionImplementation: {
-            id: item.functionType.functionImplementations?.[0]?.id,
-          },
-          functionDeployment: {
-            handler: '',
-            provider: '',
-            region: '',
-            timeoutSecs: null,
-            memory: null,
-            runtime: '',
-            userName: '',
-            regions: [],
-            runtimes: [],
-          }
-        }
-      })
+      this.editItems = this.workflowDeployment.functionDefinitions
 
-      console.log(this.editItems)
-
-    },
-
-    editItems: {
-      deep: true,
-      handler() {
-        // this.updateEditItems()
-        // this.updateCommon()
+      for (let i = 0; i < this.editItems.length; i++) {
+        this.updateItem(this.editItems[i])
       }
+
     },
 
   },
 
   created() {
+
+    this.init();
+
+    HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
+
+      this.functionImplementations = response.data
+
+    })
 
   },
 
@@ -365,34 +359,16 @@ export default {
     save() {
 
       let workflowDeployment = {
-        workflow: this.workflow,
+        workflow: this.workflowDeployment.workflow,
         name: this.name,
         user: {
           id: this.$store.state.userId
         },
-        functionDeployments: this.editItems.map((item) => {
-          return {
-            provider: item.functionDeployment.provider,
-            region: item.functionDeployment.region,
-            timeoutSecs: item.functionDeployment.timeoutSecs,
-            memory: item.functionDeployment.memory,
-            runtime: item.functionDeployment.runtime,
-            handler: item.functionDeployment.handler,
-            functionImplementationId: item.functionImplementation.id
-
-          }
-        })
+        functionDefinitions: this.editItems
       }
 
       HfApi.createWorkflowDeployment(workflowDeployment).then(() => {
         this.close()
-      })
-    },
-
-    updateEditItems() {
-      this.editItems.forEach((item) => {
-        item.functionDeployment.runtimes = this.getRuntimes(item.functionDeployment?.provider)
-        item.functionDeployment.regions = this.getRegions(item.functionDeployment?.provider)
       })
     },
 
@@ -420,8 +396,8 @@ export default {
 
       if (providers.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.provider = providers[0]
-        this.common.functionDeployment.runtimes = this.getRuntimes(this.common.functionDeployment.provider)
-        this.common.functionDeployment.regions = this.getRegions(this.common.functionDeployment.provider)
+        this.common.runtimes = this.getRuntimes(this.common.functionDeployment.provider)
+        this.common.regions = this.getRegions(this.common.functionDeployment.provider)
       }
 
       if (regions.every((val, i, arr) => val === arr[0])) {
@@ -452,8 +428,19 @@ export default {
 
     updateItem(item) {
 
-      item.functionDeployment.runtimes = this.getRuntimes(item.functionDeployment.provider)
-      item.functionDeployment.regions = this.getRegions(item.functionDeployment.provider)
+      item.runtimes = this.getRuntimes(item.functionDeployment.provider)
+      item.regions = this.getRegions(item.functionDeployment.provider)
+
+      item.functionImplementations = this.functionImplementations
+          .filter((impl) => impl.functionTypeId === item.functionType.id)
+          .map((item) => {
+            return {
+              title: item.fileName,
+              value: item.id
+            }
+          })
+
+      item.functionImplementation.id = item.functionImplementations[0].value
 
     },
 
@@ -467,8 +454,8 @@ export default {
 
     updateEditItemsForProvider() {
 
-      this.common.functionDeployment.runtimes = this.getRuntimes(this.common.functionDeployment.provider)
-      this.common.functionDeployment.regions = this.getRegions(this.common.functionDeployment.provider)
+      this.common.runtimes = this.getRuntimes(this.common.functionDeployment.provider)
+      this.common.regions = this.getRegions(this.common.functionDeployment.provider)
 
       this.editItems.forEach((item) => {
         item.functionDeployment.provider = this.common.functionDeployment.provider

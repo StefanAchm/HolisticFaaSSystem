@@ -13,8 +13,9 @@
         @dialog-closed="close"
         :edit-item="{}"/>
 
+    <v-spacer v-if="workflowMode"></v-spacer>
 
-    <v-menu offset-y>
+    <v-menu offset-y v-if="!workflowMode">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
             color="primary"
@@ -114,9 +115,10 @@
 
     </v-btn>
 
-    <v-spacer></v-spacer>
+    <v-spacer v-if="!workflowMode"></v-spacer>
 
     <v-switch
+        v-if="!workflowMode"
         class="pl-10"
         append-icon="mdi-file-tree"
         v-model="treeView"
@@ -146,6 +148,10 @@ export default {
 
   props: {
     selected: [],
+    workflowMode: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data: () => ({

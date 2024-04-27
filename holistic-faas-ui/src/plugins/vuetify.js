@@ -32,9 +32,9 @@ export default new Vuetify({
 
                 // Background, card colors, text
                 neutral: '#F2F2F3',
-                // neutral2: '#C8CDD0',
-                // neutral3: '#415058',
-                // neutral4: '#1F292E',
+                neutral2: '#C8CDD0',
+                neutral3: '#415058',
+                neutral4: '#1F292E',
 
                 // Status colors
                 error: '#D41111',

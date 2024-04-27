@@ -44,23 +44,21 @@ public class FunctionService {
 
     }
 
-    public List<APIFunction> getAllFunctions() {
+    public List<APIFunctionFlat> getAllFunctions() {
 
         List<DBFunctionType> functionTypes = this.functionTypeRepository.findAll().stream().toList();
 
-        List<DBFunctionImplementation> functionImplementations = functionTypes.get(0).getFunctionImplementations();
-
-        List<APIFunction> apiFunctions = new ArrayList<>();
+        List<APIFunctionFlat> apiFunctionFlats = new ArrayList<>();
 
         for (DBFunctionType functionType : functionTypes) {
 
             if (functionType.getFunctionImplementations() == null || functionType.getFunctionImplementations().isEmpty()) {
 
-                APIFunction apiFunction = new APIFunction();
-                apiFunction.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
-                apiFunction.setFunctionImplementation(null);
-                apiFunction.setFunctionDeployment(null);
-                apiFunctions.add(apiFunction);
+                APIFunctionFlat apiFunctionFlat = new APIFunctionFlat();
+                apiFunctionFlat.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
+                apiFunctionFlat.setFunctionImplementation(null);
+                apiFunctionFlat.setFunctionDeployment(null);
+                apiFunctionFlats.add(apiFunctionFlat);
 
             }
 
@@ -68,24 +66,24 @@ public class FunctionService {
 
                 if (functionImplementation.getFunctionDeployments() == null || functionImplementation.getFunctionDeployments().isEmpty()) {
 
-                    APIFunction apiFunction = new APIFunction();
-                    apiFunction.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
-                    apiFunction.setFunctionImplementation(APIFunctionImplementation.fromDBFunctionImplementation(functionImplementation));
-                    apiFunction.setFunctionDeployment(null);
-                    apiFunctions.add(apiFunction);
+                    APIFunctionFlat apiFunctionFlat = new APIFunctionFlat();
+                    apiFunctionFlat.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
+                    apiFunctionFlat.setFunctionImplementation(APIFunctionImplementation.fromDBFunctionImplementation(functionImplementation));
+                    apiFunctionFlat.setFunctionDeployment(null);
+                    apiFunctionFlats.add(apiFunctionFlat);
 
                 }
 
 
                 for (DBFunctionDeployment functionDeployment : functionImplementation.getFunctionDeployments()) {
 
-                    APIFunction apiFunction = new APIFunction();
+                    APIFunctionFlat apiFunctionFlat = new APIFunctionFlat();
 
-                    apiFunction.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
-                    apiFunction.setFunctionImplementation(APIFunctionImplementation.fromDBFunctionImplementation(functionImplementation));
-                    apiFunction.setFunctionDeployment(APIFunctionDeployment.fromDBFunctionDeployment(functionDeployment));
+                    apiFunctionFlat.setFunctionType(APIFunctionType.fromDBFunctionType(functionType));
+                    apiFunctionFlat.setFunctionImplementation(APIFunctionImplementation.fromDBFunctionImplementation(functionImplementation));
+                    apiFunctionFlat.setFunctionDeployment(APIFunctionDeployment.fromDBFunctionDeployment(functionDeployment));
 
-                    apiFunctions.add(apiFunction);
+                    apiFunctionFlats.add(apiFunctionFlat);
 
 
                 }
@@ -94,7 +92,7 @@ public class FunctionService {
 
         }
 
-        return apiFunctions;
+        return apiFunctionFlats;
 
     }
 
@@ -114,14 +112,14 @@ public class FunctionService {
 
         apiMigration.getFunctions()
                 .stream()
-                .map(APIFunction::getFunctionDeployment)
+                .map(APIFunctionFlat::getFunctionDeployment)
                 .forEach(this.functionDeploymentService::add);
 
         return apiMigration;
 
     }
 
-    public String getYaml(List<APIFunction> functions) {
+    public String getYaml(List<APIFunctionFlat> functions) {
         return YamlParser.writeYaml(functions);
     }
 

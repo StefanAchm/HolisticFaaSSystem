@@ -1,6 +1,6 @@
 package com.asi.hms.model.db;
 
-import com.asi.hms.model.api.APIFunction2;
+import com.asi.hms.model.api.APIFunction;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class DBFunction {
     public DBFunction() {
     }
 
-    public static DBFunction fromAPIFunction(APIFunction2 apiFunction) {
+    public static DBFunction fromAPIFunction(APIFunction apiFunction) {
         DBFunction dbFunction = new DBFunction();
         dbFunction.setName(apiFunction.getName());
         return dbFunction;

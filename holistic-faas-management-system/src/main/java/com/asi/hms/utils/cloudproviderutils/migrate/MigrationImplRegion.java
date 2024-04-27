@@ -1,6 +1,6 @@
 package com.asi.hms.utils.cloudproviderutils.migrate;
 
-import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionFlat;
 import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.model.api.APIMigrationObject;
 import com.asi.hms.model.api.APIMigrationPreparation;
@@ -14,14 +14,14 @@ public class MigrationImplRegion implements MigrationInterface {
 
         APIMigration apiMigration = new APIMigration();
 
-        for (APIFunction apiFunction : migration.getFunctions()) {
+        for (APIFunctionFlat apiFunctionFlat : migration.getFunctions()) {
 
-            String sourceRegion = apiFunction.getFunctionDeployment().getRegion();
+            String sourceRegion = apiFunctionFlat.getFunctionDeployment().getRegion();
 
-            apiFunction.getFunctionDeployment().setRegion(targetRegion);
+            apiFunctionFlat.getFunctionDeployment().setRegion(targetRegion);
 
             apiMigration.getRegionMigrations().add(new APIMigrationObject(sourceRegion, targetRegion));
-            apiMigration.getFunctions().add(apiFunction);
+            apiMigration.getFunctions().add(apiFunctionFlat);
 
         }
 

@@ -4,7 +4,9 @@
 
     <WorkflowBreadCrumps></WorkflowBreadCrumps>
 
-    Here are your deployments
+    <WorkflowDeploymentTable
+        :workflow-deployment-from-props="workflowDeployment"
+    ></WorkflowDeploymentTable>
 
 
   </v-card>
@@ -14,23 +16,25 @@
 <script>
 
 import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
+import HfApi from "@/utils/hf-api";
+import WorkflowDeploymentTable from "@/components/workflows/WorkflowDeploymentTable.vue";
 
 export default {
-  components: {WorkflowBreadCrumps},
+  components: {WorkflowDeploymentTable, WorkflowBreadCrumps},
 
   data: () => ({
-    // selected: [],
-    // search: '',
-    workflows: [],
-    // withFileDrop: false, // Because this does not work atm!
+    selected: [],
+    workflowDeployment: {},
   }),
 
   created() {
-    this.loadWorkflows()
+    this.loadWorkflowDeployment()
   },
 
   watch: {
-
+    '$route': function () {
+      this.loadWorkflowDeployment()
+    }
   },
 
   computed: {
@@ -39,7 +43,18 @@ export default {
 
   methods: {
 
-    loadWorkflows() {
+    loadWorkflowDeployment() {
+
+      HfApi.getWorkflowDeployment(this.$route.params.deploymentId)
+          .then((response) => {
+
+            this.workflowDeployment = response.data
+            this.selected = this.workflowDeployment.functionDefinitions
+
+          })
+          .catch(() => {
+            this.error = 'Could not load functions'
+          })
 
     }
 

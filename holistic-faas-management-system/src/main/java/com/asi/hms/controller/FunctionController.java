@@ -1,6 +1,6 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionFlat;
 import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.api.APIMigrationPreparation;
 import com.asi.hms.model.api.APIMigration;
@@ -27,7 +27,7 @@ public class FunctionController {
     }
 
     @GetMapping(value = "/getAll")
-    public ResponseEntity<List<APIFunction>> getAllFunctions() {
+    public ResponseEntity<List<APIFunctionFlat>> getAllFunctions() {
 
         return ResponseEntity.ok(this.functionService.getAllFunctions());
 
@@ -49,7 +49,7 @@ public class FunctionController {
 
 
     @PostMapping("/download")
-    public ResponseEntity<byte[]> downloadYaml(@RequestBody List<APIFunction> functions) throws IOException {
+    public ResponseEntity<byte[]> downloadYaml(@RequestBody List<APIFunctionFlat> functions) throws IOException {
 
         String yamlString = this.functionService.getYaml(functions);
 

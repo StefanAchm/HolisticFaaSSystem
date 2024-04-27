@@ -222,11 +222,30 @@ export default {
         });
     },
 
-    // @GetMapping(value = "/{workflowId}/implementations")
     getWorkflowFunctionImplementations(id) {
         return apiClient.get('/workflow/' + id + '/implementations');
     },
+
     createWorkflowDeployment(editItems) {
         return apiClient.post('/workflow_deployment/add', editItems);
+    },
+
+    prepareWorkflowDeployment(id) {
+        return apiClient.post('/workflow/' + id + '/prepareWorkflowDeployment');
+    },
+
+    getWorkflowFunctionDeployments(id) {
+        return apiClient.get('/workflow_deployment/' + id + '/getFunctionDeployments');
+    },
+
+    getWorkflowDeployment(id) {
+        return apiClient.get('/workflow_deployment/get/',
+            {params: {id: id}}
+        );
+    },
+
+    migrateWorkflowDeployment(migration) {
+        return apiClient.post('/workflow_deployment/migrate', migration);
     }
+
 }

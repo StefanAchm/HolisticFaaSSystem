@@ -1,7 +1,7 @@
 package com.asi.hms.model.yaml;
 
 import com.asi.hms.enums.Provider;
-import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionFlat;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.api.APIFunctionImplementation;
 import com.asi.hms.model.api.APIFunctionType;
@@ -45,12 +45,12 @@ public class YamlRoot {
         return map;
     }
 
-    public static YamlRoot fromApiFunction(List<APIFunction> functions) {
+    public static YamlRoot fromApiFunction(List<APIFunctionFlat> functions) {
 
         YamlRoot yamlRoot = new YamlRoot();
         yamlRoot.setDate(LocalDate.now().toString());
 
-        for (APIFunction function : functions) {
+        for (APIFunctionFlat function : functions) {
 
             APIFunctionType functionType = function.getFunctionType();
             APIFunctionImplementation functionImplementation = function.getFunctionImplementation();
@@ -126,9 +126,9 @@ public class YamlRoot {
 
     }
 
-    public static List<APIFunction> toApiFunction(YamlRoot yamlRoot) {
+    public static List<APIFunctionFlat> toApiFunction(YamlRoot yamlRoot) {
 
-        List<APIFunction> functions = new ArrayList<>();
+        List<APIFunctionFlat> functions = new ArrayList<>();
 
         for(YamlFunctionType yamlFunctionType : yamlRoot.functions) {
 
@@ -136,7 +136,7 @@ public class YamlRoot {
 
                 for(YamlFunctionDeployment yamlFunctionDeployment : yamlFunctionImplementation.getDeployments()) {
 
-                    APIFunction function = new APIFunction();
+                    APIFunctionFlat function = new APIFunctionFlat();
 
                     APIFunctionType functionType = new APIFunctionType();
                     functionType.setName(yamlFunctionType.getName());

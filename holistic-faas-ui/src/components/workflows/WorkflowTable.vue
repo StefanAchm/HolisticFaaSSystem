@@ -43,16 +43,12 @@ export default {
   }),
 
   created() {
-    this.init();
   },
 
   watch: {
     selected() {
       this.$emit('update-selected', this.selected)
     },
-    workflowsFromProps() {
-      this.init()
-    }
   },
 
   methods: {

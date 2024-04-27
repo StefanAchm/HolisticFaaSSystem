@@ -13,7 +13,7 @@ public class APIWorkflow {
 
     private String description;
 
-    private List<APIFunction2> functions;
+    private List<APIFunction> functions;
 
     public UUID getId() {
         return id;
@@ -39,11 +39,11 @@ public class APIWorkflow {
         this.description = description;
     }
 
-    public List<APIFunction2> getFunctions() {
+    public List<APIFunction> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(List<APIFunction2> functions) {
+    public void setFunctions(List<APIFunction> functions) {
         this.functions = functions;
     }
 
@@ -52,7 +52,7 @@ public class APIWorkflow {
         apiWorkflow.setId(dbWorkflow.getId());
         apiWorkflow.setName(dbWorkflow.getName());
         apiWorkflow.setDescription(dbWorkflow.getDescription());
-        apiWorkflow.setFunctions(dbWorkflow.getFunctions().stream().map(APIFunction2::fromDBFunction).toList());
+        apiWorkflow.setFunctions(dbWorkflow.getFunctions().stream().map(APIFunction::fromDBFunction).toList());
         return apiWorkflow;
     }
 }

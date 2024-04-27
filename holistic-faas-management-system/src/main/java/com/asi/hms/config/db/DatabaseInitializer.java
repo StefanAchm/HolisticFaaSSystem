@@ -1,7 +1,7 @@
 package com.asi.hms.config.db;
 
 import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.model.api.APIFunction2;
+import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
@@ -119,13 +119,16 @@ public class DatabaseInitializer {
                 )
         );
 
-        DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(0), true);
-        DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(1), true);
-        DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(2), true);
-        DBFunctionDeployment dbFunctionDeployment4 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(3), true);
-        DBFunctionDeployment dbFunctionDeployment5 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(4), true);
+
 
         for(int i = 0; i < 5; i++) {
+
+            DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(0), workflow1.getFunctions().get(0), true);
+            DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(1), workflow1.getFunctions().get(1), true);
+            DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(2), workflow1.getFunctions().get(2), true);
+            DBFunctionDeployment dbFunctionDeployment4 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(3), workflow1.getFunctions().get(3), true);
+            DBFunctionDeployment dbFunctionDeployment5 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(4), workflow1.getFunctions().get(4), true);
+
             addWorkflowDeployment("deployment" + i, user1, workflow1, Map.of(
                     workflow1.getFunctions().get(0), dbFunctionDeployment1,
                     workflow1.getFunctions().get(1), dbFunctionDeployment2,
@@ -188,7 +191,7 @@ public class DatabaseInitializer {
 
         dbWorkflow.setFunctions(new ArrayList<>());
 
-        for (APIFunction2 apiFunction : workflow.getFunctions()) {
+        for (APIFunction apiFunction : workflow.getFunctions()) {
 
             DBFunctionType dbFunctionType = DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType());
             this.functionTypeRepository.save(dbFunctionType);
@@ -305,7 +308,7 @@ public class DatabaseInitializer {
 
         for (int i = 0; i < nrOfDeployments; i++) {
 
-            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation, random);
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation, null, random);
 
             functionDeploymentRepository.save(dbFunctionDeployment);
 
@@ -317,6 +320,7 @@ public class DatabaseInitializer {
                                                                 String handlerPath,
                                                                 Provider provider,
                                                                 DBFunctionImplementation dbFunctionImplementation,
+                                                                DBFunction function,
                                                                 boolean random) {
 
         DBFunctionDeployment dbFunctionDeployment = new DBFunctionDeployment();
@@ -330,7 +334,10 @@ public class DatabaseInitializer {
         dbFunctionDeployment.setHandler(handlerPath);
         dbFunctionDeployment.setStatus(DeployStatus.CREATED);
         dbFunctionDeployment.setTimeoutSecs(random ? (int) (Math.random() * 10) + 3 : 3);
+
         dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
+
+        dbFunctionDeployment.setFunction(function);
 
         return dbFunctionDeployment;
 

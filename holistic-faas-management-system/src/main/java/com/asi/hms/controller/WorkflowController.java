@@ -44,13 +44,6 @@ public class WorkflowController {
 
     }
 
-//    @GetMapping(value = "/getImplementations")
-//    public ResponseEntity<List<APIFunctionImplementation>> getImplementations(@RequestParam UUID id) {
-//
-//        return ResponseEntity.ok(this.workflowService.getImplementations(id));
-//
-//    }
-
     @GetMapping(value = "/{workflowId}/implementations")
     public ResponseEntity<List<APIFunctionImplementation>> getWorkflowFunctionImplementations(@PathVariable UUID workflowId) {
         List<APIFunctionImplementation> implementations = this.workflowService.getWorkflowFunctionImplementations(workflowId);
@@ -72,4 +65,12 @@ public class WorkflowController {
 
     }
 
+    @PostMapping(value = "{workflowId}/prepareWorkflowDeployment")
+    public ResponseEntity<APIWorkflowDeployment> prepareWorkflowDeployment(@PathVariable UUID workflowId) {
+
+        APIWorkflowDeployment deployment = this.workflowService.prepareWorkflowDeployment(workflowId);
+
+        return ResponseEntity.ok(deployment);
+
+    }
 }

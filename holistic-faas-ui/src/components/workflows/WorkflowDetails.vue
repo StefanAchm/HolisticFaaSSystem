@@ -1,39 +1,27 @@
 <template>
-  <v-card>
-
-    <v-toolbar>
-
-      <v-toolbar-title> {{ workflow.name }}</v-toolbar-title>
-
+  <div>
+    <!-- Header -->
+    <v-toolbar flat fluid>
+      <v-toolbar-title>Workflow: {{ workflow.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
-
       <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Add Implementation</v-btn>
       <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Add Deployment</v-btn>
-
-      <FunctionImplementationDialogExtended
-          :dialog.sync="functionImplementationDialogVisible"
-          :editItem="{}"
-          :function-types="getFunctionTypes()"
-          @dialog-closed="loadWorkflow"
-      />
-
-      <WorkflowDeploymentDialog
-          :dialog.sync="deploymentDialogVisible"
-          :workflow="workflow"
-          @dialog-closed="loadWorkflow"
-      />
-
-
     </v-toolbar>
 
-    <v-card-text>{{ workflow.description }}</v-card-text>
+    <!-- Breadcrumbs -->
+<!--    <WorkflowBreadCrumps />-->
 
-    <v-tabs vertical v-model="tab">
+    <!-- Tabs -->
+    <v-tabs v-model="tab" class="pl-5">
 
       <v-tab key="abstract">Functions</v-tab>
       <v-tab key="implementations">Implementations</v-tab>
       <v-tab key="deployments">Deployments</v-tab>
 
+    </v-tabs>
+
+    <!-- Tab content -->
+    <v-card tile>
       <v-tabs-items v-model="tab">
         <v-tab-item key="abstract">
           <WorkflowAbstract :workflow="workflow"/>
@@ -44,11 +32,23 @@
         <v-tab-item key="deployments">
           <WorkflowDeployment :workflow="workflow"/>
         </v-tab-item>
-
       </v-tabs-items>
-    </v-tabs>
+    </v-card>
 
-  </v-card>
+    <!-- Dialogs -->
+    <FunctionImplementationDialogExtended
+        :dialog.sync="functionImplementationDialogVisible"
+        :editItem="{}"
+        :function-types="getFunctionTypes()"
+        @dialog-closed="loadWorkflow"
+    />
+
+    <WorkflowDeploymentDialog
+        :dialog.sync="deploymentDialogVisible"
+        :workflow-deployment="workflowDeployment"
+        @dialog-closed="loadWorkflow"
+    />
+  </div>
 </template>
 
 <script>
@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       workflow: {}, // This will hold the fetched workflow
+      workflowDeployment: {}, // This will hold the fetched workflow deployment
       tab: "abstract", // The currently selected tab
       functionImplementationDialogVisible: false,
       deploymentDialogVisible: false,
@@ -75,6 +76,7 @@ export default {
   },
   created() {
     this.loadWorkflow();
+    this.getWorkflowDeployment();
   },
   methods: {
 
@@ -84,6 +86,44 @@ export default {
 
     openDeploymentDialog() {
       this.deploymentDialogVisible = true;
+    },
+
+    getWorkflowDeployment() {
+
+      HfApi.prepareWorkflowDeployment(this.$route.params.id).then((response) => {
+
+        this.workflowDeployment = response.data
+
+      })
+
+      // HfApi.getWorkflowFunctionImplementations(this.workflow.id).then((response) => {
+      //
+      //   let functionImplementations = response.data
+      //
+      //   HfApi.prepareWorkflowDeployment(this.workflow.id).then((response) => {
+      //
+      //     this.workflowDeployment = response.data
+      //
+      //     for(let i = 0; i < this.workflowDeployment.functionDefinitions.length; i++) {
+      //
+      //       this.workflowDeployment.functionDefinitions[i].functionImplementations = functionImplementations
+      //           .filter((impl) => impl.functionTypeId === this.workflowDeployment.functionDefinitions[i].functionType.id)
+      //           .map((item) => {
+      //             return {
+      //               title: item.fileName,
+      //               value: item.id
+      //             }
+      //           })
+      //
+      //       this.workflowDeployment.functionDefinitions[i].functionImplementation.id = this.workflowDeployment.functionDefinitions[i].functionImplementations[0].value
+      //
+      //     }
+      //
+      //   })
+      //
+      //
+      // })
+
     },
 
     getFunctionTypes() {

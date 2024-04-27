@@ -27,15 +27,15 @@ public class MigrationImplUser implements MigrationInterface {
                 .findFirst()
                 .orElseThrow(() -> new HolisticFaaSException("User not found"));
 
-        for (APIFunction apiFunction : migration.getFunctions()) {
+        for (APIFunctionFlat apiFunctionFlat : migration.getFunctions()) {
 
-            String sourceUser = apiFunction.getFunctionDeployment().getUserId().toString();
+            String sourceUser = apiFunctionFlat.getFunctionDeployment().getUserId().toString();
 
-            apiFunction.getFunctionDeployment().setUserId(UUID.fromString(migration.getTarget()));
-            apiFunction.getFunctionDeployment().setUserName(targetUser.getUsername());
+            apiFunctionFlat.getFunctionDeployment().setUserId(UUID.fromString(migration.getTarget()));
+            apiFunctionFlat.getFunctionDeployment().setUserName(targetUser.getUsername());
 
             apiMigration.getUserMigrations().add(new APIMigrationObject(sourceUser, migration.getTarget()));
-            apiMigration.getFunctions().add(apiFunction);
+            apiMigration.getFunctions().add(apiFunctionFlat);
 
         }
 

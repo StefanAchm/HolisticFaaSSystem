@@ -3,14 +3,8 @@ package com.asi.hms.service;
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunctionDeployment;
-import com.asi.hms.model.db.DBFunctionDeployment;
-import com.asi.hms.model.db.DBFunctionImplementation;
-import com.asi.hms.model.db.DBUser;
-import com.asi.hms.model.db.DBUserCredentials;
-import com.asi.hms.repository.FunctionDeploymentRepository;
-import com.asi.hms.repository.FunctionImplementationRepository;
-import com.asi.hms.repository.UserCredentialsRepository;
-import com.asi.hms.repository.UserRepository;
+import com.asi.hms.model.db.*;
+import com.asi.hms.repository.*;
 import com.asi.hms.utils.ProgressHandler;
 import com.asi.hms.utils.cloudproviderutils.deploy.DeployerInterface;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
@@ -31,8 +25,10 @@ public class FunctionDeploymentService {
 
     private final UserRepository userRepository;
     private final UserCredentialsRepository userCredentialsRepository;
+
     private final FunctionImplementationRepository functionImplementationRepository;
     private final FunctionDeploymentRepository functionDeploymentRepository;
+    private final FunctionRepository functionRepository;
 
     private final WebSocketSessionService sessionService;
 
@@ -40,12 +36,16 @@ public class FunctionDeploymentService {
                                      UserCredentialsRepository userCredentialsRepository,
                                      FunctionImplementationRepository functionImplementationRepository,
                                      FunctionDeploymentRepository functionDeploymentRepository,
+                                     FunctionRepository functionRepository,
                                      WebSocketSessionService sessionService) {
 
         this.userRepository = userRepository;
         this.userCredentialsRepository = userCredentialsRepository;
+
         this.functionImplementationRepository = functionImplementationRepository;
         this.functionDeploymentRepository = functionDeploymentRepository;
+        this.functionRepository = functionRepository;
+
         this.sessionService = sessionService;
 
     }
@@ -60,10 +60,15 @@ public class FunctionDeploymentService {
                 .findById(apiFunctionDeployment.getFunctionImplementationId())
                 .orElseThrow(() -> new HolisticFaaSException("Function not found"));
 
+        DBFunction function = this.functionRepository
+                .findById(apiFunctionDeployment.getFunctionId())
+                .orElseThrow(() -> new HolisticFaaSException("Function not found"));
+
         DBFunctionDeployment dbFunctionDeployment = DBFunctionDeployment.fromAPIFunctionDeployment(
                 apiFunctionDeployment,
                 user,
-                functionImplementation
+                functionImplementation,
+                function
         );
 
         this.functionDeploymentRepository.save(dbFunctionDeployment);

@@ -15,7 +15,6 @@ public class APIFunctionDeployment {
     private UUID id;
 
     private Provider provider;
-
     private Integer memory;
     private Integer timeoutSecs;
     private String handler;
@@ -28,6 +27,7 @@ public class APIFunctionDeployment {
     private String userName;
 
     private UUID functionImplementationId;
+    private UUID functionId;
 
     private URI uri;
 
@@ -48,6 +48,7 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setUserId(dbFunctionDeployment.getUser().getId());
         apiFunctionDeployment.setUserName(dbFunctionDeployment.getUser().getUsername());
         apiFunctionDeployment.setFunctionImplementationId(dbFunctionDeployment.getFunctionImplementation().getId());
+        apiFunctionDeployment.setFunctionId(dbFunctionDeployment.getFunction().getId());
 
         try {
             apiFunctionDeployment.setUri(
@@ -103,6 +104,10 @@ public class APIFunctionDeployment {
 
     @JsonGetter("handlerShort")
     public String getHandlerShort() {
+
+        if(this.handler == null) {
+            return null;
+        }
 
         // E.g. if a handler is "com.asi.hsg.HelloWorldHandler::handleRequest"
         // then the short handler is "c.a.h.HelloWorldHandler::handleRequest"
@@ -161,6 +166,14 @@ public class APIFunctionDeployment {
 
     public void setFunctionImplementationId(UUID functionImplementationId) {
         this.functionImplementationId = functionImplementationId;
+    }
+
+    public UUID getFunctionId() {
+        return functionId;
+    }
+
+    public void setFunctionId(UUID functionId) {
+        this.functionId = functionId;
     }
 
     public DeployStatus getStatus() {

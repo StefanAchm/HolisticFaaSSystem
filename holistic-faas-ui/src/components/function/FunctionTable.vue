@@ -6,7 +6,7 @@
       v-model="selected"
       :single-select="false"
       item-key="id"
-      show-select
+      :show-select="showSelect"
       :items-per-page="10"
       :search="search"
   >
@@ -142,7 +142,11 @@ export default {
 
   props: {
     search: String,
-    functionsFromProps: []
+    functionsFromProps: [],
+    workflowMode: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data: () => ({
@@ -151,25 +155,7 @@ export default {
 
     functions: [],
     selected: [],
-    headers: [
-
-      {text: 'Status', value: 'status', sortable: false},
-      {text: 'Name', value: 'functionType.name', sortable: true},
-      {text: 'Implementation', value: 'implementation', sortable: true},
-
-      {text: 'Handler', value: 'functionDeployment.handler', sortable: true},
-      {text: 'Provider', value: 'functionDeployment.provider', sortable: true},
-      {text: 'Region', value: 'functionDeployment.region', sortable: true},
-      {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
-      {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
-      {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
-      {text: 'User', value: 'functionDeployment.userName', sortable: true},
-
-      {text: '', value: 'actions', sortable: false},
-
-      {text: '', value: 'link', sortable: false},
-
-    ],
+    headers: [],
 
     functionMigrationDialogVisible: false,
     functionDialogVisible: false,
@@ -198,17 +184,82 @@ export default {
     }
   },
 
+  computed: {
+    showSelect() {
+      return !this.workflowMode
+    }
+  },
+
   methods: {
 
+    getHeaders() {
+
+      if(this.workflowMode) {
+
+        return [
+
+          {text: 'Status', value: 'status', sortable: false},
+          {text: 'Name', value: 'functionType.name', sortable: true},
+          {text: 'Implementation', value: 'implementation', sortable: true},
+
+          {text: 'Handler', value: 'functionDeployment.handler', sortable: true},
+          {text: 'Provider', value: 'functionDeployment.provider', sortable: true},
+          {text: 'Region', value: 'functionDeployment.region', sortable: true},
+          {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
+          {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
+          {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
+          {text: 'User', value: 'functionDeployment.userName', sortable: true},
+
+          {text: '', value: 'link', sortable: false},
+
+        ]
+
+      } else {
+
+        return [
+
+          {text: 'Status', value: 'status', sortable: false},
+          {text: 'Name', value: 'functionType.name', sortable: true},
+          {text: 'Implementation', value: 'implementation', sortable: true},
+
+          {text: 'Handler', value: 'functionDeployment.handler', sortable: true},
+          {text: 'Provider', value: 'functionDeployment.provider', sortable: true},
+          {text: 'Region', value: 'functionDeployment.region', sortable: true},
+          {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
+          {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
+          {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
+          {text: 'User', value: 'functionDeployment.userName', sortable: true},
+
+          {text: '', value: 'actions', sortable: false},
+
+          {text: '', value: 'link', sortable: false},
+
+        ]
+
+      }
+
+    },
+
     init() {
+
       this.functions = this.functionsFromProps
+
       this.selectedMenuItem = {};
+
+
       this.selected = [];
+
+      if(this.workflowMode) {
+        this.selected = this.functions
+      }
+
       this.editItem = {
         functionType: {},
         functionImplementation: {},
         functionDeployment: {}
       };
+
+      this.headers = this.getHeaders()
 
     },
 

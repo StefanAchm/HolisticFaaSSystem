@@ -1,20 +1,14 @@
 <template>
   <div class="text-center">
 
-    <FunctionMigrationTable
-        :dialog.sync="functionMigrationDialog"
-        @dialog-closed="close"
-        :items="items"
-    />
-
     <WorkflowDeploymentDialog
         :dialog.sync="deploymentDialogVisible"
         @dialog-closed="close"
-        :workflow="{functionDefinitions: items}"
+        :workflow-deployment="workflowDeployment"
     />
 
     <v-menu
-        :disabled="items.length === 0"
+        :disabled="workflowDeployment.functionDefinitions?.length === 0"
         offset-y
     >
 
@@ -24,7 +18,7 @@
             v-bind="attrs"
             class="mx-2"
             v-on="on"
-            :disabled="items.length === 0"
+            :disabled="workflowDeployment.functionDefinitions?.length === 0"
         >
 
           <v-icon left>
@@ -32,7 +26,7 @@
           </v-icon>
 
 
-          Migrate ({{ items.length }})
+          Migrate ({{ workflowDeployment.functionDefinitions?.length }})
 
 
         </v-btn>
@@ -69,20 +63,11 @@
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title @click="openMigrationDialog()">
-              <v-list-item-icon>
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-list-item-icon>
-              Custom
-            </v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
             <v-list-item-title @click="openDeploymentDialog()">
               <v-list-item-icon>
                 <v-icon>mdi-dots-horizontal</v-icon>
               </v-list-item-icon>
-              Custom 2
+              Custom
             </v-list-item-title>
           </v-list-item>
 
@@ -96,23 +81,21 @@
 <script>
 
 import HfApi from "@/utils/hf-api";
-import FunctionMigrationTable from "@/components/function/dialogs/FunctionMigrationTable.vue";
 import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
 
 export default {
 
-  components: {WorkflowDeploymentDialog, FunctionMigrationTable},
+  components: {WorkflowDeploymentDialog},
 
   props: {
-    items: {
-      type: Array,
-      required: true,
+    workflowDeployment: {
+      type: Object,
+      required: true
     },
   },
 
   data: () => ({
 
-    functionMigrationDialog: false,
     deploymentDialogVisible: false,
 
   }),
@@ -123,51 +106,40 @@ export default {
       this.$emit('menu-closed')
     },
 
-    getMigrateRequest() {
-      // Items consists of a list of {id, functionDeployment, functionImplementation and functionType}
-      // But the api does not expect the id field, so create a new object without that
-
-      return this.items.map(item => {
-        return {
-          functionDeployment: item.functionDeployment,
-          functionImplementation: item.functionImplementation,
-          functionType: item.functionType
-        }
-      })
-    },
-
     migrateToMyAccount() {
 
-      HfApi.prepareMigration(this.getMigrateRequest(), this.$store.state.userId, 'FUNCTION_USER')
-          .then((response) => {
-            HfApi.migrateFunctions(response.data)
-                .then(() => {
-                  this.close()
-                })
+      let migration = {
+        migrationType: 'FUNCTION_USER',
+        target: this.$store.state.userId,
+        workflowDeployment: this.workflowDeployment
+      }
 
-          })
+      migration.workflowDeployment.user.id = this.$store.state.userId
+
+      HfApi.migrateWorkflowDeployment(migration).then(() => {
+        this.close()
+      })
 
     },
 
     migrateToProvider(provider) {
 
-      HfApi.prepareMigration(this.getMigrateRequest(), provider, 'FUNCTION_PROVIDER')
-          .then((response) => {
-            HfApi.migrateFunctions(response.data)
-                .then(() => {
-                  this.close()
-                })
+      let migration = {
+        migrationType: 'FUNCTION_PROVIDER',
+        target: provider,
+        workflowDeployment: this.workflowDeployment
+      }
 
-          })
+      HfApi.migrateWorkflowDeployment(migration).then(() => {
+        this.close()
+      })
 
-    },
-
-    openMigrationDialog() {
-      this.functionMigrationDialog = true
     },
 
     openDeploymentDialog() {
+
       this.deploymentDialogVisible = true
+
     }
 
   }

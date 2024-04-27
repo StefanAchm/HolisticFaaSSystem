@@ -108,9 +108,9 @@
     <v-main>
 
       <!-- Provides the application the proper gutter -->
-      <v-container class="pt-6">
+      <v-sheet class="ma-0 pa-5" color="neutral" min-height="100%">
         <router-view></router-view>
-      </v-container>
+      </v-sheet>
 
     </v-main>
 

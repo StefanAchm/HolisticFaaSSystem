@@ -1,7 +1,7 @@
 package com.asi.hms.utils.cloudproviderutils;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
-import com.asi.hms.model.api.APIFunction;
+import com.asi.hms.model.api.APIFunctionFlat;
 import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.yaml.*;
 import org.yaml.snakeyaml.DumperOptions;
@@ -41,7 +41,7 @@ public class YamlParser {
     }
 
 
-    public static String writeYaml(List<APIFunction> functions) {
+    public static String writeYaml(List<APIFunctionFlat> functions) {
 
         DumperOptions options = new DumperOptions();
         options.setPrettyFlow(true);
@@ -72,7 +72,7 @@ public class YamlParser {
 
     }
 
-    public static List<APIFunction> readYamlAsList(Path path) {
+    public static List<APIFunctionFlat> readYamlAsList(Path path) {
 
         Yaml yaml = new Yaml();
 
@@ -88,7 +88,7 @@ public class YamlParser {
 
     }
 
-    public static List<APIFunction> readYaml(String yamlString) {
+    public static List<APIFunctionFlat> readYaml(String yamlString) {
 
         Yaml yaml = new Yaml();
 
