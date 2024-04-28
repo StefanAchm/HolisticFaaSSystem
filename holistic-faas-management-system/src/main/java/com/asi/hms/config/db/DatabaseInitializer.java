@@ -1,12 +1,10 @@
 package com.asi.hms.config.db;
 
-import com.asi.hms.enums.DeployStatus;
-import com.asi.hms.enums.RuntimeAWS;
+import com.asi.hms.enums.*;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
-import com.asi.hms.enums.Provider;
 import com.asi.hms.service.FunctionService;
 import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +15,7 @@ import java.util.*;
 
 @Component
 public class DatabaseInitializer {
+
 
     private final String[] implementations = {
             "zips\\aws-helloworld-java-1.0-SNAPSHOT.zip",
@@ -235,7 +234,7 @@ public class DatabaseInitializer {
 
         functions.forEach((functionName, functionType) -> {
 
-            DBFunctionType dbFunctionType = addFunctionType(workflow, functionType);
+            DBFunctionType dbFunctionType = addFunctionType(functionType);
 
             DBFunction workflowFunction = addWorkflowFunction(workflow, functionName, dbFunctionType);
             workflow.getFunctions().add(workflowFunction);
@@ -267,11 +266,10 @@ public class DatabaseInitializer {
 
     }
 
-    private DBFunctionType addFunctionType(DBWorkflow workflow, String functionType) {
+    private DBFunctionType addFunctionType(String functionType) {
 
         DBFunctionType dbFunctionType = new DBFunctionType();
         dbFunctionType.setName(functionType);
-//        dbFunctionType.setWorkflow(workflow);
 
         return functionTypeRepository.save(dbFunctionType);
 
