@@ -102,9 +102,12 @@ public class AfclParser {
         }
 
         List<AtomicFunction> atomicFunctions = new ArrayList<>();
-        for(Function f : functions) {
-            if(f instanceof AtomicFunction af) {
+        for (Function f : functions) {
+            if (f instanceof AtomicFunction af &&
+                    atomicFunctions.stream().noneMatch(atomicFunction -> atomicFunction.getName().equals(af.getName()))) {
+
                 atomicFunctions.add(af);
+
             }
         }
 
@@ -138,7 +141,7 @@ public class AfclParser {
             functions.addAll(getAllFunctions(loopCompound.getLoopBody()));
         } else if (f instanceof Parallel parallel) {
 
-            for(Section section : parallel.getParallelBody()) {
+            for (Section section : parallel.getParallelBody()) {
                 functions.addAll(getAllFunctions(section.getSection()));
             }
 

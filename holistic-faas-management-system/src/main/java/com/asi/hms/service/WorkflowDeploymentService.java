@@ -51,7 +51,7 @@ public class WorkflowDeploymentService {
 
     }
 
-    public DBWorkflowDeployment add(APIWorkflowDeployment apiWorkflowDeployment) {
+    public APIWorkflowDeployment add(APIWorkflowDeployment apiWorkflowDeployment) {
 
         DBWorkflow dbWorkflow = this.workflowRepository.findById(apiWorkflowDeployment.getWorkflow().getId()).orElseThrow(
                 () -> new HolisticFaaSException("Workflow not found")
@@ -65,6 +65,7 @@ public class WorkflowDeploymentService {
         dbWorkflowDeployment.setWorkflow(dbWorkflow);
         dbWorkflowDeployment.setUser(user);
         dbWorkflowDeployment.setName(apiWorkflowDeployment.getName());
+        dbWorkflowDeployment.setFunctionDeployments(new ArrayList<>());
 
         this.workflowDeploymentRepository.save(dbWorkflowDeployment);
 
@@ -89,9 +90,11 @@ public class WorkflowDeploymentService {
             dbFunctionDeployment.setWorkflowDeployment(dbWorkflowDeployment);
             this.functionDeploymentRepository.save(dbFunctionDeployment);
 
+            dbWorkflowDeployment.getFunctionDeployments().add(dbFunctionDeployment);
+
         }
 
-        return dbWorkflowDeployment;
+        return APIWorkflowDeployment.fromDBWorkflowDeployment(dbWorkflowDeployment);
 
     }
 
@@ -146,12 +149,14 @@ public class WorkflowDeploymentService {
         apiWorkflowDeployment.setName(apiWorkflowDeploymentMigration.getWorkflowDeployment().getName());
         apiWorkflowDeployment.setFunctionDefinitions(apiMigration.getFunctions());
 
-        DBWorkflowDeployment dbWorkflowDeployment = this.add(apiWorkflowDeployment);
+        if(apiMigration.isValid()) {
+            apiWorkflowDeployment = this.add(apiWorkflowDeployment);
+        }
 
-        return APIWorkflowDeployment.fromDBWorkflowDeployment(dbWorkflowDeployment);
+        apiWorkflowDeployment.setValid(apiMigration.isValid());
+
+        return apiWorkflowDeployment;
 
     }
-
-
 
 }

@@ -26,6 +26,7 @@
             item-text="name"
             item-value="id"
             label="Function Type"
+            :disabled="implementation"
         ></v-select>
 
         <v-file-input
@@ -58,7 +59,15 @@ export default {
 
   props: {
     dialog: Boolean,
-    functionTypes: {type: Array, default: () => []}
+    workflow: {
+      type: Object,
+      default: null
+    },
+    implementation: {
+      type: Object,
+      default: null
+    }
+
   },
 
   data: () => ({
@@ -82,13 +91,20 @@ export default {
 
     formTitle() {
       return 'Add Functionimplementation'
-    }
+    },
+
+    functionTypes() {
+      return this.workflow.functions?.map(f => f.functionType);
+    },
+
   },
 
   watch: {
     dialog(val) {
       if (val) {
         this.currentFile = null
+        this.functionType = this.implementation?.functionType?.id
+
       }
     }
   },

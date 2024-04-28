@@ -351,9 +351,9 @@ export default {
 
   methods: {
 
-    close() {
+    close(workflowDeployment) {
       this.dialogLocal = false
-      this.$emit('dialog-closed')
+      this.$emit('dialog-closed', workflowDeployment)
     },
 
     save() {
@@ -367,8 +367,8 @@ export default {
         functionDefinitions: this.editItems
       }
 
-      HfApi.createWorkflowDeployment(workflowDeployment).then(() => {
-        this.close()
+      HfApi.createWorkflowDeployment(workflowDeployment).then((response) => {
+        this.close(response.data)
       })
     },
 

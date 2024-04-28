@@ -32,6 +32,8 @@ public class DatabaseInitializer {
     private final String[] handlers = {
             "com.asi.hsg.HelloWorldHandler::handleRequest",
             "com.asi.hsg.HelloWorldHandler",
+            // lambda_function.lambda_handler
+
     };
 
     private final String[] credentials = {
@@ -137,7 +139,7 @@ public class DatabaseInitializer {
 
                     DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user1,
                             handlers[0], // TODO
-                            RuntimeAWS.PYTHON_3_12.toString(),
+                            RuntimeAWS.PYTHON_3_12.getRuntimeCode(),
                             Provider.AWS,
                             first.get(),
                             function,

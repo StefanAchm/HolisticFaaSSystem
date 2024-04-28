@@ -68,6 +68,9 @@ public enum RuntimeAWS implements RuntimeInterface {
         String language = runtimeCode.split("\\d")[0];
         String version = runtimeCode.substring(language.length());
 
+        // Remove all none alphanumeric characters from the version
+        version = version.replaceAll("[^0-9]", "");
+
         RuntimeGlobal runtimeGlobal = new RuntimeGlobal();
 
         runtimeGlobal.setLanguage(language);

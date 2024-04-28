@@ -16,6 +16,7 @@
     <template v-slot:item="{ item }">
       <tr @click="goToDetails(item.id)">
         <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
       </tr>
     </template>
 
@@ -36,7 +37,8 @@ export default {
     selected: [],
     headers: [
 
-      {text: 'Name', value: 'name', sortable: true},
+      {text: 'Name', value: 'name', sortable: true, width: '20%'},
+      {text: 'Description', value: 'description', sortable: true, width: '80%'},
 
     ],
 

@@ -140,6 +140,7 @@ import FunctionDeploymentDialog from "@/components/function/dialogs/FunctionDepl
 import DeploymentIcon from "@/components/function/icons/DeploymentIcon.vue";
 import LinkIcon from "@/components/function/icons/LinkIcon.vue";
 import WorkflowDeploymentHeader from "@/components/workflows/headers/WorkflowDeploymentHeader.vue";
+import hfWebsocket from "@/utils/hf-websocket";
 
 export default {
 
@@ -160,7 +161,29 @@ export default {
 
     workflowDeployment: {},
 
-    headers: [],
+    headers: [
+
+      {text: 'Status', value: 'status', sortable: false},
+
+      {text: 'Name', value: 'function.name', sortable: true},
+
+      {text: 'Type', value: 'functionType.name', sortable: true},
+
+      {text: 'Implementation', value: 'implementation', sortable: true},
+
+      {text: 'Handler', value: 'functionDeployment.handler', sortable: true},
+      {text: 'Provider', value: 'functionDeployment.provider', sortable: true},
+      {text: 'Region', value: 'functionDeployment.region', sortable: true},
+      {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
+      {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
+      {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
+      {text: 'User', value: 'functionDeployment.userName', sortable: true},
+
+      // {text: '', value: 'actions', sortable: false},
+
+      {text: '', value: 'link', sortable: false},
+
+    ],
 
     functionMigrationDialogVisible: false,
     functionDialogVisible: false,
@@ -190,34 +213,6 @@ export default {
 
   methods: {
 
-    getHeaders() {
-
-      return [
-
-        {text: 'Status', value: 'status', sortable: false},
-
-        {text: 'Name', value: 'function.name', sortable: true},
-
-        {text: 'Type', value: 'functionType.name', sortable: true},
-
-        {text: 'Implementation', value: 'implementation', sortable: true},
-
-        {text: 'Handler', value: 'functionDeployment.handler', sortable: true},
-        {text: 'Provider', value: 'functionDeployment.provider', sortable: true},
-        {text: 'Region', value: 'functionDeployment.region', sortable: true},
-        {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
-        {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
-        {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
-        {text: 'User', value: 'functionDeployment.userName', sortable: true},
-
-        // {text: '', value: 'actions', sortable: false},
-
-        {text: '', value: 'link', sortable: false},
-
-      ]
-
-    },
-
     init() {
 
       this.workflowDeployment = this.workflowDeploymentFromProps
@@ -230,7 +225,40 @@ export default {
         functionDeployment: {}
       };
 
-      this.headers = this.getHeaders()
+      hfWebsocket.onMessage(this.updateProgress)
+
+    },
+
+    updateProgress(message) {
+
+      // Update progress of process component, depending on the message
+
+      let id = message.id;
+      let step = message.step;
+      let steps = message.steps;
+      let status = message.status;
+      let statusMessage = message.statusMessage;
+      let text = message.text;
+
+      let value = step / steps * 100
+
+      this.workflowDeploymentFromProps.functionDefinitions
+          .filter(f => f.functionDeployment.id === id)
+          .forEach(f => {
+
+            let fd = f.functionDeployment
+
+            this.$set(fd, 'isLoadingValue', value)
+
+            if (value === 100) {
+              this.$set(fd, 'isLoadingValue', null)
+            }
+
+            this.$set(fd, 'status', status)
+            this.$set(fd, 'statusMessage', statusMessage)
+            this.$set(fd, 'text', text)
+
+          })
 
     },
 

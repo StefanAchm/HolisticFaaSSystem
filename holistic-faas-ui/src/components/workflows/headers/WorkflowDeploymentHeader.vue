@@ -8,7 +8,11 @@
       <v-spacer></v-spacer>
 
 <!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
-      <v-btn color="primary" class="mx-2" @click="deployAll">Deploy</v-btn>
+      <v-btn
+          :disabled="undeployedFunctions.length === 0"
+          color="primary"
+          class="mx-2"
+          @click="deployAll">Deploy ({{undeployedFunctions.length}})</v-btn>
 
       <WorkflowMigrateButton
           :workflow-deployment="workflowDeployment"
@@ -39,6 +43,12 @@ export default {
       type: Object,
       required: true
     },
+  },
+
+  computed: {
+    undeployedFunctions() {
+      return this.workflowDeployment.functionDefinitions.filter(item => item.functionDeployment.status !== 'DEPLOYED')
+    }
   },
 
   methods: {

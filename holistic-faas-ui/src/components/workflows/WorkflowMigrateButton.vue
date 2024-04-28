@@ -4,7 +4,7 @@
     <WorkflowDeploymentDialog
         :dialog.sync="deploymentDialogVisible"
         @dialog-closed="close"
-        :workflow-deployment="workflowDeployment"
+        :workflow-deployment="workflowDeploymentForMigration"
     />
 
     <v-menu
@@ -96,6 +96,7 @@ export default {
 
   data: () => ({
 
+    workflowDeploymentForMigration: {},
     deploymentDialogVisible: false,
 
   }),
@@ -106,7 +107,14 @@ export default {
 
       // this.$emit('menu-closed', workflowDeployment)
 
-      this.$router.push({ name: 'deployments', params: { id: workflowDeployment.workflow.id, deploymentId: workflowDeployment.id } });
+      if (workflowDeployment?.workflow?.id && workflowDeployment?.id) {
+
+        this.$router.push({
+          name: 'deployments',
+          params: {id: workflowDeployment.workflow.id, deploymentId: workflowDeployment.id}
+        });
+
+      }
 
     },
 
@@ -121,7 +129,14 @@ export default {
       migration.workflowDeployment.user.id = this.$store.state.userId
 
       HfApi.migrateWorkflowDeployment(migration).then((response) => {
-        this.close(response.data)
+
+        if (!response.data.isValid) {
+          this.workflowDeploymentForMigration = response.data
+          this.deploymentDialogVisible = true
+        } else {
+          this.close(response.data)
+        }
+
       })
 
     },
@@ -135,13 +150,21 @@ export default {
       }
 
       HfApi.migrateWorkflowDeployment(migration).then((response) => {
-        this.close(response.data)
+
+        if (!response.data.valid) {
+          this.workflowDeploymentForMigration = response.data
+          this.deploymentDialogVisible = true
+        } else {
+          this.close(response.data)
+        }
+
       })
 
     },
 
     openDeploymentDialog() {
 
+      this.workflowDeploymentForMigration = this.workflowDeployment
       this.deploymentDialogVisible = true
 
     }

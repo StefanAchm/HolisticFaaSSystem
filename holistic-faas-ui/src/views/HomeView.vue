@@ -39,6 +39,26 @@
         <v-card>
 
           <v-card-title>
+            <span class="text-h5">Workflows</span>
+          </v-card-title>
+
+          <v-card-text>
+            Add, manage and deploy Workflows
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn color="primary" text @click="$router.push({ path: '/workflows'})">Explore</v-btn>
+          </v-card-actions>
+
+        </v-card>
+
+      </v-col>
+
+      <v-col>
+
+        <v-card>
+
+          <v-card-title>
             <span class="text-h5">Functions</span>
           </v-card-title>
 

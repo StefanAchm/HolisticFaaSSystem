@@ -35,9 +35,8 @@ public class WorkflowDeploymentController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> add(@RequestBody APIWorkflowDeployment apiWorkflowDeployment) {
-        this.workflowDeploymentService.add(apiWorkflowDeployment);
-        return ResponseEntity.ok("Workflow deployment added");
+    public ResponseEntity<APIWorkflowDeployment> add(@RequestBody APIWorkflowDeployment apiWorkflowDeployment) {
+        return ResponseEntity.ok(this.workflowDeploymentService.add(apiWorkflowDeployment));
     }
 
     @PostMapping(value = "/migrate")

@@ -21,7 +21,7 @@ export default {
 
   props: {
     functions: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
@@ -38,8 +38,6 @@ export default {
         // {text: 'File Path', value: 'filePath'},
 
       ],
-
-      functionImplementationDialogVisible: false,
 
     };
   },

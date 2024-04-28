@@ -102,7 +102,9 @@ export default {
 
     deployFunction(item) {
 
-      HfApi.deployFunctionDeployment(item.functionDeployment.id)
+      if(item.functionDeployment.status === 'CREATED') {
+        HfApi.deployFunctionDeployment(item.functionDeployment.id)
+      }
 
     },
 

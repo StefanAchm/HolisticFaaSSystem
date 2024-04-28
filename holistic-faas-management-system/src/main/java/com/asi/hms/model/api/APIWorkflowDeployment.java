@@ -21,6 +21,13 @@ public class APIWorkflowDeployment {
 
     private List<APIFunctionFlat> functionDefinitions;
 
+    private boolean isValid;
+
+    public APIWorkflowDeployment() {
+        this.functionDefinitions = new ArrayList<>();
+        this.isValid = true;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -69,6 +76,14 @@ public class APIWorkflowDeployment {
         this.user = user;
     }
 
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
     public static APIWorkflowDeployment fromDBWorkflowDeployment(DBWorkflowDeployment dbWorkflowDeployment) {
 
         APIWorkflowDeployment apiWorkflowDeployment = new APIWorkflowDeployment();
@@ -89,7 +104,7 @@ public class APIWorkflowDeployment {
 
         }
 
-        apiWorkflowDeployment.setDeploymentDetails(WorkflowDeploymentDetailsGenerator.getDeploymentDetails(dbWorkflowDeployment));
+        apiWorkflowDeployment.setDeploymentDetails(WorkflowDeploymentDetailsGenerator.getDeploymentDetails(apiWorkflowDeployment));
 
         return apiWorkflowDeployment;
 

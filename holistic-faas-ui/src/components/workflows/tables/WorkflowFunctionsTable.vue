@@ -9,16 +9,16 @@
 
     <template v-slot:top>
 
-      <FunctionImplementationDialog
+      <FunctionImplementationDialogExtended
           :dialog.sync="functionImplementationDialogVisible"
+          :workflow="workflow"
+          :implementation="selected"
           @dialog-closed="close"
-          :edit-item="editItem"/>
+      />
 
     </template>
 
     <template v-slot:[`item.addImplementation`]="{ item }">
-
-      <!--      <v-btn @click="addImplementation(item)">Add Implementation</v-btn>-->
 
       <v-btn
           color="secondary"
@@ -45,10 +45,11 @@
 
 <script>
 
-import FunctionImplementationDialog from "@/components/function/dialogs/FunctionImplementationDialog.vue";
+import FunctionImplementationDialogExtended
+  from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
 
 export default {
-  components: {FunctionImplementationDialog},
+  components: {FunctionImplementationDialogExtended},
 
   props: {
     workflow: {
@@ -63,50 +64,50 @@ export default {
         {text: 'Name', value: 'name'},
         {text: 'Type', value: 'functionType.name'},
         {text: 'Implementations', value: 'implementations'},
-        // {text: '', value: 'addImplementation'}
+        {text: '', value: 'addImplementation'}
       ],
-      functions: [],
       functionImplementationDialogVisible: false,
-      editItem: {},
+      selected: {},
     };
   },
 
   watch: {
-    workflow() {
-      this.loadFunctions();
-    }
+
   },
 
   created() {
-    this.loadFunctions();
+  },
+
+  computed: {
+    functions() {
+
+      if(this.workflow.functions == null) {
+        return [];
+      }
+
+      return this.workflow.functions.map(f => {
+        return {
+          id: f.id,
+          name: f.name,
+          functionType: f.functionType,
+          implementations: f.functionType.functionImplementations.length,
+          addImplementation: f
+        }
+      });
+
+    }
   },
 
   methods: {
-    loadFunctions() {
-      this.functions = this.workflow.functions;
-
-      if(this.functions == null) {
-        return;
-      }
-
-      for(let f of this.functions) {
-        f.implementations = f.functionType.functionImplementations.length
-      }
-    },
 
     addImplementation(item) {
-      this.editItem = item;
-
-      this.editItem.functionImplementation = {
-        functionTypeId: item.functionType.id,
-      }
-
+      this.selected = item;
       this.functionImplementationDialogVisible = true;
     },
 
     close() {
       this.functionImplementationDialogVisible = false;
-      this.loadFunctions();
+      this.$emit('dialog-closed');
     }
 
   },

@@ -31,6 +31,10 @@ public class APIMigrationObject {
         this.target = target;
     }
 
+    public boolean isValid() {
+        return source != null && target != null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

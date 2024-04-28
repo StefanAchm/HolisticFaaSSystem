@@ -55,4 +55,15 @@ public class APIMigration {
     public void setFunctions(List<APIFunctionFlat> functions) {
         this.functions = functions;
     }
+
+    public boolean isValid() {
+
+        // If all migrationobjects have a source and target, the migration is valid
+
+        return this.userMigrations.stream().allMatch(APIMigrationObject::isValid) &&
+                this.regionMigrations.stream().allMatch(APIMigrationObject::isValid) &&
+                this.runtimeMigrations.stream().allMatch(APIMigrationObject::isValid);
+
+    }
+
 }
