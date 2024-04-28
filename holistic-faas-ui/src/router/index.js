@@ -39,12 +39,12 @@ const routes = [
     {
         path: '/workflows/:id',
         name: 'workflow',
-        component: () => import('../views/WorkflowView.vue')
+        component: () => import('../views/WorkflowDetailsView.vue')
     },
     {
         path: '/workflows/:id/deployments/:deploymentId',
         name: 'deployments',
-        component: () => import('../views/WorkflowDeploymentsView.vue')
+        component: () => import('../views/WorkflowDeploymentView.vue')
     }
 
 ]

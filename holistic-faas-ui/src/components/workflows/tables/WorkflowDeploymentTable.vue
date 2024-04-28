@@ -1,19 +1,10 @@
 <template>
 
   <div>
-    <!-- Header -->
-    <v-toolbar flat fluid>
-      <v-toolbar-title>Deployment: {{ workflowDeployment.name }}</v-toolbar-title>
-      <v-spacer></v-spacer>
 
-<!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
-<!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Deploy</v-btn>-->
-
-      <WorkflowMigrateMenue :workflow-deployment="workflowDeployment"></WorkflowMigrateMenue>
-
-<!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
-
-    </v-toolbar>
+    <WorkflowDeploymentHeader
+        :workflow-deployment="workflowDeployment"
+    ></WorkflowDeploymentHeader>
 
     <v-data-table
         :headers="headers"
@@ -148,11 +139,12 @@ import FunctionImplementationDialog from "@/components/function/dialogs/Function
 import FunctionDeploymentDialog from "@/components/function/dialogs/FunctionDeploymentDialog.vue";
 import DeploymentIcon from "@/components/function/icons/DeploymentIcon.vue";
 import LinkIcon from "@/components/function/icons/LinkIcon.vue";
-import WorkflowMigrateMenue from "@/components/workflows/WorkflowMigrateMenue.vue";
+import WorkflowDeploymentHeader from "@/components/workflows/headers/WorkflowDeploymentHeader.vue";
 
 export default {
 
-  components: {WorkflowMigrateMenue, LinkIcon, DeploymentIcon, FunctionDeploymentDialog, FunctionImplementationDialog},
+  components: {
+    WorkflowDeploymentHeader, LinkIcon, DeploymentIcon, FunctionDeploymentDialog, FunctionImplementationDialog},
 
   props: {
     search: String,

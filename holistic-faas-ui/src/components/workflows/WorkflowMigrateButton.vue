@@ -102,8 +102,12 @@ export default {
 
   methods: {
 
-    close() {
-      this.$emit('menu-closed')
+    close(workflowDeployment) {
+
+      // this.$emit('menu-closed', workflowDeployment)
+
+      this.$router.push({ name: 'deployments', params: { id: workflowDeployment.workflow.id, deploymentId: workflowDeployment.id } });
+
     },
 
     migrateToMyAccount() {
@@ -116,8 +120,8 @@ export default {
 
       migration.workflowDeployment.user.id = this.$store.state.userId
 
-      HfApi.migrateWorkflowDeployment(migration).then(() => {
-        this.close()
+      HfApi.migrateWorkflowDeployment(migration).then((response) => {
+        this.close(response.data)
       })
 
     },
@@ -130,8 +134,8 @@ export default {
         workflowDeployment: this.workflowDeployment
       }
 
-      HfApi.migrateWorkflowDeployment(migration).then(() => {
-        this.close()
+      HfApi.migrateWorkflowDeployment(migration).then((response) => {
+        this.close(response.data)
       })
 
     },

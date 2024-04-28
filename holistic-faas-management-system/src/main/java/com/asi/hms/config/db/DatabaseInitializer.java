@@ -1,6 +1,7 @@
 package com.asi.hms.config.db;
 
 import com.asi.hms.enums.DeployStatus;
+import com.asi.hms.enums.RuntimeAWS;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.db.*;
@@ -12,9 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class DatabaseInitializer {
@@ -26,8 +25,8 @@ public class DatabaseInitializer {
             "afcl_workflows\\genome\\genomeAwsFunctions\\genome_individual.py",
             "afcl_workflows\\genome\\genomeAwsFunctions\\genome_individuals_merge.py",
             "afcl_workflows\\genome\\genomeAwsFunctions\\genome_sifting.py",
-            "afcl_workflows\\genome\\genomeAwsFunctions\\mutual_overlap\\zip.py",
-            "afcl_workflows\\genome\\genomeAwsFunctions\\frequency\\zip.py",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\mutual_overlap\\zip.zip",
+            "afcl_workflows\\genome\\genomeAwsFunctions\\frequency\\zip.zip",
     };
 
     private final String[] handlers = {
@@ -123,21 +122,36 @@ public class DatabaseInitializer {
 
         for(int i = 0; i < 5; i++) {
 
-            DBFunctionDeployment dbFunctionDeployment1 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(0), workflow1.getFunctions().get(0), true);
-            DBFunctionDeployment dbFunctionDeployment2 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(1), workflow1.getFunctions().get(1), true);
-            DBFunctionDeployment dbFunctionDeployment3 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(2), workflow1.getFunctions().get(2), true);
-            DBFunctionDeployment dbFunctionDeployment4 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(3), workflow1.getFunctions().get(3), true);
-            DBFunctionDeployment dbFunctionDeployment5 = getDbFunctionDeployment(user1, handlers[0], Provider.AWS, dbFunctionImplementations.get(4), workflow1.getFunctions().get(4), true);
 
-            addWorkflowDeployment("deployment" + i, user1, workflow1, Map.of(
-                    workflow1.getFunctions().get(0), dbFunctionDeployment1,
-                    workflow1.getFunctions().get(1), dbFunctionDeployment2,
-                    workflow1.getFunctions().get(2), dbFunctionDeployment3,
-                    workflow1.getFunctions().get(3), dbFunctionDeployment4,
-                    workflow1.getFunctions().get(4), dbFunctionDeployment5
-            ));
+            Map<DBFunction, DBFunctionDeployment> dbFunctionDeployments = new HashMap<>();
+            for (DBFunction function : workflow1.getFunctions()) {
+
+                String name = function.getFunctionType().getName();
+
+                Optional<DBFunctionImplementation> first = dbFunctionImplementations
+                        .stream()
+                        .filter(impl -> impl.getFunctionType().getName().equals(name))
+                        .findFirst();
+
+                if (first.isPresent()) {
+
+                    DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user1,
+                            handlers[0], // TODO
+                            RuntimeAWS.PYTHON_3_12.toString(),
+                            Provider.AWS,
+                            first.get(),
+                            function,
+                            true);
+
+                    dbFunctionDeployments.put(function, dbFunctionDeployment);
+
+                }
+
+            }
+
+            addWorkflowDeployment("deployment" + i, user1, workflow1, dbFunctionDeployments);
+
         }
-
 
 
     }
@@ -148,8 +162,9 @@ public class DatabaseInitializer {
     private List<DBFunctionImplementation> addWorkflowImplementations(Map<String, DBFunctionType> implementation) {
 
         List<DBFunctionImplementation> dbFunctionImplementations = new ArrayList<>();
-        implementation.forEach((functionImplementation, functionType) -> {
-
+        for (Map.Entry<String, DBFunctionType> entry : implementation.entrySet()) {
+            String functionImplementation = entry.getKey();
+            DBFunctionType functionType = entry.getValue();
             DBFunctionImplementation dbFunctionImplementation = new DBFunctionImplementation();
             dbFunctionImplementation.setFilePath(resourcesPath + functionImplementation);
             dbFunctionImplementation.setFunctionType(functionType);
@@ -158,7 +173,7 @@ public class DatabaseInitializer {
 
             dbFunctionImplementations.add(dbFunctionImplementation);
 
-        });
+        }
 
         return dbFunctionImplementations;
 
@@ -308,7 +323,7 @@ public class DatabaseInitializer {
 
         for (int i = 0; i < nrOfDeployments; i++) {
 
-            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, provider, dbFunctionImplementation, null, random);
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user, handlerPath, "java17", provider, dbFunctionImplementation, null, random);
 
             functionDeploymentRepository.save(dbFunctionDeployment);
 
@@ -318,6 +333,7 @@ public class DatabaseInitializer {
 
     private static DBFunctionDeployment getDbFunctionDeployment(DBUser user,
                                                                 String handlerPath,
+                                                                String runtime,
                                                                 Provider provider,
                                                                 DBFunctionImplementation dbFunctionImplementation,
                                                                 DBFunction function,
@@ -328,7 +344,7 @@ public class DatabaseInitializer {
         dbFunctionDeployment.setProvider(provider.name());
         dbFunctionDeployment.setUser(user);
         dbFunctionDeployment.setRegion(provider == Provider.AWS ? "eu-west-2" : "europe-west2");
-        dbFunctionDeployment.setRuntime("java17");
+        dbFunctionDeployment.setRuntime(runtime);
 
         dbFunctionDeployment.setMemory(random ? (int) (Math.random() * 10) + 128 : 128);
         dbFunctionDeployment.setHandler(handlerPath);

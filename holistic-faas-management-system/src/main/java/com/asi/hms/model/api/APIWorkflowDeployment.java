@@ -2,6 +2,7 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBFunctionDeployment;
 import com.asi.hms.model.db.DBWorkflowDeployment;
+import com.asi.hms.utils.WorkflowDeploymentDetailsGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ public class APIWorkflowDeployment {
 
     private UUID id;
     private String name;
+
+    private String deploymentDetails;
 
     private APIWorkflow workflow;
 
@@ -32,6 +35,14 @@ public class APIWorkflowDeployment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDeploymentDetails() {
+        return deploymentDetails;
+    }
+
+    public void setDeploymentDetails(String deploymentDetails) {
+        this.deploymentDetails = deploymentDetails;
     }
 
     public APIWorkflow getWorkflow() {
@@ -77,6 +88,8 @@ public class APIWorkflowDeployment {
             }
 
         }
+
+        apiWorkflowDeployment.setDeploymentDetails(WorkflowDeploymentDetailsGenerator.getDeploymentDetails(dbWorkflowDeployment));
 
         return apiWorkflowDeployment;
 

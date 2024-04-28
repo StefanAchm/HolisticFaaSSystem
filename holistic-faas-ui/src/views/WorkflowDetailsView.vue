@@ -12,7 +12,7 @@
 
 <script>
 
-import WorkflowDetails from "@/components/workflows/WorkflowDetails.vue";
+import WorkflowDetails from "@/components/workflows/headers/WorkflowDetailsHeader.vue";
 import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
 
 export default {

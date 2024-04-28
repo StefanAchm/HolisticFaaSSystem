@@ -10,6 +10,7 @@
       <tr @click="goToDetails(item.id)">
         <td>{{ item.name }}</td>
         <td>{{ item.user.username }}</td>
+        <td>{{ item.deploymentDetails }}</td>
       </tr>
     </template>
 
@@ -18,13 +19,16 @@
 </template>
 
 <script>
-import HfApi from "@/utils/hf-api";
 
 export default {
 
   props: {
     workflow: {
       type: Object,
+      required: true
+    },
+    deployments: {
+      type: Array,
       required: true
     }
   },
@@ -34,28 +38,18 @@ export default {
       headers: [
         {text: 'Deployment', value: 'name'},
         {text: 'User', value: 'user.username'},
+        {text: 'Details', value: 'deploymentDetails'}
       ],
-      deployments: [],
     };
   },
 
   created() {
-    this.loadDeployment();
   },
 
   watch: {
   },
 
   methods: {
-    loadDeployment() {
-      HfApi.getDeployments(this.workflow.id)
-          .then(response => {
-            this.deployments = response.data;
-          })
-          .catch(error => {
-            console.error("Failed to load deployments:", error);
-          });
-    },
 
     goToDetails(id) {
       this.$router.push({ name: 'deployments', params: { id: this.workflow.id, deploymentId: id } });

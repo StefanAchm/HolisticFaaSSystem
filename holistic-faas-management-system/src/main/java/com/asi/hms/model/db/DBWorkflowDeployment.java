@@ -14,6 +14,8 @@ public class DBWorkflowDeployment {
 
     private String name;
 
+    private String deploymentDetails;
+
     @ManyToOne
     @JoinColumn(name = "workflow_id")
     private DBWorkflow workflow;
@@ -38,6 +40,14 @@ public class DBWorkflowDeployment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDeploymentDetails() {
+        return deploymentDetails;
+    }
+
+    public void setDeploymentDetails(String deploymentDetails) {
+        this.deploymentDetails = deploymentDetails;
     }
 
     public DBWorkflow getWorkflow() {

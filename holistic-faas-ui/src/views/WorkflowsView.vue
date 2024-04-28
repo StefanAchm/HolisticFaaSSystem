@@ -21,8 +21,8 @@
 
 <script>
 
-import WorkflowTable from "@/components/workflows/WorkflowTable.vue";
-import WorkflowHeader from "@/components/workflows/WorkflowHeader.vue";
+import WorkflowTable from "@/components/workflows/tables/WorkflowsTable.vue";
+import WorkflowHeader from "@/components/workflows/headers/WorkflowsHeader.vue";
 import HfApi from "@/utils/hf-api";
 import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
 

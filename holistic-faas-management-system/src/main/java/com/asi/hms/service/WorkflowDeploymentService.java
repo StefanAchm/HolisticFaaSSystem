@@ -51,7 +51,7 @@ public class WorkflowDeploymentService {
 
     }
 
-    public void add(APIWorkflowDeployment apiWorkflowDeployment) {
+    public DBWorkflowDeployment add(APIWorkflowDeployment apiWorkflowDeployment) {
 
         DBWorkflow dbWorkflow = this.workflowRepository.findById(apiWorkflowDeployment.getWorkflow().getId()).orElseThrow(
                 () -> new HolisticFaaSException("Workflow not found")
@@ -91,6 +91,8 @@ public class WorkflowDeploymentService {
 
         }
 
+        return dbWorkflowDeployment;
+
     }
 
     public APIWorkflowDeployment getWorkflowDeployment(UUID id) {
@@ -125,7 +127,7 @@ public class WorkflowDeploymentService {
 
     }
 
-    public void migrate(APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
+    public APIWorkflowDeployment migrate(APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
 
         List<APIUser> users = this.userService.getAllUser();
 
@@ -144,13 +146,12 @@ public class WorkflowDeploymentService {
         apiWorkflowDeployment.setName(apiWorkflowDeploymentMigration.getWorkflowDeployment().getName());
         apiWorkflowDeployment.setFunctionDefinitions(apiMigration.getFunctions());
 
-        this.add(apiWorkflowDeployment);
+        DBWorkflowDeployment dbWorkflowDeployment = this.add(apiWorkflowDeployment);
 
-//        apiMigration.getFunctions()
-//                .stream()
-//                .map(APIFunctionFlat::getFunctionDeployment)
-//                .forEach(this.functionDeploymentService::add);
+        return APIWorkflowDeployment.fromDBWorkflowDeployment(dbWorkflowDeployment);
 
     }
+
+
 
 }

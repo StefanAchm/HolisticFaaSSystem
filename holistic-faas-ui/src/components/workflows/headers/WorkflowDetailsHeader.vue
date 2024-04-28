@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <!-- Header -->
     <v-toolbar flat fluid>
       <v-toolbar-title>Workflow: {{ workflow.name }}</v-toolbar-title>
@@ -8,15 +9,12 @@
       <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Add Deployment</v-btn>
     </v-toolbar>
 
-    <!-- Breadcrumbs -->
-<!--    <WorkflowBreadCrumps />-->
-
     <!-- Tabs -->
     <v-tabs v-model="tab" class="pl-5">
 
-      <v-tab key="abstract">Functions</v-tab>
-      <v-tab key="implementations">Implementations</v-tab>
-      <v-tab key="deployments">Deployments</v-tab>
+      <v-tab key="abstract">Functions ({{ workflow.functions?.length || 0 }})</v-tab>
+      <v-tab key="implementations">Implementations ({{ implementations?.length || 0 }})</v-tab>
+      <v-tab key="deployments">Deployments ({{ deployments?.length || 0 }})</v-tab>
 
     </v-tabs>
 
@@ -27,10 +25,10 @@
           <WorkflowAbstract :workflow="workflow"/>
         </v-tab-item>
         <v-tab-item key="implementations">
-          <FunctionImplementations :workflow="workflow"/>
+          <FunctionImplementations :functions="implementations"/>
         </v-tab-item>
         <v-tab-item key="deployments">
-          <WorkflowDeployment :workflow="workflow"/>
+          <WorkflowDeployment :workflow="workflow" :deployments="deployments"/>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -54,9 +52,9 @@
 <script>
 
 import HfApi from "@/utils/hf-api";
-import WorkflowAbstract from "@/components/workflows/WorkflowAbstract.vue";
-import WorkflowDeployment from "@/components/workflows/WorkflowDeployment.vue";
-import FunctionImplementations from "@/components/workflows/FunctionImplementations.vue";
+import WorkflowAbstract from "@/components/workflows/tables/WorkflowFunctionsTable.vue";
+import WorkflowDeployment from "@/components/workflows/tables/WorkflowDeploymentsTable.vue";
+import FunctionImplementations from "@/components/workflows/tables/WorkflowImplementationsTable.vue";
 import FunctionImplementationDialogExtended
   from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
 import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
@@ -72,12 +70,38 @@ export default {
       tab: "abstract", // The currently selected tab
       functionImplementationDialogVisible: false,
       deploymentDialogVisible: false,
+      deployments: {},
+
     };
   },
+
   created() {
     this.loadWorkflow();
     this.getWorkflowDeployment();
   },
+
+  computed: {
+    implementations() {
+      // this.functions = ; // Flatten this list!
+      // Each function has a name and a type, but multiple implementations
+      // We need to flatten this list to show all implementations
+      return this.workflow.functions?.map(function (functionItem) {
+
+        if (functionItem.functionType.functionImplementations == null || functionItem.functionType.functionImplementations.length === 0) {
+          return [];
+        }
+
+        return functionItem.functionType.functionImplementations.map(function (functionImplementation) {
+          return {
+            function: functionItem,
+            functionImplementation: functionImplementation
+          }
+        });
+      }).flat()
+          .filter(item => Object.keys(item).length !== 0); // Filter out empty objects
+    }
+  },
+
   methods: {
 
     openFunctionImplementationDialog() {
@@ -96,34 +120,16 @@ export default {
 
       })
 
-      // HfApi.getWorkflowFunctionImplementations(this.workflow.id).then((response) => {
-      //
-      //   let functionImplementations = response.data
-      //
-      //   HfApi.prepareWorkflowDeployment(this.workflow.id).then((response) => {
-      //
-      //     this.workflowDeployment = response.data
-      //
-      //     for(let i = 0; i < this.workflowDeployment.functionDefinitions.length; i++) {
-      //
-      //       this.workflowDeployment.functionDefinitions[i].functionImplementations = functionImplementations
-      //           .filter((impl) => impl.functionTypeId === this.workflowDeployment.functionDefinitions[i].functionType.id)
-      //           .map((item) => {
-      //             return {
-      //               title: item.fileName,
-      //               value: item.id
-      //             }
-      //           })
-      //
-      //       this.workflowDeployment.functionDefinitions[i].functionImplementation.id = this.workflowDeployment.functionDefinitions[i].functionImplementations[0].value
-      //
-      //     }
-      //
-      //   })
-      //
-      //
-      // })
+    },
 
+    loadDeployments() {
+      HfApi.getDeployments(this.workflow.id)
+          .then(response => {
+            this.deployments = response.data;
+          })
+          .catch(error => {
+            console.error("Failed to load deployments:", error);
+          });
     },
 
     getFunctionTypes() {
@@ -134,6 +140,7 @@ export default {
       HfApi.getWorkflow(this.$route.params.id)
           .then(response => {
             this.workflow = response.data;
+            this.loadDeployments();
           })
           .catch(error => {
             console.error("Failed to load workflows:", error);

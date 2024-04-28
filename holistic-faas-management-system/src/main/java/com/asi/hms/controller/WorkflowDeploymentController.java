@@ -41,10 +41,8 @@ public class WorkflowDeploymentController {
     }
 
     @PostMapping(value = "/migrate")
-    public ResponseEntity<String> migrate(@RequestBody APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
-        this.workflowDeploymentService.migrate(apiWorkflowDeploymentMigration);
-        return ResponseEntity.ok("done");
-
+    public ResponseEntity<APIWorkflowDeployment> migrate(@RequestBody APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
+        return ResponseEntity.ok(this.workflowDeploymentService.migrate(apiWorkflowDeploymentMigration));
     }
 
 }

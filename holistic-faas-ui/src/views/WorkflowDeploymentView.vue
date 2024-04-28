@@ -17,7 +17,7 @@
 
 import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
 import HfApi from "@/utils/hf-api";
-import WorkflowDeploymentTable from "@/components/workflows/WorkflowDeploymentTable.vue";
+import WorkflowDeploymentTable from "@/components/workflows/tables/WorkflowDeploymentTable.vue";
 
 export default {
   components: {WorkflowDeploymentTable, WorkflowBreadCrumps},
