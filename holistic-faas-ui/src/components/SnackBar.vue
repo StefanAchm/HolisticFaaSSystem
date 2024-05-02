@@ -49,12 +49,10 @@ export default {
   },
   methods:{
 
-    // this.$root.snackbar.showSuccess({message: 'Workflows loaded'})
-
     showError(data) {
       this.message = data.message
       this.color = 'error'
-      this.icon = data.icon || 'mdi-alert'
+      this.icon = 'mdi-alert'
       this.showSnackbar = true
     },
 
@@ -64,6 +62,13 @@ export default {
       this.icon = 'mdi-check'
       this.showSnackbar = true
       this.route = data.route
+    },
+
+    showWarning(data) {
+      this.message = data.message
+      this.color = 'warning'
+      this.icon = 'mdi-alert'
+      this.showSnackbar = true
     },
 
     show(data) {

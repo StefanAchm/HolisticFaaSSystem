@@ -19,38 +19,29 @@ public class FunctionDeploymentController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> add(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
-        this.functionDeploymentService.add(apiFunctionDeployment);
-        return ResponseEntity.ok("Deploy Function added");
+    public ResponseEntity<APIFunctionDeployment> add(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        return ResponseEntity.ok(this.functionDeploymentService.add(apiFunctionDeployment));
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity<String> update(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
-        this.functionDeploymentService.update(apiFunctionDeployment);
-        return ResponseEntity.ok("Deploy Function edited");
+    public ResponseEntity<APIFunctionDeployment> update(@RequestBody APIFunctionDeployment apiFunctionDeployment) {
+        return ResponseEntity.ok(this.functionDeploymentService.update(apiFunctionDeployment));
     }
 
     @PostMapping(value = "/deploy")
     public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
-
         this.functionDeploymentService.deploy(functionId);
-
-        return ResponseEntity.ok("Deploying function now");
-
+        return ResponseEntity.ok("Function deployment started");
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity<APIFunctionDeployment> getFunctionDeployment(@RequestParam UUID functionId) {
-
         return ResponseEntity.ok(this.functionDeploymentService.getFunctionDeployment(functionId));
-
     }
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIFunctionDeployment>> getAllFunctionDeployments() {
-
         return ResponseEntity.ok(this.functionDeploymentService.getAllFunctionDeployments());
-
     }
 
 }

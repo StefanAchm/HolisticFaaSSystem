@@ -77,7 +77,7 @@ public class FunctionDeploymentService {
 
     }
 
-    public void update(APIFunctionDeployment apiFunctionDeployment) {
+    public APIFunctionDeployment update(APIFunctionDeployment apiFunctionDeployment) {
 
         DBFunctionDeployment functionDeployment = this.functionDeploymentRepository
                 .findById(apiFunctionDeployment.getId())
@@ -95,6 +95,8 @@ public class FunctionDeploymentService {
         functionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
 
         this.functionDeploymentRepository.save(functionDeployment);
+
+        return APIFunctionDeployment.fromDBFunctionDeployment(functionDeployment);
 
     }
 

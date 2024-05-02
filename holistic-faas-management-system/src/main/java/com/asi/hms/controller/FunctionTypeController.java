@@ -18,15 +18,13 @@ public class FunctionTypeController {
     }
 
     @PostMapping(value = "/add")
-    public void addFunctionType(@RequestBody APIFunctionType apiFunctionType) {
-        this.functionTypeService.add(apiFunctionType);
+    public ResponseEntity<APIFunctionType> addFunctionType(@RequestBody APIFunctionType apiFunctionType) {
+        return ResponseEntity.ok(this.functionTypeService.add(apiFunctionType));
     }
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIFunctionType>> getAllFunctionTypes() {
         return ResponseEntity.ok(this.functionTypeService.getAllFunctionTypes());
     }
-
-
 
 }

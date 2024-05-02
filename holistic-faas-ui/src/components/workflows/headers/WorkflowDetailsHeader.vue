@@ -3,15 +3,36 @@
 
     <!-- Header -->
     <v-toolbar flat fluid>
-      <v-toolbar-title>Workflow: {{ workflow.name }}</v-toolbar-title>
+
+      <v-toolbar-title>{{workflow.name}}</v-toolbar-title>
+
       <v-spacer></v-spacer>
+
+      <v-btn color="primary" class="mx-2" @click="openFunctionDialog">Add Function</v-btn>
       <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Add Implementation</v-btn>
       <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Add Deployment</v-btn>
+
     </v-toolbar>
+
+    <!-- Add a v-card here to display the workflow details -->
+    <v-card elevation="0" class="pb-6">
+<!--      <v-card-title> Details: </v-card-title>-->
+      <v-card-text>
+        <strong> Description: </strong>
+        {{ workflow.description }}
+      </v-card-text>
+
+    </v-card>
 
     <!-- Dialogs -->
     <FunctionImplementationDialogExtended
         :dialog.sync="functionImplementationDialogVisible"
+        :workflow="workflow"
+        @dialog-closed="dialogClosed()"
+    />
+
+    <FunctionWithTypeDialog
+        :dialog.sync="functionDialogVisible"
         :workflow="workflow"
         @dialog-closed="dialogClosed()"
     />
@@ -30,6 +51,7 @@ import HfApi from "@/utils/hf-api";
 import FunctionImplementationDialogExtended
   from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
 import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
+import FunctionWithTypeDialog from "@/components/function/dialogs/FunctionWithTypeDialog.vue";
 
 export default {
 
@@ -41,15 +63,22 @@ export default {
   },
 
   components: {
+    FunctionWithTypeDialog,
     WorkflowDeploymentDialog,
     FunctionImplementationDialogExtended},
 
   data() {
+
     return {
+
       workflowDeployment: {}, // This will hold the fetched workflow deployment
+
       functionImplementationDialogVisible: false,
       deploymentDialogVisible: false,
+      functionDialogVisible: false
+
     };
+
   },
 
   created() {
@@ -64,6 +93,10 @@ export default {
 
     dialogClosed() {
       this.$emit('workflow-updated');
+    },
+
+    openFunctionDialog() {
+      this.functionDialogVisible = true;
     },
 
     openFunctionImplementationDialog() {

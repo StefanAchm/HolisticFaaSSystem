@@ -5,8 +5,13 @@ import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
-import com.asi.hms.service.FunctionService;
+import com.asi.hms.service.FunctionFlatService;
+import com.asi.hms.service.UserService;
 import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -57,7 +62,9 @@ public class DatabaseInitializer {
     private final WorkflowFunctionRepository workflowFunctionRepository;
     private final WorkflowDeploymentRepository workflowDeploymentRepository;
 
-    private final FunctionService functionService;
+    private final UserService userService;
+
+    private final FunctionFlatService functionFlatService;
 
     public DatabaseInitializer(PasswordEncoder passwordEncoder,
                                FunctionDeploymentRepository functionDeploymentRepository,
@@ -69,7 +76,8 @@ public class DatabaseInitializer {
                                WorkflowRepository workflowRepository,
                                WorkflowFunctionRepository workflowFunctionRepository,
                                WorkflowDeploymentRepository workflowDeploymentRepository,
-                               FunctionService functionService
+                               UserService userService,
+                               FunctionFlatService functionFlatService
     ) {
 
         this.passwordEncoder = passwordEncoder;
@@ -86,7 +94,9 @@ public class DatabaseInitializer {
         this.workflowFunctionRepository = workflowFunctionRepository;
         this.workflowDeploymentRepository = workflowDeploymentRepository;
 
-        this.functionService = functionService;
+        this.userService = userService;
+
+        this.functionFlatService = functionFlatService;
 
     }
 
@@ -97,6 +107,11 @@ public class DatabaseInitializer {
 
         addUserCredentials(user1, "AWS", credentials[0]);
         addUserCredentials(user1, "GCP", credentials[1]);
+
+        UserDetails userDetails = userService.loadUserByUsername("user1");
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
 //        addFunction(user1, "helloWorld1", implementations[0], handlers[0], Provider.AWS, 5, true);
 //        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
@@ -120,8 +135,7 @@ public class DatabaseInitializer {
         );
 
 
-
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
 
 
             Map<DBFunction, DBFunctionDeployment> dbFunctionDeployments = new HashMap<>();
@@ -201,6 +215,7 @@ public class DatabaseInitializer {
     private DBWorkflow addAbstractWorkflowFromFile(String fileName) {
 
         APIWorkflow workflow = AfclParser.getWorkflow(resourcesPath + fileName);
+        workflow.setDescription("Genome1000 (GEN) is a scientific workflow which identifies mutational overlaps using data from the 1000 Genomes project in order to provide a null distribution for rigorous statistical evaluation of potential disease-related mutations. Each instance of the function Individual fetches and parses single nucleotide polymorphism (SNPs) variants in a chromosome and determines which individuals contain these variants. Individuals_merge merges all outputs of individuals, while Sifting computes the mutation for all SNP variants (SIFT scores). Next, Mutation_overlap measures SNP variants (the overlap in mutations), while Frequency measures the frequency of mutational overlaps. For every of the six super populations (such as African, Mixed American or East Asian) as well as for all populations, a separate instance of Mutations_overlap and Frequency is invoked in the last two parallel loops.");
 
         DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
         this.workflowRepository.save(dbWorkflow);

@@ -15,9 +15,13 @@
     </template>
 
     <template v-slot:item="{ item }">
-      <tr @click="goToDetails(item.id)">
-        <td>{{ item.name }}</td>
-        <td>{{ item.description }}</td>
+      <tr>
+        <td>
+          <a @click="goToDetails(item.id)">{{ item.name }}</a>
+        </td>
+        <td>{{ truncate(item.description, 80) }}</td>
+        <td>{{ item.createdAt }}</td>
+        <td>{{ item.createdBy }}</td>
       </tr>
     </template>
 
@@ -39,7 +43,10 @@ export default {
     headers: [
 
       {text: 'Name', value: 'name', sortable: true, width: '20%'},
-      {text: 'Description', value: 'description', sortable: true, width: '80%'},
+      {text: 'Description', value: 'description', sortable: true, width: '40%'},
+
+      {text: 'Created at', value: 'createdAt', sortable: true, width: '20%'},
+      {text: 'Created by', value: 'createdBy', sortable: true, width: '20%'},
 
     ],
 
@@ -55,6 +62,10 @@ export default {
   },
 
   methods: {
+
+    truncate(text, length) {
+      return text.length > length ? text.substring(0, length) + '...' : text
+    },
 
     goToDetails(id) {
       this.$router.push({ name: 'workflow', params: { id } });

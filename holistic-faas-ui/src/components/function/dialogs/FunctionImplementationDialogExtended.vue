@@ -20,20 +20,29 @@
 
       <v-card-text>
 
-        <v-select
-            v-model="functionType"
-            :items="functionTypes"
-            item-text="name"
-            item-value="id"
-            label="Function Type"
-            :disabled="implementation"
-        ></v-select>
+        <v-form v-model="isValid">
 
-        <v-file-input
-            v-model="currentFile"
-            truncate-length="60"
-            @change="selectFile"
-        ></v-file-input>
+          <v-select
+              v-model="functionType"
+              :items="functionTypes"
+              item-text="name"
+              item-value="id"
+              label="Function Type"
+              :disabled="implementation"
+              required
+              :rules="[v => !!v || 'Function Type is required']"
+          ></v-select>
+
+          <v-file-input
+              v-model="currentFile"
+              truncate-length="60"
+              @change="selectFile"
+              label="Function implementation"
+              required
+              :rules="[v => !!v || 'Function implementation is required']"
+          ></v-file-input>
+
+        </v-form>
 
       </v-card-text>
 
@@ -41,7 +50,7 @@
 
         <v-spacer></v-spacer>
         <v-btn color="neutral" @click="close">Close</v-btn>
-        <v-btn color="primary" @click="save">Save</v-btn>
+        <v-btn color="primary" :disabled="!isValid" @click="save">Save</v-btn>
 
       </v-card-actions>
 
@@ -73,6 +82,7 @@ export default {
   data: () => ({
     currentFile: null,
     functionType: null,
+    isValid: false
   }),
 
   computed: {

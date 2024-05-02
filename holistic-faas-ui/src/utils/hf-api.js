@@ -21,6 +21,12 @@ apiClient.interceptors.request.use(
 
 export default {
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Function
+
+    addFunction(functionWithType) {
+        return apiClient.post('/function/add', functionWithType);
+    },
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Function type
@@ -193,7 +199,7 @@ export default {
     },
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Provider options and functions
+    // Workflow
 
     getAllWorkflows() {
         return apiClient.get('/workflow/getAll');
@@ -210,15 +216,15 @@ export default {
         return apiClient.get('/workflow/' + id +'/getDeployments');
     },
 
-    uploadWorkflow(file) {
+    uploadWorkflow(file, workflow) {
 
         let formData = new FormData();
 
         formData.append('file', file);
+        formData.append('workflow', new Blob([JSON.stringify(workflow)], {type: 'application/json'}));
 
         return apiClient.post('/workflow/add', formData, {
             headers: {'Content-Type': 'multipart/form-data'},
-            // params: {userId: userId}
         });
     },
 
@@ -226,13 +232,22 @@ export default {
         return apiClient.get('/workflow/' + id + '/implementations');
     },
 
-    createWorkflowDeployment(editItems) {
-        return apiClient.post('/workflow_deployment/add', editItems);
-    },
 
     prepareWorkflowDeployment(id) {
         return apiClient.post('/workflow/' + id + '/prepareWorkflowDeployment');
     },
+
+    createWorkflow(workflow) {
+        return apiClient.post('/workflow/add', workflow);
+    },
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Workflow deployment
+
+    createWorkflowDeployment(editItems) {
+        return apiClient.post('/workflow_deployment/add', editItems);
+    },
+
 
     getWorkflowFunctionDeployments(id) {
         return apiClient.get('/workflow_deployment/' + id + '/getFunctionDeployments');
@@ -246,6 +261,7 @@ export default {
 
     migrateWorkflowDeployment(migration) {
         return apiClient.post('/workflow_deployment/migrate', migration);
-    }
+    },
+
 
 }

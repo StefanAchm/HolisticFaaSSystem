@@ -12,6 +12,8 @@ public class APIFunction {
 
     private APIFunctionType functionType;
 
+    private UUID workflowId;
+
     public UUID getId() {
         return id;
     }
@@ -34,6 +36,14 @@ public class APIFunction {
 
     public void setFunctionType(APIFunctionType functionType) {
         this.functionType = functionType;
+    }
+
+    public UUID getWorkflowId() {
+        return workflowId;
+    }
+
+    public void setWorkflowId(UUID workflowId) {
+        this.workflowId = workflowId;
     }
 
     public static APIFunction fromDBFunction(DBFunction dbFunction) {

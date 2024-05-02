@@ -30,7 +30,7 @@ public class UserCredentialsService {
         this.uploadFileService = uploadFileService;
     }
 
-    public void addOrUpdate(MultipartFile file, APIUserCredentials apiUserCredentials, boolean alwaysCreate) {
+    public APIUserCredentials addOrUpdate(MultipartFile file, APIUserCredentials apiUserCredentials, boolean alwaysCreate) {
 
         DBUser dbUser = this.userRepository
                 .findById(apiUserCredentials.getUserId())
@@ -57,6 +57,8 @@ public class UserCredentialsService {
         dbUserCredentials.setCredentialsFilePath(path);
 
         this.userCredentialsRepository.save(dbUserCredentials);
+
+        return APIUserCredentials.fromDBUserCredentials(dbUserCredentials);
 
     }
 

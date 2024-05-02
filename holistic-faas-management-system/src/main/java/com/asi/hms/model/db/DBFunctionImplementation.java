@@ -51,4 +51,7 @@ public class DBFunctionImplementation {
     public void setFunctionType(DBFunctionType functionType) {
         this.functionType = functionType;
     }
+
+
+
 }

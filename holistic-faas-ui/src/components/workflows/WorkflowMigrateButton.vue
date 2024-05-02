@@ -136,6 +136,7 @@ export default {
             if (!response.data.valid) {
               this.workflowDeploymentForMigration = response.data
               this.deploymentDialogVisible = true
+              this.$root.snackbar.showWarning({message: 'Could not auto migrate, please manually select deployment details'})
             } else {
               this.close(response.data, this.$store.state.username)
             }
@@ -157,6 +158,7 @@ export default {
         if (!response.data.valid) {
           this.workflowDeploymentForMigration = response.data
           this.deploymentDialogVisible = true
+          this.$root.snackbar.showWarning({message: 'Could not auto migrate, please manually select deployment details'})
         } else {
           this.close(response.data, migration.target)
         }

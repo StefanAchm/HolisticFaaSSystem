@@ -1,32 +1,45 @@
 <template>
 
-  <!-- Header -->
-  <v-toolbar flat fluid>
-    <v-toolbar-title>
-      Deployment: {{ workflowDeployment.name }} of {{ workflowDeployment.user?.username }}
-    </v-toolbar-title>
+  <div>
 
-    <v-spacer></v-spacer>
+    <!-- Header -->
+    <v-toolbar flat fluid>
+      <v-toolbar-title>
+        {{ workflowDeployment.name }}
+      </v-toolbar-title>
 
-    <!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
-    <v-btn
-        :disabled="undeployedFunctions?.length === 0"
-        color="primary"
-        class="mx-2"
-        @click="deployAll">
+      <v-spacer></v-spacer>
 
-      Deploy ({{ undeployedFunctions?.length }})
+      <!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
+      <v-btn
+          :disabled="undeployedFunctions?.length === 0"
+          color="primary"
+          class="mx-2"
+          @click="deployAll">
 
-    </v-btn>
+        Deploy ({{ undeployedFunctions?.length }})
 
-    <WorkflowMigrateButton
-        :workflow-deployment="workflowDeployment"
-    ></WorkflowMigrateButton>
+      </v-btn>
 
-    <!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
+      <WorkflowMigrateButton
+          :workflow-deployment="workflowDeployment"
+      ></WorkflowMigrateButton>
 
-  </v-toolbar>
+      <!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
 
+    </v-toolbar>
+
+    <!-- Add a v-card here to display the workflow details -->
+    <v-card elevation="0" class="pb-6">
+      <!--      <v-card-title> Details: </v-card-title>-->
+      <v-card-text>
+        <strong> User: </strong>
+        {{ workflowDeployment.user?.username }}
+      </v-card-text>
+
+    </v-card>
+
+  </div>
 
 </template>
 

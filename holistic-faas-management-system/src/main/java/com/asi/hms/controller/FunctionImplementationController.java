@@ -22,30 +22,24 @@ public class FunctionImplementationController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> add(@RequestPart("file") MultipartFile file,
+    public ResponseEntity<APIFunctionImplementation> add(@RequestPart("file") MultipartFile file,
                                       @RequestPart(value = "apiFunction") APIFunctionImplementation apiFunctionImplementation) {
 
-        this.functionImplementationService.add(file, apiFunctionImplementation);
-
-        return ResponseEntity.ok("File uploaded");
+        return ResponseEntity.ok(this.functionImplementationService.add(file, apiFunctionImplementation));
 
     }
 
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> update(@RequestPart("file") MultipartFile file,
+    public ResponseEntity<APIFunctionImplementation> update(@RequestPart("file") MultipartFile file,
                                       @RequestPart(value = "apiFunction") APIFunctionImplementation apiFunctionImplementation) {
 
-        this.functionImplementationService.update(file, apiFunctionImplementation);
-
-        return ResponseEntity.ok("File uploaded");
+        return ResponseEntity.ok(this.functionImplementationService.update(file, apiFunctionImplementation));
 
     }
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIFunctionImplementation>> getAllFunctionImplementations() {
-
         return ResponseEntity.ok(this.functionImplementationService.getAllFunction());
-
     }
 
 }

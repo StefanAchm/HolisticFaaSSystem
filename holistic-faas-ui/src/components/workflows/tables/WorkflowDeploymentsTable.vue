@@ -4,12 +4,12 @@
       :items="deployments"
       item-key="id"
       class="elevation-1"
-      loading="deployments.length === 0"
+      :loading="loading"
   >
 
     <template v-slot:item="{ item }">
-      <tr @click="goToDetails(item.id)">
-        <td>{{ item.name }}</td>
+      <tr>
+        <td><a @click="goToDetails(item.id)">{{ item.name }}</a></td>
         <td>{{ item.user.username }}</td>
         <td>{{ item.deploymentDetails }}</td>
       </tr>
@@ -45,6 +45,12 @@ export default {
   },
 
   created() {
+  },
+
+  computed: {
+    loading() {
+      return false
+    }
   },
 
   watch: {

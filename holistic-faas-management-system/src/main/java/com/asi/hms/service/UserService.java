@@ -36,13 +36,15 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public void register(APIUser user) {
+    public APIUser register(APIUser user) {
 
         DBUser dbUser = new DBUser();
         dbUser.setUsername(user.getUsername());
         dbUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         this.userRepository.save(dbUser);
+
+        return APIUser.fromDBUser(dbUser);
 
     }
 

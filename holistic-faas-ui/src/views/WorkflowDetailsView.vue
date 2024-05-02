@@ -2,7 +2,9 @@
 
   <v-card>
 
-    <WorkflowBreadCrumbs></WorkflowBreadCrumbs>
+    <WorkflowBreadCrumbs
+        :workflow="workflow"
+    ></WorkflowBreadCrumbs>
 
     <WorkflowDetailsHeader
         :workflow="workflow"
@@ -13,6 +15,7 @@
         :workflow="workflow"
         :deployments="deployments"
         :implementations="implementations"
+        @workflow-updated="loadWorkflow"
     />
 
   </v-card>

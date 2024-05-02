@@ -2,7 +2,10 @@
 
   <v-card>
 
-    <WorkflowBreadCrumbs></WorkflowBreadCrumbs>
+    <WorkflowBreadCrumbs
+        :workflow="workflow"
+        :workflow-deployment="workflowDeployment"
+    ></WorkflowBreadCrumbs>
 
     <WorkflowDeploymentHeader
         :workflow-deployment="workflowDeployment"
@@ -28,10 +31,12 @@ export default {
 
   data: () => ({
     workflowDeployment: {},
+    workflow: {}
   }),
 
   created() {
     this.loadWorkflowDeployment()
+    this.loadWorkflow()
   },
 
   watch: {
@@ -43,6 +48,17 @@ export default {
   computed: {},
 
   methods: {
+
+    loadWorkflow() {
+      HfApi.getWorkflow(this.$route.params.id)
+          .then(response => {
+            this.workflow = response.data;
+          })
+          .catch(error => {
+            console.error("Failed to load workflows:", error);
+          });
+
+    },
 
     loadWorkflowDeployment() {
 

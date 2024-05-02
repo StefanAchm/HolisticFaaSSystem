@@ -47,9 +47,20 @@ public class WorkflowService {
         return this.workflowRepository.findById(id).map(APIWorkflow::fromDBWorkflow).orElse(null);
     }
 
-    public APIWorkflow add(MultipartFile file) {
+    public APIWorkflow add(MultipartFile file, APIWorkflow workflowFromRequest) {
 
-        APIWorkflow workflow = AfclParser.getWorkflow(file);
+        APIWorkflow workflow = new APIWorkflow();
+
+        if(file != null) {
+            APIWorkflow workflowFromFile = AfclParser.getWorkflow(file);
+            workflow.setName(workflowFromFile.getName());
+            workflow.setFunctions(workflowFromFile.getFunctions());
+        }
+
+        if(workflowFromRequest != null) {
+            workflow.setName(workflowFromRequest.getName());
+            workflow.setDescription(workflowFromRequest.getDescription());
+        }
 
         DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
         this.workflowRepository.save(dbWorkflow);
@@ -138,4 +149,13 @@ public class WorkflowService {
         return apiWorkflowDeployment;
 
     }
+
+    public APIWorkflow add(APIWorkflow workflow) {
+
+        DBWorkflow dbWorkflow = this.workflowRepository.save(DBWorkflow.fromAPIWorkflow(workflow));
+
+        return APIWorkflow.fromDBWorkflow(dbWorkflow);
+
+    }
+
 }

@@ -23,8 +23,8 @@
         </v-tab-item>
 
         <v-tab-item key="abstract">
-          <WorkflowAbstract
-              @dialog-closed="this.$emit('workflow-updated')"
+          <WorkflowFunctionsTable
+              @dialog-closed="$emit('workflow-updated')"
               :workflow="workflow"/>
         </v-tab-item>
 
@@ -42,7 +42,7 @@
 
 <script>
 
-import WorkflowAbstract from "@/components/workflows/tables/WorkflowFunctionsTable.vue";
+import WorkflowFunctionsTable from "@/components/workflows/tables/WorkflowFunctionsTable.vue";
 import WorkflowDeployment from "@/components/workflows/tables/WorkflowDeploymentsTable.vue";
 import FunctionImplementations from "@/components/workflows/tables/WorkflowImplementationsTable.vue";
 
@@ -54,7 +54,7 @@ export default {
     deployments: {}
   },
 
-  components: {FunctionImplementations, WorkflowDeployment, WorkflowAbstract},
+  components: {FunctionImplementations, WorkflowDeployment, WorkflowFunctionsTable},
 
   data() {
     return {

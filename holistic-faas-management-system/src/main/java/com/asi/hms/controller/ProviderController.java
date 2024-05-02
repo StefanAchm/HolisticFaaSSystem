@@ -21,9 +21,7 @@ public class ProviderController {
 
     @GetMapping(value = "/getProviderOptions")
     public ResponseEntity<List<APIProviderOptions>> getProviderOptions() {
-
         return ResponseEntity.ok(this.providerService.getProviderOptions());
-
     }
 
 }

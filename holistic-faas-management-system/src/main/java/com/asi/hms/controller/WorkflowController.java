@@ -25,52 +25,39 @@ public class WorkflowController {
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIWorkflow>> getAllWorkflows() {
-
         return ResponseEntity.ok(this.workflowService.getAllWorkflows());
-
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity<APIWorkflow> getWorkflow(@RequestParam UUID id) {
-
         return ResponseEntity.ok(this.workflowService.getWorkflow(id));
-
     }
 
     @GetMapping(value = "/{workflowId}/getDeployments")
     public ResponseEntity<List<APIWorkflowDeployment>> getDeployments(@PathVariable UUID workflowId) {
-
         return ResponseEntity.ok(this.workflowService.getDeployments(workflowId));
-
     }
 
     @GetMapping(value = "/{workflowId}/implementations")
     public ResponseEntity<List<APIFunctionImplementation>> getWorkflowFunctionImplementations(@PathVariable UUID workflowId) {
-        List<APIFunctionImplementation> implementations = this.workflowService.getWorkflowFunctionImplementations(workflowId);
-        return ResponseEntity.ok(implementations);
+        return ResponseEntity.ok(this.workflowService.getWorkflowFunctionImplementations(workflowId));
     }
 
     @GetMapping(value = "/{workflowId}/types")
     public ResponseEntity<List<APIFunctionType>> getWorkflowFunctionTypes(@PathVariable UUID workflowId) {
-        List<APIFunctionType> types = this.workflowService.getWorkflowFunctionTypes(workflowId);
-        return ResponseEntity.ok(types);
+        return ResponseEntity.ok(this.workflowService.getWorkflowFunctionTypes(workflowId));
     }
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<APIWorkflow> add(@RequestPart("file") MultipartFile file) {
+    public ResponseEntity<APIWorkflow> add(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                      @RequestPart(value = "workflow") APIWorkflow workflow) {
 
-        APIWorkflow workflow = this.workflowService.add(file);
-
-        return ResponseEntity.ok(workflow);
+        return ResponseEntity.ok(this.workflowService.add(file, workflow));
 
     }
 
     @PostMapping(value = "{workflowId}/prepareWorkflowDeployment")
     public ResponseEntity<APIWorkflowDeployment> prepareWorkflowDeployment(@PathVariable UUID workflowId) {
-
-        APIWorkflowDeployment deployment = this.workflowService.prepareWorkflowDeployment(workflowId);
-
-        return ResponseEntity.ok(deployment);
-
+        return ResponseEntity.ok(this.workflowService.prepareWorkflowDeployment(workflowId));
     }
 }

@@ -14,263 +14,259 @@
 
       </v-card-title>
 
-      <v-card-text>
+      <v-form v-model="isValid">
 
-        <v-text-field
-            v-model="name"
-            label="Name of the Deployment"
-            style="width: 30%"
-        ></v-text-field>
-
-      </v-card-text>
+        <v-card-text>
 
 
-      <v-simple-table class="table-styling">
-        <template v-slot:default>
-
-          <thead>
-
-          <tr>
-            <th class="text-left">Name</th>
-            <th class="text-left">Type</th>
-            <th class="text-left">Implementation</th>
-            <th class="text-left">Handler</th>
-            <th class="text-left">Provider</th>
-            <th class="text-left">Region</th>
-            <th class="text-left">TimeoutSecs</th>
-            <th class="text-left">Memory</th>
-            <th class="text-left">Runtime</th>
-            <!--            <th class="text-left">User</th>-->
-          </tr>
-          </thead>
-
-          <tbody>
-
-          <tr
-              class="table-styling-common-row grey lighten-3"
-          >
-            <td>
-
-              <!--              <v-text-field-->
-              <!--                  class="column-name"-->
-              <!--                  type="text"-->
-              <!--                  v-model="common.functionName"-->
-              <!--                  disabled-->
-              <!--              ></v-text-field>-->
-            </td>
-
-            <td>
-
-              <!--              <v-text-field-->
-              <!--                  class="column-name"-->
-              <!--                  type="text"-->
-              <!--                  v-model="common.functionName"-->
-              <!--                  disabled-->
-              <!--              ></v-text-field>-->
-            </td>
-
-            <td>
-
-              <!--              <v-autocomplete-->
-              <!--                  class="column-implementation"-->
-              <!--                  type="text"-->
-              <!--                  v-model="common.functionImplementation.id"-->
-              <!--              ></v-autocomplete>-->
-            </td>
-
-            <td>
-              <v-text-field
-                  class="column-handler"
-                  type="text"
-                  v-model="common.functionDeployment.handler"
-                  @input="updateEditItemsForHandler"
-              ></v-text-field>
-            </td>
-
-            <td>
-              <v-autocomplete
-                  class="column-provider"
-                  v-model="common.functionDeployment.provider"
-                  :items="providers"
-                  item-text="title"
-                  item-value="value"
-                  @change="updateEditItemsForProvider"
-              ></v-autocomplete>
-
-            </td>
-
-            <td>
-              <v-autocomplete
-                  class="column-region"
-                  v-model="common.functionDeployment.region"
-                  :items="common.regions"
-                  item-text="title"
-                  item-value="value"
-                  @change="updateEditItemsForRegion"
-              ></v-autocomplete>
-            </td>
+          <v-text-field
+              v-model="name"
+              label="Name of the Deployment"
+              style="width: 30%"
+              required
+              :rules="[v => !!v || 'Name is required']"
+          ></v-text-field>
 
 
-            <td>
-              <v-text-field
-                  class="column-timeoutSecs"
-                  type="number"
-                  v-model="common.functionDeployment.timeoutSecs"
-                  @input="updateEditItemsForTimeoutSecs"
-              ></v-text-field>
-            </td>
+        </v-card-text>
 
 
-            <td>
-              <v-text-field
-                  class="column-memory"
-                  type="number"
-                  v-model="common.functionDeployment.memory"
-                  @input="updateEditItemsForMemory"
-              ></v-text-field>
+        <v-simple-table class="table-styling">
+          <template v-slot:default>
 
-            </td>
+            <thead>
 
-            <td>
-              <v-autocomplete
-                  class="column-runtime"
-                  v-model="common.functionDeployment.runtime"
-                  :items="common.runtimes"
-                  item-text="title"
-                  item-value="value"
-                  @change="updateEditItemsForRuntimes"
-              ></v-autocomplete>
-            </td>
+            <tr>
+              <th class="text-left">Name</th>
+              <th class="text-left">Type</th>
+              <th class="text-left">Implementation</th>
+              <th class="text-left">Handler</th>
+              <th class="text-left">Provider</th>
+              <th class="text-left">Region</th>
+              <th class="text-left">TimeoutSecs</th>
+              <th class="text-left">Memory</th>
+              <th class="text-left">Runtime</th>
+              <!--            <th class="text-left">User</th>-->
+            </tr>
+            </thead>
 
-            <td>
+            <tbody>
 
-              <!--              <v-text-field-->
-              <!--                  class="column-username"-->
-              <!--                  type="text"-->
-              <!--                  v-model="common.userName"-->
-              <!--                  disabled-->
-              <!--              ></v-text-field>-->
+            <tr
+                class="table-styling-common-row grey lighten-3"
+            >
+              <td>
 
-            </td>
+              </td>
 
-          </tr>
+              <td>
 
-          <tr
-              v-for="item in editItems"
-              :key="item.id"
-              class="table-styling-rows grey lighten-5"
-          >
-            <td>
+              </td>
 
-              <v-text-field
-                  class="column-name"
-                  type="text"
-                  v-model="item.function.name"
-                  disabled></v-text-field>
-            </td>
+              <td>
 
-            <td>
+              </td>
 
-              <v-text-field
-                  class="column-name"
-                  type="text"
-                  v-model="item.functionType.name"
-                  disabled></v-text-field>
-            </td>
+              <td>
+                <v-text-field
+                    class="column-handler"
+                    type="text"
+                    v-model="common.functionDeployment.handler"
+                    @input="updateEditItemsForHandler"
+                ></v-text-field>
+              </td>
 
-            <td>
+              <td>
+                <v-autocomplete
+                    class="column-provider"
+                    v-model="common.functionDeployment.provider"
+                    :items="providers"
+                    item-text="title"
+                    item-value="value"
+                    @change="updateEditItemsForProvider"
+                ></v-autocomplete>
 
-              <v-autocomplete
-                  class="column-implementation"
-                  type="text"
-                  v-model="item.functionImplementation.id"
-                  :items="item.functionImplementations"
-                  item-text="title"
-                  item-value="value"
-              ></v-autocomplete>
-            </td>
+              </td>
 
-            <td>
-              <v-text-field
-                  class="column-handler"
-                  type="text"
-                  v-model="item.functionDeployment.handler"
-              ></v-text-field>
-            </td>
-
-            <td>
-              <v-autocomplete
-                  class="column-provider"
-                  v-model="item.functionDeployment.provider"
-                  :items="providers"
-                  item-text="title"
-                  item-value="value"
-                  @change="updateItem(item)"
-              ></v-autocomplete>
-
-            </td>
-
-            <td>
-              <v-autocomplete
-                  class="column-region"
-                  v-model="item.functionDeployment.region"
-                  :items="item.regions"
-                  item-text="title"
-                  item-value="value"
-              ></v-autocomplete>
-            </td>
+              <td>
+                <v-autocomplete
+                    class="column-region"
+                    v-model="common.functionDeployment.region"
+                    :items="common.regions"
+                    item-text="title"
+                    item-value="value"
+                    @change="updateEditItemsForRegion"
+                ></v-autocomplete>
+              </td>
 
 
-            <td>
-              <v-text-field
-                  class="column-timeoutSecs"
-                  type="number"
-                  v-model="item.functionDeployment.timeoutSecs"
-              ></v-text-field>
-            </td>
+              <td>
+                <v-text-field
+                    class="column-timeoutSecs"
+                    type="number"
+                    v-model="common.functionDeployment.timeoutSecs"
+                    @input="updateEditItemsForTimeoutSecs"
+                ></v-text-field>
+              </td>
 
 
-            <td>
-              <v-text-field
-                  class="column-memory"
-                  type="number"
-                  v-model="item.functionDeployment.memory"
-              ></v-text-field>
+              <td>
+                <v-text-field
+                    class="column-memory"
+                    type="number"
+                    v-model="common.functionDeployment.memory"
+                    @input="updateEditItemsForMemory"
+                ></v-text-field>
 
-            </td>
+              </td>
 
-            <td>
-              <v-autocomplete
-                  class="column-runtime"
-                  v-model="item.functionDeployment.runtime"
-                  :items="item.runtimes"
-                  item-text="title"
-                  item-value="value"
-              ></v-autocomplete>
-            </td>
+              <td>
+                <v-autocomplete
+                    class="column-runtime"
+                    v-model="common.functionDeployment.runtime"
+                    :items="common.runtimes"
+                    item-text="title"
+                    item-value="value"
+                    @change="updateEditItemsForRuntimes"
+                ></v-autocomplete>
+              </td>
 
-            <td>
+              <td>
 
-              <!--              <v-text-field-->
-              <!--                  class="column-username"-->
-              <!--                  type="text"-->
-              <!--                  v-model="item.userName"-->
-              <!--                  disabled></v-text-field>-->
-            </td>
+              </td>
 
-          </tr>
+            </tr>
 
-          </tbody>
+            <tr
+                v-for="item in editItems"
+                :key="item.id"
+                class="table-styling-rows grey lighten-5"
+            >
+              <td>
 
-        </template>
-      </v-simple-table>
+                <v-text-field
+                    class="column-name"
+                    type="text"
+                    v-model="item.function.name"
+                    disabled></v-text-field>
+              </td>
+
+              <td>
+
+                <v-text-field
+                    class="column-name"
+                    type="text"
+                    v-model="item.functionType.name"
+                    disabled></v-text-field>
+              </td>
+
+              <td>
+
+                <v-autocomplete
+                    class="column-implementation"
+                    type="text"
+                    v-model="item.functionImplementation.id"
+                    :items="item.functionImplementations"
+                    item-text="title"
+                    item-value="value"
+                ></v-autocomplete>
+              </td>
+
+              <td>
+                <v-text-field
+                    class="column-handler"
+                    type="text"
+                    v-model="item.functionDeployment.handler"
+                    required
+                    :rules="[v => !!v || 'Handler is required']"
+                ></v-text-field>
+              </td>
+
+              <td>
+                <v-autocomplete
+                    class="column-provider"
+                    v-model="item.functionDeployment.provider"
+                    :items="providers"
+                    item-text="title"
+                    item-value="value"
+                    @change="updateItem(item)"
+                    required
+                    :rules="[v => !!v || 'Provider is required']"
+                ></v-autocomplete>
+
+              </td>
+
+              <td>
+                <v-autocomplete
+                    class="column-region"
+                    v-model="item.functionDeployment.region"
+                    :items="item.regions"
+                    item-text="title"
+                    item-value="value"
+                    required
+                    :rules="[v => !!v || 'Region is required']"
+                ></v-autocomplete>
+              </td>
+
+
+              <td>
+                <v-text-field
+                    class="column-timeoutSecs"
+                    type="number"
+                    v-model="item.functionDeployment.timeoutSecs"
+                    required
+                    :rules="[v => !!v || 'TimeoutSecs is required']"
+                ></v-text-field>
+              </td>
+
+
+              <td>
+                <v-text-field
+                    class="column-memory"
+                    type="number"
+                    v-model="item.functionDeployment.memory"
+                    required
+                    :rules="[v => !!v || 'Memory is required']"
+                ></v-text-field>
+
+              </td>
+
+              <td>
+                <v-autocomplete
+                    class="column-runtime"
+                    v-model="item.functionDeployment.runtime"
+                    :items="item.runtimes"
+                    item-text="title"
+                    item-value="value"
+                    required
+                    :rules="[v => !!v || 'Runtime is required']"
+                ></v-autocomplete>
+              </td>
+
+              <td>
+
+                <!--              <v-text-field-->
+                <!--                  class="column-username"-->
+                <!--                  type="text"-->
+                <!--                  v-model="item.userName"-->
+                <!--                  disabled></v-text-field>-->
+              </td>
+
+            </tr>
+
+            </tbody>
+
+          </template>
+        </v-simple-table>
+
+      </v-form>
 
       <v-card-actions>
 
         <v-spacer></v-spacer>
 
         <v-btn color="neutral" @click="close">Close</v-btn>
-        <v-btn color="primary" @click="save">Save</v-btn>
+        <v-btn color="primary" :disabled="!isValid" @click="save">Save</v-btn>
 
       </v-card-actions>
 
@@ -316,8 +312,9 @@ export default {
         userName: '',
         regions: [],
         runtimes: [],
-      }
+      },
     },
+    isValid: false
 
   }),
 

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "workflows")
-public class DBWorkflow {
+public class DBWorkflow extends Auditable {
 
     @Id
     @GeneratedValue
@@ -16,6 +16,7 @@ public class DBWorkflow {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "workflow")

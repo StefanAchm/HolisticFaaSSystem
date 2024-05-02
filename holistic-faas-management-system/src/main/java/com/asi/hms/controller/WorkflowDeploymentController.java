@@ -22,16 +22,12 @@ public class WorkflowDeploymentController {
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIWorkflowDeployment>> getAllWorkflowDeployments() {
-
         return ResponseEntity.ok(this.workflowDeploymentService.getAllWorkflowDeployments());
-
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity<APIWorkflowDeployment> getWorkflowDeployment(@RequestParam UUID id) {
-
         return ResponseEntity.ok(this.workflowDeploymentService.getWorkflowDeployment(id));
-
     }
 
     @PostMapping(value = "/add")

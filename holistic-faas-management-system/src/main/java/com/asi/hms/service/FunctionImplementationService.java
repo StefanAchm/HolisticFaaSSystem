@@ -67,7 +67,7 @@ public class FunctionImplementationService {
 
     }
 
-    public void update(MultipartFile file, APIFunctionImplementation apiFunctionImplementation) {
+    public APIFunctionImplementation update(MultipartFile file, APIFunctionImplementation apiFunctionImplementation) {
 
         DBFunctionImplementation dbFunctionImplementation = this.functionImplementationRepository
                 .findById(apiFunctionImplementation.getId())
@@ -79,8 +79,8 @@ public class FunctionImplementationService {
         dbFunctionImplementation.setFilePath(path);
         this.functionImplementationRepository.save(dbFunctionImplementation);
 
+        return APIFunctionImplementation.fromDBFunctionImplementation(dbFunctionImplementation);
+
     }
-
-
 
 }

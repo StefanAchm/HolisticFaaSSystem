@@ -5,6 +5,7 @@ import com.asi.hms.enums.RuntimeInterface;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +24,8 @@ public class JacksonConfig {
         module.addSerializer(RegionInterface.class, new RegionInterface.RegionSerializer());
         module.addSerializer(RuntimeInterface.class, new RuntimeInterface.RuntimeSerializer());
         mapper.registerModule(module);
+
+        mapper.registerModule(new JavaTimeModule());
 
         return mapper;
 

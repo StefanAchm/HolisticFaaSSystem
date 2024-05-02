@@ -2,10 +2,11 @@ package com.asi.hms.model.api;
 
 import com.asi.hms.model.db.DBWorkflow;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class APIWorkflow {
+public class APIWorkflow extends APIAudit {
 
     private UUID id;
 
@@ -14,6 +15,10 @@ public class APIWorkflow {
     private String description;
 
     private List<APIFunction> functions;
+
+    public APIWorkflow() {
+        this.functions = new ArrayList<>();
+    }
 
     public UUID getId() {
         return id;
@@ -48,11 +53,20 @@ public class APIWorkflow {
     }
 
     public static APIWorkflow fromDBWorkflow(DBWorkflow dbWorkflow) {
+
         APIWorkflow apiWorkflow = new APIWorkflow();
         apiWorkflow.setId(dbWorkflow.getId());
         apiWorkflow.setName(dbWorkflow.getName());
         apiWorkflow.setDescription(dbWorkflow.getDescription());
-        apiWorkflow.setFunctions(dbWorkflow.getFunctions().stream().map(APIFunction::fromDBFunction).toList());
+
+        if(dbWorkflow.getFunctions() != null) {
+            apiWorkflow.setFunctions(dbWorkflow.getFunctions().stream().map(APIFunction::fromDBFunction).toList());
+        }
+
+        apiWorkflow.setCreatedAt(dbWorkflow.getCreatedAt());
+        apiWorkflow.setCreatedBy(dbWorkflow.getCreatedBy().getUsername());
+
         return apiWorkflow;
+
     }
 }

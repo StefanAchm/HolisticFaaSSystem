@@ -8,18 +8,10 @@
 
     <v-spacer></v-spacer>
 
-    <input
-        type="file"
-        ref="fileInput"
-        @change="onFileSelected"
-        style="display: none"
-        accept=".yaml, .yml"
-    />
-
     <v-btn
         color="primary"
         class="mx-2"
-        @click="openFileSelect">
+        @click="openWorkflowDialog">
       <v-icon
           left>
         mdi-plus
@@ -27,21 +19,28 @@
       Add
     </v-btn>
 
+    <WorkflowDialog
+        @workflow-added="$emit('workflow-added')"
+        :dialog="dialog"/>
+
   </v-toolbar>
 
 </template>
 
 <script>
 
-import HfApi from "@/utils/hf-api";
+import WorkflowDialog from "@/components/workflows/WorkflowDialog.vue";
 
 export default {
+  components: {WorkflowDialog},
 
   props: {
 
   },
 
   data: () => ({
+
+    dialog: false
 
   }),
 
@@ -55,20 +54,9 @@ export default {
 
   methods: {
 
-    openFileSelect() {
-      this.$refs.fileInput.click();
+    openWorkflowDialog() {
+      this.dialog = true
     },
-
-    onFileSelected(event) {
-      HfApi.uploadWorkflow(event.target.files[0])
-        .then(() => {
-          this.$emit('workflow-added');
-          this.$root.snackbar.showSuccess({message: 'Workflow added'})
-        })
-        .catch(() => {
-          this.$root.snackbar.showError({message: 'Failed to add workflow'})
-        })
-    }
 
   }
 

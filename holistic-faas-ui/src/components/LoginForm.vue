@@ -41,9 +41,9 @@
 
               <v-alert
                   dense
-                  outlined
                   v-if="error"
                   type="error"
+                  class="my-5"
               >
                 {{ error }}
               </v-alert>

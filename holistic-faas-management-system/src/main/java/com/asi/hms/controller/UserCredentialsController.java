@@ -20,37 +20,27 @@ public class UserCredentialsController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> add(@RequestPart("file") MultipartFile file,
+    public ResponseEntity<APIUserCredentials> add(@RequestPart("file") MultipartFile file,
                                       @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
 
-        this.userCredentialsService.addOrUpdate(file, apiUserCredentials, true);
-
-        return ResponseEntity.ok("Credentials added");
+        return ResponseEntity.ok(this.userCredentialsService.addOrUpdate(file, apiUserCredentials, true));
 
     }
 
     @PostMapping(value = "/addOrUpdate")
-    public ResponseEntity<String> addOrUpdate(@RequestPart("file") MultipartFile file,
+    public ResponseEntity<APIUserCredentials> addOrUpdate(@RequestPart("file") MultipartFile file,
                                               @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
-
-        this.userCredentialsService.addOrUpdate(file, apiUserCredentials, false);
-
-        return ResponseEntity.ok("Credentials added");
-
+        return ResponseEntity.ok(this.userCredentialsService.addOrUpdate(file, apiUserCredentials, false));
     }
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<APIUserCredentials>> getAllUser() {
-
         return ResponseEntity.ok(this.userCredentialsService.getAllUser());
-
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<APIUserCredentials>> get(@RequestParam UUID userId) {
-
         return ResponseEntity.ok(this.userCredentialsService.get(userId));
-
     }
 
 }

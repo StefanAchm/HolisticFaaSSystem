@@ -32,12 +32,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody APIUser user) {
-
-        this.userService.register(user);
-
-        return ResponseEntity.ok("User registered");
-
+    public ResponseEntity<APIUser> register(@RequestBody APIUser user) {
+        return ResponseEntity.ok(this.userService.register(user));
     }
 
     @PostMapping("/login")
