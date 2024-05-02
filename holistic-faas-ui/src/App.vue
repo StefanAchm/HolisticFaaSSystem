@@ -114,13 +114,19 @@
 
     </v-main>
 
+    <snackbar ref="snackbar"></snackbar>
+
   </v-app>
 
 </template>
 
 <script>
 
+import snackbar from "@/components/SnackBar.vue";
+
 export default {
+
+  components: {snackbar},
 
   name: 'App',
 
@@ -135,6 +141,10 @@ export default {
       ],
       right: null,
     }
+  },
+
+  mounted() {
+    this.$root.snackbar = this.$refs.snackbar;
   },
 
   methods: {

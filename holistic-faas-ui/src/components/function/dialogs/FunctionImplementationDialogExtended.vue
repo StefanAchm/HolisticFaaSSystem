@@ -104,7 +104,6 @@ export default {
       if (val) {
         this.currentFile = null
         this.functionType = this.implementation?.functionType?.id
-
       }
     }
   },
@@ -130,7 +129,11 @@ export default {
 
       HfApi.uploadFunction(this.currentFile, functionImplementation)
           .then(() => {
+            this.$root.snackbar.showSuccess({message: 'Function implementations added'})
             this.close()
+          })
+          .catch(() => {
+            this.$root.snackbar.showError({message: 'Failed to add function implementations'})
           })
 
     }

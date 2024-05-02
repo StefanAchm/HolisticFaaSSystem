@@ -7,6 +7,7 @@
       :single-select="false"
       item-key="id"
       :items-per-page="10"
+      loading="deployments.length === 0"
   >
 
     <template v-slot:top>

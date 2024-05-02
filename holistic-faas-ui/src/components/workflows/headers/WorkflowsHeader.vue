@@ -63,9 +63,10 @@ export default {
       HfApi.uploadWorkflow(event.target.files[0])
         .then(() => {
           this.$emit('workflow-added');
+          this.$root.snackbar.showSuccess({message: 'Workflow added'})
         })
-        .catch(error => {
-          console.error("Failed to upload workflow:", error);
+        .catch(() => {
+          this.$root.snackbar.showError({message: 'Failed to add workflow'})
         })
     }
 

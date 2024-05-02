@@ -103,11 +103,13 @@ export default {
 
   methods: {
 
-    close(workflowDeployment) {
+    close(workflowDeployment, target) {
 
       // this.$emit('menu-closed', workflowDeployment)
 
       if (workflowDeployment?.workflow?.id && workflowDeployment?.id) {
+
+        this.$root.snackbar.showSuccess({message: 'Workflow migrated to ' + target})
 
         this.$router.push({
           name: 'deployments',
@@ -128,16 +130,17 @@ export default {
 
       migration.workflowDeployment.user.id = this.$store.state.userId
 
-      HfApi.migrateWorkflowDeployment(migration).then((response) => {
+      HfApi.migrateWorkflowDeployment(migration)
+          .then((response) => {
 
-        if (!response.data.isValid) {
-          this.workflowDeploymentForMigration = response.data
-          this.deploymentDialogVisible = true
-        } else {
-          this.close(response.data)
-        }
+            if (!response.data.valid) {
+              this.workflowDeploymentForMigration = response.data
+              this.deploymentDialogVisible = true
+            } else {
+              this.close(response.data, this.$store.state.username)
+            }
 
-      })
+          })
 
     },
 
@@ -155,7 +158,7 @@ export default {
           this.workflowDeploymentForMigration = response.data
           this.deploymentDialogVisible = true
         } else {
-          this.close(response.data)
+          this.close(response.data, migration.target)
         }
 
       })

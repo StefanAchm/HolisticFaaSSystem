@@ -2,10 +2,6 @@
 
   <div>
 
-    <WorkflowDeploymentHeader
-        :workflow-deployment="workflowDeployment"
-    ></WorkflowDeploymentHeader>
-
     <v-data-table
         :headers="headers"
         :items="workflowDeployment.functionDefinitions"
@@ -139,17 +135,16 @@ import FunctionImplementationDialog from "@/components/function/dialogs/Function
 import FunctionDeploymentDialog from "@/components/function/dialogs/FunctionDeploymentDialog.vue";
 import DeploymentIcon from "@/components/function/icons/DeploymentIcon.vue";
 import LinkIcon from "@/components/function/icons/LinkIcon.vue";
-import WorkflowDeploymentHeader from "@/components/workflows/headers/WorkflowDeploymentHeader.vue";
 import hfWebsocket from "@/utils/hf-websocket";
 
 export default {
 
   components: {
-    WorkflowDeploymentHeader, LinkIcon, DeploymentIcon, FunctionDeploymentDialog, FunctionImplementationDialog},
+    LinkIcon, DeploymentIcon, FunctionDeploymentDialog, FunctionImplementationDialog},
 
   props: {
     search: String,
-    workflowDeploymentFromProps: {
+    workflowDeployment: {
       type: Object,
       required: true
     },
@@ -158,8 +153,6 @@ export default {
   data: () => ({
 
     selectedMenuItem: {},
-
-    workflowDeployment: {},
 
     headers: [
 
@@ -204,7 +197,7 @@ export default {
   },
 
   watch: {
-    workflowDeploymentFromProps() {
+    workflowDeployment() {
       this.init()
     }
   },
@@ -214,8 +207,6 @@ export default {
   methods: {
 
     init() {
-
-      this.workflowDeployment = this.workflowDeploymentFromProps
 
       this.selectedMenuItem = {};
 

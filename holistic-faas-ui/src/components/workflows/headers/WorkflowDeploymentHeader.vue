@@ -1,30 +1,32 @@
 <template>
 
-  <div>
-    <!-- Header -->
-    <v-toolbar flat fluid>
-      <v-toolbar-title>Deployment: {{ workflowDeployment.name }} of {{ workflowDeployment.user?.username }} </v-toolbar-title>
+  <!-- Header -->
+  <v-toolbar flat fluid>
+    <v-toolbar-title>
+      Deployment: {{ workflowDeployment.name }} of {{ workflowDeployment.user?.username }}
+    </v-toolbar-title>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-<!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
-      <v-btn
-          :disabled="undeployedFunctions.length === 0"
-          color="primary"
-          class="mx-2"
-          @click="deployAll">Deploy ({{undeployedFunctions.length}})</v-btn>
+    <!--      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Download</v-btn>-->
+    <v-btn
+        :disabled="undeployedFunctions?.length === 0"
+        color="primary"
+        class="mx-2"
+        @click="deployAll">
 
-      <WorkflowMigrateButton
-          :workflow-deployment="workflowDeployment"
-      ></WorkflowMigrateButton>
+      Deploy ({{ undeployedFunctions?.length }})
 
-<!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
+    </v-btn>
 
-    </v-toolbar>
+    <WorkflowMigrateButton
+        :workflow-deployment="workflowDeployment"
+    ></WorkflowMigrateButton>
 
+    <!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
 
+  </v-toolbar>
 
-  </div>
 
 </template>
 
@@ -47,7 +49,7 @@ export default {
 
   computed: {
     undeployedFunctions() {
-      return this.workflowDeployment.functionDefinitions.filter(item => item.functionDeployment.status !== 'DEPLOYED')
+      return this.workflowDeployment.functionDefinitions?.filter(item => item.functionDeployment.status !== 'DEPLOYED')
     }
   },
 

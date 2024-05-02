@@ -1,14 +1,14 @@
 <template>
 
 
-  <v-container>
+  <v-container style="width: 400px">
 
     <v-layout
         align-center
         justify-center
     >
 
-      <v-flex xs12 sm8 md4>
+      <v-flex>
 
         <v-card class="elevation-12">
 
@@ -53,19 +53,21 @@
                   width="100%"
                   color="primary"
                   type="submit"
-                  class="my-6"
+                  class="my-5"
               >
                 Login
               </v-btn>
 
-
-              <v-spacer></v-spacer>
-
+              <div class="line-separator">
+                <hr>
+                <span>or</span>
+                <hr>
+              </div>
 
               <v-btn
                   width="100%"
-                  x-small
                   color="neutral"
+                  class="my-5"
                   @click="changeForm()">
                 Register here
               </v-btn>
@@ -92,17 +94,23 @@
                   width="100%"
                   color="primary"
                   type="submit"
-                  class="my-6"
+                  class="my-5"
               >
                 Register
               </v-btn>
 
+              <div class="line-separator">
+                <hr>
+                <span>or</span>
+                <hr>
+              </div>
 
               <v-btn
                   width="100%"
-                  x-small
                   color="neutral"
-                  @click="changeForm()">
+                  @click="changeForm()"
+                  class="my-5"
+              >
                 Go to login
               </v-btn>
 
@@ -182,10 +190,6 @@ export default {
       return this.registerForm ? 'Register' : 'Sign in';
     },
 
-    getButtonTitle() {
-      return this.registerForm ? 'Login' : 'Register here';
-    },
-
     changeForm() {
       this.init();
       this.registerForm = !this.registerForm;
@@ -196,3 +200,23 @@ export default {
 
 };
 </script>
+
+<style scoped>
+.line-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: grey;
+}
+
+.line-separator hr {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid grey;
+}
+
+.line-separator span {
+  padding: 0 10px;
+  background: white;
+}
+</style>

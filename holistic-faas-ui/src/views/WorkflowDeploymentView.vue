@@ -2,12 +2,15 @@
 
   <v-card>
 
-    <WorkflowBreadCrumps></WorkflowBreadCrumps>
+    <WorkflowBreadCrumbs></WorkflowBreadCrumbs>
+
+    <WorkflowDeploymentHeader
+        :workflow-deployment="workflowDeployment"
+    ></WorkflowDeploymentHeader>
 
     <WorkflowDeploymentTable
-        :workflow-deployment-from-props="workflowDeployment"
+        :workflow-deployment="workflowDeployment"
     ></WorkflowDeploymentTable>
-
 
   </v-card>
 
@@ -15,15 +18,15 @@
 
 <script>
 
-import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
+import WorkflowBreadCrumbs from "@/components/workflows/WorkflowBreadCrumbs.vue";
 import HfApi from "@/utils/hf-api";
 import WorkflowDeploymentTable from "@/components/workflows/tables/WorkflowDeploymentTable.vue";
+import WorkflowDeploymentHeader from "@/components/workflows/headers/WorkflowDeploymentHeader.vue";
 
 export default {
-  components: {WorkflowDeploymentTable, WorkflowBreadCrumps},
+  components: {WorkflowDeploymentHeader, WorkflowDeploymentTable, WorkflowBreadCrumbs},
 
   data: () => ({
-    selected: [],
     workflowDeployment: {},
   }),
 
@@ -32,14 +35,12 @@ export default {
   },
 
   watch: {
-    '$route': function () {
+    '$route'() {
       this.loadWorkflowDeployment()
     }
   },
 
-  computed: {
-
-  },
+  computed: {},
 
   methods: {
 
@@ -49,7 +50,6 @@ export default {
           .then((response) => {
 
             this.workflowDeployment = response.data
-            this.selected = this.workflowDeployment.functionDefinitions
 
           })
           .catch(() => {

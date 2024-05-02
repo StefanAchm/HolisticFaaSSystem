@@ -10,7 +10,7 @@
 
       <v-card-title>
 
-        Create Deployment:
+        Create Deployment
 
       </v-card-title>
 
@@ -18,7 +18,7 @@
 
         <v-text-field
             v-model="name"
-            label="Name"
+            label="Name of the Deployment"
             style="width: 30%"
         ></v-text-field>
 
@@ -292,7 +292,7 @@ export default {
 
   props: {
     dialog: Boolean,
-    workflowDeployment: [],
+    workflowDeployment: {},
   },
 
   data: () => ({
@@ -367,9 +367,22 @@ export default {
         functionDefinitions: this.editItems
       }
 
-      HfApi.createWorkflowDeployment(workflowDeployment).then((response) => {
-        this.close(response.data)
-      })
+      HfApi.createWorkflowDeployment(workflowDeployment)
+          .then((response) => {
+            this.close(response.data)
+
+            this.$root.snackbar.showSuccess(
+                {
+                  message: 'Deployment created',
+                  route: {
+                    name: 'deployments',
+                    params: {id: response.data.workflow.id, deploymentId: response.data.id}
+                  }
+                })
+          })
+          .catch(() => {
+            this.$root.snackbar.showError({message: 'Failed to create deployment'})
+          })
     },
 
     updateCommon() {

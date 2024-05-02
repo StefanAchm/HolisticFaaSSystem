@@ -2,7 +2,7 @@
 
   <v-card>
 
-    <WorkflowBreadCrumps></WorkflowBreadCrumps>
+    <WorkflowBreadCrumbs></WorkflowBreadCrumbs>
 
     <WorkflowHeader
         @workflow-added="loadWorkflows"
@@ -10,10 +10,8 @@
 
     <WorkflowTable
         ref="workflowTable"
-        :workflowsFromProps="workflows"
+        :workflows-from-props="workflows"
     ></WorkflowTable>
-
-
 
   </v-card>
 
@@ -24,29 +22,22 @@
 import WorkflowTable from "@/components/workflows/tables/WorkflowsTable.vue";
 import WorkflowHeader from "@/components/workflows/headers/WorkflowsHeader.vue";
 import HfApi from "@/utils/hf-api";
-import WorkflowBreadCrumps from "@/components/workflows/WorkflowBreadCrumps.vue";
+import WorkflowBreadCrumbs from "@/components/workflows/WorkflowBreadCrumbs.vue";
 
 export default {
-  components: {WorkflowBreadCrumps, WorkflowHeader, WorkflowTable},
+  components: {WorkflowBreadCrumbs, WorkflowHeader, WorkflowTable},
 
   data: () => ({
-    // selected: [],
-    // search: '',
     workflows: [],
-    // withFileDrop: false, // Because this does not work atm!
   }),
 
   created() {
-    this.loadWorkflows()
+    this.loadWorkflows();
   },
 
-  watch: {
+  watch: {},
 
-  },
-
-  computed: {
-
-  },
+  computed: {},
 
   methods: {
 

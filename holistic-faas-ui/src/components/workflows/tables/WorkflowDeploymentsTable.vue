@@ -4,6 +4,7 @@
       :items="deployments"
       item-key="id"
       class="elevation-1"
+      loading="deployments.length === 0"
   >
 
     <template v-slot:item="{ item }">
