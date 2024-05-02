@@ -10,6 +10,8 @@ import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.repository.WorkflowRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FunctionService {
 
@@ -35,9 +37,12 @@ public class FunctionService {
         DBWorkflow dbWorkflow = this.workflowRepository.findById(apiFunction.getWorkflowId())
                 .orElseThrow(() -> new HolisticFaaSException("Workflow not found"));
 
-        DBFunctionType dbFunctionType = this.functionTypeRepository.save(
-                DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType())
-        );
+        List<DBFunctionType> dbFunctionTypes = this.functionTypeRepository.findByFunctionWorkflowIdAndName(
+                dbWorkflow.getId(), apiFunction.getFunctionType().getName());
+
+        DBFunctionType dbFunctionType = dbFunctionTypes.isEmpty()
+                ? this.functionTypeRepository.save(DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType()))
+                : dbFunctionTypes.get(0);
 
         DBFunction dbFunction = DBFunction.fromAPIFunction(apiFunction);
         dbFunction.setWorkflow(dbWorkflow);

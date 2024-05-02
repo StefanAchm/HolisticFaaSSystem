@@ -7,13 +7,13 @@ import com.google.gson.JsonParser;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class FileUtil {
 
@@ -87,7 +87,7 @@ public class FileUtil {
 
     public static String getFileNameFromPath(String filePath) {
 
-        if(filePath == null) {
+        if (filePath == null) {
             return null;
         }
 
@@ -97,6 +97,77 @@ public class FileUtil {
 
     public static String normalize(Path filePath) {
         return filePath.normalize().toString();
+    }
+
+    public static void zipFolderV2(Path sourceFolderPath, Path zipPath) throws IOException {
+
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
+
+            Files.walkFileTree(sourceFolderPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
+                    Files.copy(file, zos);
+                    zos.closeEntry();
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(dir).toString() + "/"));
+                    zos.closeEntry();
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
+        }
+
+    }
+
+    public static void zipFolder(Path sourceFolderPath, Path zipFilePath) throws IOException {
+
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath.toFile());
+             ZipOutputStream zos = new ZipOutputStream(fos)) {
+
+            Files.walk(sourceFolderPath)
+                    .filter(path -> !Files.isDirectory(path))
+                    .forEach(path -> {
+                        ZipEntry zipEntry = new ZipEntry(sourceFolderPath.relativize(path).toString());
+                        try {
+                            zos.putNextEntry(zipEntry);
+                            Files.copy(path, zos);
+                            zos.closeEntry();
+                        } catch (IOException e) {
+                            throw new HolisticFaaSException(e);
+                        }
+                    });
+
+        }
+
+    }
+
+    public static Path zipFiles(List<Path> files, Path zipFilePath) {
+
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath.toFile());
+             ZipOutputStream zos = new ZipOutputStream(fos)) {
+
+            for (Path file : files) {
+
+                ZipEntry zipEntry = new ZipEntry(file.getFileName().toString());
+                zos.putNextEntry(zipEntry);
+
+                byte[] bytes = Files.readAllBytes(file);
+                zos.write(bytes, 0, bytes.length);
+                zos.closeEntry();
+
+            }
+
+        } catch (IOException e) {
+            throw new HolisticFaaSException(e);
+        }
+
+        return zipFilePath;
+
     }
 
     public static Path unzip(Path filePath) {

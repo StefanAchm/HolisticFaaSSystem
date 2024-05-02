@@ -90,6 +90,7 @@ export default {
 
     close() {
       this.dialogLocal = false
+      this.isValid = false
     },
 
     save() {

@@ -1,5 +1,6 @@
 package com.asi.hms.service;
 
+import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.DBFunction;
 import com.asi.hms.model.db.DBFunctionType;
@@ -9,10 +10,12 @@ import com.asi.hms.repository.FunctionRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.repository.WorkflowRepository;
 import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,16 +29,22 @@ public class WorkflowService {
     private final FunctionTypeRepository functionTypeRepository;
     private final FunctionImplementationRepository functionImplementationRepository;
 
+    private final UploadFileService uploadFileService;
+
     public WorkflowService(WorkflowRepository workflowRepository,
                            FunctionRepository functionRepository,
                            FunctionTypeRepository functionTypeRepository,
-                           FunctionImplementationRepository functionImplementationRepository) {
+                           FunctionImplementationRepository functionImplementationRepository,
+                           UploadFileService uploadFileService) {
 
         this.workflowRepository = workflowRepository;
 
         this.functionRepository = functionRepository;
         this.functionTypeRepository = functionTypeRepository;
         this.functionImplementationRepository = functionImplementationRepository;
+
+        this.uploadFileService = uploadFileService;
+
     }
 
     public List<APIWorkflow> getAllWorkflows() {
@@ -52,9 +61,15 @@ public class WorkflowService {
         APIWorkflow workflow = new APIWorkflow();
 
         if(file != null) {
+
+            String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+
             APIWorkflow workflowFromFile = AfclParser.getWorkflow(file);
             workflow.setName(workflowFromFile.getName());
             workflow.setFunctions(workflowFromFile.getFunctions());
+
+            workflow.setFilePath(path);
+
         }
 
         if(workflowFromRequest != null) {
@@ -94,15 +109,6 @@ public class WorkflowService {
                 .toList();
 
     }
-
-//    public List<APIFunctionImplementation> getImplementations(UUID id) {
-//
-//        return this.functionImplementationRepository.findByFunctionWorkflowId(id)
-//                .stream()
-//                .map(APIFunctionImplementation::fromDBFunctionImplementation)
-//                .toList();
-//
-//    }
 
     public List<APIFunctionImplementation> getWorkflowFunctionImplementations(UUID workflowId) {
         return this.functionImplementationRepository.findByFunctionWorkflowId(workflowId)
@@ -155,6 +161,26 @@ public class WorkflowService {
         DBWorkflow dbWorkflow = this.workflowRepository.save(DBWorkflow.fromAPIWorkflow(workflow));
 
         return APIWorkflow.fromDBWorkflow(dbWorkflow);
+
+    }
+
+    public byte[] downloadAbstractWorkflow(UUID workflowId) {
+
+        DBWorkflow workflow = this.workflowRepository.findById(workflowId).orElseThrow(
+                () -> new HolisticFaaSException("Workflow not found")
+        );
+
+        try {
+
+            String filePath = workflow.getFilePath();
+
+            File file = new File(filePath);
+
+            return Files.readAllBytes(file.toPath());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

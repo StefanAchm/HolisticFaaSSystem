@@ -4,10 +4,15 @@ import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
+import com.asi.hms.utils.FileUtil;
+import com.asi.hms.utils.cloudproviderutils.YamlParser;
 import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -149,13 +154,56 @@ public class WorkflowDeploymentService {
         apiWorkflowDeployment.setName(apiWorkflowDeploymentMigration.getWorkflowDeployment().getName());
         apiWorkflowDeployment.setFunctionDefinitions(apiMigration.getFunctions());
 
-        if(apiMigration.isValid()) {
+        if (apiMigration.isValid()) {
             apiWorkflowDeployment = this.add(apiWorkflowDeployment);
         }
 
         apiWorkflowDeployment.setValid(apiMigration.isValid());
 
         return apiWorkflowDeployment;
+
+    }
+
+    public void download(UUID workflowDeploymentId, OutputStream outputStream) throws IOException {
+
+        DBWorkflowDeployment dbWorkflowDeployment = this.workflowDeploymentRepository.findById(workflowDeploymentId).orElseThrow(
+                () -> new HolisticFaaSException("Workflow deployment not found")
+        );
+
+        // 1. Create a tmp folder
+        Path workflowDeployment = Files.createTempDirectory("workflowDeployment");
+
+        // 2. Copy the workflow file into the tmp folder
+        String workflowFilePathAsString = dbWorkflowDeployment.getWorkflow().getFilePath();
+        Path workflowFilePath = Path.of(workflowFilePathAsString);
+        Files.copy(workflowFilePath, workflowDeployment.resolve(workflowFilePath.getFileName()));
+
+        // 3. Copy the functions.yaml file into the tmp folder
+        List<APIFunctionFlat> apiFunctionFlats = this.getFunctionDeployments(workflowDeploymentId);
+        String functionsYamlContent = YamlParser.writeYaml(apiFunctionFlats);
+        Files.write(workflowDeployment.resolve("functions.yaml"), functionsYamlContent.getBytes());
+
+        // 4. Copy all function implementations into the tmp folder
+        Path functionImplementationsPath = Files.createDirectory(workflowDeployment.resolve("functionImplementations"));
+        for(DBFunctionDeployment dbFunctionDeployment : dbWorkflowDeployment.getFunctionDeployments()) {
+
+            DBFunctionImplementation dbFunctionImplementation = dbFunctionDeployment.getFunctionImplementation();
+
+            String functionImplementationFilePathAsString = dbFunctionImplementation.getFilePath();
+            Path functionImplementationFilePath = Path.of(functionImplementationFilePathAsString);
+
+            Path functionPath = Files.createDirectory(functionImplementationsPath.resolve(dbFunctionDeployment.getFunction().getName()));
+            Files.copy(functionImplementationFilePath, functionPath.resolve(functionImplementationFilePath.getFileName()));
+
+        }
+
+        Path zipOutFile = Files.createTempFile("workflowDeployment", ".zip");
+        FileUtil.zipFolderV2(workflowDeployment, zipOutFile);
+
+//        return Files.readAllBytes(zipOutFile); // TODO: delete tmp folder
+
+        // 5. Copy the zip file into the output stream
+        Files.copy(zipOutFile, outputStream);
 
     }
 

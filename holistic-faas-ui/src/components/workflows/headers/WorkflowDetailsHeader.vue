@@ -4,19 +4,78 @@
     <!-- Header -->
     <v-toolbar flat fluid>
 
-      <v-toolbar-title>{{workflow.name}}</v-toolbar-title>
+      <v-toolbar-title>{{ workflow.name }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn color="primary" class="mx-2" @click="openFunctionDialog">Add Function</v-btn>
-      <v-btn color="primary" class="mx-2" @click="openFunctionImplementationDialog">Add Implementation</v-btn>
-      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Add Deployment</v-btn>
+      <v-btn color="primary" :disabled="!workflow.filePath" class="mx-2" @click="downloadWorkflow">
+
+        <v-icon
+            left>
+          mdi-download
+        </v-icon>
+
+        Download Definition
+
+      </v-btn>
+
+
+      <v-btn
+          color="primary"
+          class="mx-2"
+          @click="openFunctionDialog">
+
+        <v-icon
+            left>
+          mdi-plus
+        </v-icon>
+
+
+        Add Function
+      </v-btn>
+
+
+      <v-btn
+          color="primary"
+          class="mx-2"
+          @click="openFunctionImplementationDialog">
+
+        <v-icon
+            left>
+          mdi-plus
+        </v-icon>
+
+        Add Implementation
+
+      </v-btn>
+
+
+      <v-btn
+          color="primary"
+          class="mx-2"
+          @click="openDeploymentDialog">
+
+        <v-icon
+            left>
+          mdi-plus
+        </v-icon>
+
+        Add Deployment
+
+      </v-btn>
+
 
     </v-toolbar>
 
     <!-- Add a v-card here to display the workflow details -->
     <v-card elevation="0" class="pb-6">
-<!--      <v-card-title> Details: </v-card-title>-->
+      <!--      <v-card-title> Details: </v-card-title>-->
+
+      <v-card-text>
+        <strong> Created by: </strong>
+        {{ workflow.createdBy }}
+      </v-card-text>
+
       <v-card-text>
         <strong> Description: </strong>
         {{ workflow.description }}
@@ -50,8 +109,9 @@
 import HfApi from "@/utils/hf-api";
 import FunctionImplementationDialogExtended
   from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
-import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
+import WorkflowDeploymentDialog from "@/components/workflows/dialogs/WorkflowDeploymentDialog.vue";
 import FunctionWithTypeDialog from "@/components/function/dialogs/FunctionWithTypeDialog.vue";
+import download from "@/utils/download";
 
 export default {
 
@@ -65,7 +125,8 @@ export default {
   components: {
     FunctionWithTypeDialog,
     WorkflowDeploymentDialog,
-    FunctionImplementationDialogExtended},
+    FunctionImplementationDialogExtended
+  },
 
   data() {
 
@@ -85,13 +146,12 @@ export default {
     this.getWorkflowDeployment();
   },
 
-  computed: {
-
-  },
+  computed: {},
 
   methods: {
 
     dialogClosed() {
+      this.getWorkflowDeployment();
       this.$emit('workflow-updated');
     },
 
@@ -107,14 +167,24 @@ export default {
       this.deploymentDialogVisible = true;
     },
 
+    downloadWorkflow() {
+
+      HfApi.downloadWorkflow(this.workflow.id)
+          .then((response) => {
+                download.downloadFile(response.data, this.workflow.name + '.yaml')
+              }
+          )
+
+    },
+
     getWorkflowDeployment() {
 
       HfApi.prepareWorkflowDeployment(this.$route.params.id)
           .then((response) => {
 
-        this.workflowDeployment = response.data
+            this.workflowDeployment = response.data
 
-      })
+          })
 
     },
 

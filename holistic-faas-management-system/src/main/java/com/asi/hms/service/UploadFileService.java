@@ -21,6 +21,7 @@ public class UploadFileService {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileService.class);
 
     public static final String FUNCTIONS_DIR = "functions";
+    public static final String WORKFLOWS_DIR = "workflows";
     public static final String UPLOADS_DIR = "deployments";
     public static final String CREDENTIALS_DIR = "credentials";
 

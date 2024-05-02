@@ -241,6 +241,11 @@ export default {
         return apiClient.post('/workflow/add', workflow);
     },
 
+    downloadWorkflow(workflowId) {
+        return apiClient.post('/workflow/' + workflowId + '/download',
+            {responseType: 'blob'});
+    },
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Workflow deployment
 
@@ -261,6 +266,11 @@ export default {
 
     migrateWorkflowDeployment(migration) {
         return apiClient.post('/workflow_deployment/migrate', migration);
+    },
+
+    downloadWorkflowDeployment(id) {
+        return apiClient.post('/workflow_deployment/' + id + '/download',
+            {responseType: 'blob'});
     },
 
 

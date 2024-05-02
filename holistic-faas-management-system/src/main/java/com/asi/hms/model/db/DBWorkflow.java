@@ -19,6 +19,8 @@ public class DBWorkflow extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private String filePath;
+
     @OneToMany(mappedBy = "workflow")
     private List<DBFunction> functions;
 
@@ -28,11 +30,12 @@ public class DBWorkflow extends Auditable {
     public DBWorkflow() {
     }
 
-    public static DBWorkflow fromAPIWorkflow(APIWorkflow workflow1) {
+    public static DBWorkflow fromAPIWorkflow(APIWorkflow workflow) {
         DBWorkflow dbWorkflow = new DBWorkflow();
-        dbWorkflow.setId(workflow1.getId());
-        dbWorkflow.setName(workflow1.getName());
-        dbWorkflow.setDescription(workflow1.getDescription());
+        dbWorkflow.setId(workflow.getId());
+        dbWorkflow.setName(workflow.getName());
+        dbWorkflow.setDescription(workflow.getDescription());
+        dbWorkflow.setFilePath(workflow.getFilePath());
         return dbWorkflow;
     }
 
@@ -54,6 +57,14 @@ public class DBWorkflow extends Auditable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public void setId(UUID id) {

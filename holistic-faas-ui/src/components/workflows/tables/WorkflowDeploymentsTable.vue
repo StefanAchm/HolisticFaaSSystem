@@ -38,7 +38,7 @@ export default {
     return {
       headers: [
         {text: 'Deployment', value: 'name'},
-        {text: 'User', value: 'user.username'},
+        {text: 'Created by', value: 'user.username'},
         {text: 'Details', value: 'deploymentDetails'}
       ],
     };

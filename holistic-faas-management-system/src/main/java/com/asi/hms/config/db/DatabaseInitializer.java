@@ -216,6 +216,7 @@ public class DatabaseInitializer {
 
         APIWorkflow workflow = AfclParser.getWorkflow(resourcesPath + fileName);
         workflow.setDescription("Genome1000 (GEN) is a scientific workflow which identifies mutational overlaps using data from the 1000 Genomes project in order to provide a null distribution for rigorous statistical evaluation of potential disease-related mutations. Each instance of the function Individual fetches and parses single nucleotide polymorphism (SNPs) variants in a chromosome and determines which individuals contain these variants. Individuals_merge merges all outputs of individuals, while Sifting computes the mutation for all SNP variants (SIFT scores). Next, Mutation_overlap measures SNP variants (the overlap in mutations), while Frequency measures the frequency of mutational overlaps. For every of the six super populations (such as African, Mixed American or East Asian) as well as for all populations, a separate instance of Mutations_overlap and Frequency is invoked in the last two parallel loops.");
+        workflow.setFilePath(resourcesPath + fileName);
 
         DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
         this.workflowRepository.save(dbWorkflow);

@@ -29,7 +29,7 @@
 
 <script>
 
-import WorkflowDialog from "@/components/workflows/WorkflowDialog.vue";
+import WorkflowDialog from "@/components/workflows/dialogs/WorkflowDialog.vue";
 
 export default {
   components: {WorkflowDialog},

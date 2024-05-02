@@ -97,6 +97,7 @@ export default {
   methods: {
     close() {
       this.dialogLocal = false
+      this.isValid = false
       this.$emit('dialog-closed')
     },
     save() {

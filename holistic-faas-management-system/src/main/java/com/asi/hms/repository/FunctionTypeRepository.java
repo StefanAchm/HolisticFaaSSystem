@@ -17,4 +17,10 @@ public interface FunctionTypeRepository extends JpaRepository<DBFunctionType, UU
             "JOIN ft.functions f " +
             "WHERE f.workflow.id = :workflowId")
     List<DBFunctionType> findByFunctionWorkflowId(@Param("workflowId") UUID workflowId);
+
+    @Query("SELECT ft FROM DBFunctionType ft " +
+            "JOIN ft.functions f " +
+            "WHERE f.workflow.id = :workflowId AND ft.name = :name")
+    List<DBFunctionType> findByFunctionWorkflowIdAndName(@Param("workflowId") UUID workflowId, @Param("name") String name);
+
 }

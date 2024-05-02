@@ -128,6 +128,7 @@ export default {
       this.dialogLocal = false
       this.currentFile = null
       this.functionType = null
+      this.isValid = false
       this.$emit('dialog-closed')
     },
 

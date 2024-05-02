@@ -5,6 +5,7 @@ import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.api.APIWorkflow;
 import com.asi.hms.model.api.APIWorkflowDeployment;
 import com.asi.hms.service.WorkflowService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,4 +61,20 @@ public class WorkflowController {
     public ResponseEntity<APIWorkflowDeployment> prepareWorkflowDeployment(@PathVariable UUID workflowId) {
         return ResponseEntity.ok(this.workflowService.prepareWorkflowDeployment(workflowId));
     }
+
+    @PostMapping("{workflowId}/download")
+    public ResponseEntity<byte[]> downloadAbstractWorkflow(@PathVariable UUID workflowId) {
+
+        byte[] content = this.workflowService.downloadAbstractWorkflow(workflowId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=.yaml");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(content);
+
+    }
+
+
 }

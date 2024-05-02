@@ -14,6 +14,8 @@ public class APIWorkflow extends APIAudit {
 
     private String description;
 
+    private String filePath;
+
     private List<APIFunction> functions;
 
     public APIWorkflow() {
@@ -44,6 +46,14 @@ public class APIWorkflow extends APIAudit {
         this.description = description;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public List<APIFunction> getFunctions() {
         return functions;
     }
@@ -62,6 +72,8 @@ public class APIWorkflow extends APIAudit {
         if(dbWorkflow.getFunctions() != null) {
             apiWorkflow.setFunctions(dbWorkflow.getFunctions().stream().map(APIFunction::fromDBFunction).toList());
         }
+
+        apiWorkflow.setFilePath(dbWorkflow.getFilePath());
 
         apiWorkflow.setCreatedAt(dbWorkflow.getCreatedAt());
         apiWorkflow.setCreatedBy(dbWorkflow.getCreatedBy().getUsername());

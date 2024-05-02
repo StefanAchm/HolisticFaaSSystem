@@ -97,7 +97,7 @@
 
 import HfApi from "@/utils/hf-api";
 import FunctionMigrationTable from "@/components/function/dialogs/FunctionMigrationTable.vue";
-import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
+import WorkflowDeploymentDialog from "@/components/workflows/dialogs/WorkflowDeploymentDialog.vue";
 
 export default {
 

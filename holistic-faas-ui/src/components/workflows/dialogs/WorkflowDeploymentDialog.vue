@@ -326,9 +326,17 @@ export default {
 
       this.editItems = this.workflowDeployment.functionDefinitions
 
-      for (let i = 0; i < this.editItems.length; i++) {
-        this.updateItem(this.editItems[i])
-      }
+      HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
+
+        this.functionImplementations = response.data
+
+        for (let i = 0; i < this.editItems.length; i++) {
+          this.updateItem(this.editItems[i])
+        }
+
+      })
+
+
 
     },
 
@@ -337,19 +345,14 @@ export default {
   created() {
 
     this.init();
-
-    HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
-
-      this.functionImplementations = response.data
-
-    })
-
+    
   },
 
   methods: {
 
     close(workflowDeployment) {
       this.dialogLocal = false
+      this.isValid = false
       this.$emit('dialog-closed', workflowDeployment)
     },
 

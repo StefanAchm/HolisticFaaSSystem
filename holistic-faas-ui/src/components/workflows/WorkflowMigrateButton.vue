@@ -32,7 +32,7 @@
         </v-btn>
       </template>
 
-      <v-list>
+      <v-list dense>
         <v-list-item-group>
 
           <v-list-item>
@@ -81,7 +81,7 @@
 <script>
 
 import HfApi from "@/utils/hf-api";
-import WorkflowDeploymentDialog from "@/components/workflows/WorkflowDeploymentDialog.vue";
+import WorkflowDeploymentDialog from "@/components/workflows/dialogs/WorkflowDeploymentDialog.vue";
 
 export default {
 

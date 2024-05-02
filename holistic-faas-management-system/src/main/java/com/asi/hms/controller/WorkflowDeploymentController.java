@@ -1,12 +1,14 @@
 package com.asi.hms.controller;
 
-import com.asi.hms.model.api.APIMigration;
 import com.asi.hms.model.api.APIWorkflowDeployment;
 import com.asi.hms.model.api.APIWorkflowDeploymentMigration;
 import com.asi.hms.service.WorkflowDeploymentService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,5 +41,34 @@ public class WorkflowDeploymentController {
     public ResponseEntity<APIWorkflowDeployment> migrate(@RequestBody APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
         return ResponseEntity.ok(this.workflowDeploymentService.migrate(apiWorkflowDeploymentMigration));
     }
+
+    @PostMapping("{workflowDeploymentId}/download")
+    public ResponseEntity<StreamingResponseBody> download(@PathVariable UUID workflowDeploymentId) {
+
+        StreamingResponseBody stream = outputStream -> {
+            try {
+                this.workflowDeploymentService.download(workflowDeploymentId, outputStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+//        byte[] content = null;
+//        try {
+//            content = this.workflowDeploymentService.download(workflowDeploymentId, outputStream);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=.zip");
+//        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(content.length));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(stream);
+
+    }
+
 
 }

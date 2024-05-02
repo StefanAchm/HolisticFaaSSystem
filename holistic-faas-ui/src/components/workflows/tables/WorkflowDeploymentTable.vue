@@ -170,7 +170,7 @@ export default {
       {text: 'Timeout', value: 'functionDeployment.timeoutSecs', sortable: true},
       {text: 'Memory', value: 'functionDeployment.memory', sortable: true},
       {text: 'Runtime', value: 'functionDeployment.runtime', sortable: true},
-      {text: 'User', value: 'functionDeployment.userName', sortable: true},
+      // {text: 'User', value: 'functionDeployment.userName', sortable: true},
 
       // {text: '', value: 'actions', sortable: false},
 
