@@ -21,7 +21,7 @@
 
     <WorkflowDialog
         @workflow-added="$emit('workflow-added')"
-        :dialog="dialog"/>
+        :dialog.sync="dialog"/>
 
   </v-toolbar>
 

@@ -20,7 +20,7 @@
 
       <v-card-text>
 
-        <v-form v-model="isValid">
+        <v-form v-model="isValid" ref="form">
 
           <v-select
               v-model="functionType"
@@ -129,6 +129,7 @@ export default {
       this.currentFile = null
       this.functionType = null
       this.isValid = false
+      this.$refs.form.reset(); // reset the form validation
       this.$emit('dialog-closed')
     },
 

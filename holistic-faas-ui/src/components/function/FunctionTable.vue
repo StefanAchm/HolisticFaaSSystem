@@ -219,7 +219,8 @@ export default {
         return [
 
           {text: 'Status', value: 'status', sortable: false},
-          {text: 'Name', value: 'functionType.name', sortable: true},
+          // {text: 'Name', value: 'function.name', sortable: true},
+          {text: 'Type', value: 'functionType.name', sortable: true},
           {text: 'Implementation', value: 'implementation', sortable: true},
 
           {text: 'Handler', value: 'functionDeployment.handler', sortable: true},

@@ -14,7 +14,7 @@
 
       <v-card-text>
 
-        <v-form v-model="isValid">
+        <v-form v-model="isValid" ref="form">
 
           <v-text-field
               v-model="editItemLocal.name"
@@ -98,7 +98,13 @@ export default {
     close() {
       this.dialogLocal = false
       this.isValid = false
+      this.$refs.form.reset(); // reset the form validation
+      this.editItemLocal = {
+        name: '',
+            functionType: {name: ''}
+      };
       this.$emit('dialog-closed')
+
     },
     save() {
       this.editItemLocal.workflowId = this.workflow.id

@@ -133,7 +133,7 @@ export default {
     },
 
     getAllFunctions() {
-        return apiClient.get('/function/getAll');
+        return apiClient.get('/functionFlat/getAll');
     },
 
     prepareMigration(items, target, type) {

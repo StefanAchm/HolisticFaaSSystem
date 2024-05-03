@@ -15,7 +15,7 @@
 
       <v-card-text>
 
-        <v-form v-model="isValid">
+        <v-form v-model="isValid" ref="form">
 
           <v-text-field
               v-model="workflow.name"
@@ -70,16 +70,26 @@ export default {
   },
 
   data: () => ({
-    dialogLocal: false,
     workflow: {},
     currentFile: null,
     isValid: false
   }),
 
-  watch: {
-    dialog() {
-      this.dialogLocal = this.dialog
-    }
+  // watch: {
+  //   dialog(value) {
+  //     this.dialogLocal = value;
+  //   }
+  // },
+
+  computed: {
+    dialogLocal: {
+      get() {
+        return this.dialog
+      },
+      set(value) {
+        this.$emit('update:dialog', value)
+      }
+    },
   },
 
   methods: {
@@ -91,6 +101,8 @@ export default {
     close() {
       this.dialogLocal = false
       this.isValid = false
+      this.$refs.form.reset(); // reset the form validation
+      this.workflow = {}
     },
 
     save() {

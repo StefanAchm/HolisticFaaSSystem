@@ -14,7 +14,7 @@
 
       </v-card-title>
 
-      <v-form v-model="isValid">
+      <v-form v-model="isValid" ref="form">
 
         <v-card-text>
 
@@ -356,6 +356,7 @@ export default {
       this.dialogLocal = false
       this.isValid = false
       this.$emit('dialog-closed', workflowDeployment)
+      this.$refs.form.reset(); // reset the form validation
     },
 
     save() {
