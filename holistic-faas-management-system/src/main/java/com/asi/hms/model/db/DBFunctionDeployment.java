@@ -168,8 +168,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     }
 
     public String getUniqueName() {
-        // TODO: setting a unique name for now, not sure if that is wanted!
-        return this.getFunctionImplementation().getFunctionType().getName() + "-" + this.id;
+        return this.getFunction().getName();
     }
 
     public DBFunction getFunction() {

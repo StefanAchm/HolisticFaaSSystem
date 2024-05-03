@@ -82,8 +82,12 @@ public class WorkflowService {
 
         for (APIFunction apiFunction : workflow.getFunctions()) {
 
-            DBFunctionType dbFunctionType = DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType());
-            this.functionTypeRepository.save(dbFunctionType);
+            List<DBFunctionType> dbFunctionTypes = this.functionTypeRepository.findByFunctionWorkflowIdAndName(
+                    dbWorkflow.getId(), apiFunction.getFunctionType().getName());
+
+            DBFunctionType dbFunctionType = dbFunctionTypes.isEmpty()
+                    ? this.functionTypeRepository.save(DBFunctionType.fromAPIFunctionType(apiFunction.getFunctionType()))
+                    : dbFunctionTypes.get(0);
 
             DBFunction dbFunction = DBFunction.fromAPIFunction(apiFunction);
             dbFunction.setWorkflow(dbWorkflow);
