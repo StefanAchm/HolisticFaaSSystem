@@ -25,7 +25,7 @@
           :disabled="undeployedFunctions?.length === 0"
           color="primary"
           class="mx-2"
-          @click="deployAll">
+          @click="deployUndeployed">
 
         <v-icon
             left>
@@ -48,8 +48,7 @@
     <v-card elevation="0" class="pb-6">
       <!--      <v-card-title> Details: </v-card-title>-->
       <v-card-text>
-        <strong> Created by: </strong>
-        {{ workflowDeployment.user?.username }}
+        <strong> Created by: </strong> {{ workflowDeployment.user?.username }}
       </v-card-text>
 
     </v-card>
@@ -78,16 +77,30 @@ export default {
 
   computed: {
     undeployedFunctions() {
-      return this.workflowDeployment.functionDefinitions?.filter(item => item.functionDeployment.status !== 'DEPLOYED')
+      return this.workflowDeployment.functionDefinitions?.filter(item => item.functionDeployment.status !== 'DEPLOYED' && item.functionDeployment.status !== 'STARTED')
     }
   },
 
   methods: {
 
     downloadWorkflow() {
-      HfApi.downloadWorkflowDeployment(this.workflowDeployment.id).then(response => {
-        download.downloadFile(response.data, this.workflowDeployment.name + '.zip')
+      HfApi.downloadWorkflowDeployment(this.workflowDeployment.id)
+          .then(response => {
+            download.downloadFile(response.data, this.workflowDeployment.name + '.zip')
+          })
+    },
+
+    deployUndeployed() {
+
+      this.undeployedFunctions.forEach(item => {
+        HfApi.deployFunctionDeployment(item.functionDeployment.id)
+            .then(() => {
+            })
+            .catch(() => {
+              this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.functionDeployment.name})
+            })
       })
+
     },
 
     deployAll() {

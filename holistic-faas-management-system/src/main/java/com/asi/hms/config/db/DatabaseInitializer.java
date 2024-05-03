@@ -36,8 +36,7 @@ public class DatabaseInitializer {
     private final String[] handlers = {
             "com.asi.hsg.HelloWorldHandler::handleRequest",
             "com.asi.hsg.HelloWorldHandler",
-            // lambda_function.lambda_handler
-
+            "lambda_function.lambda_handler"
     };
 
     private final String[] credentials = {
@@ -103,20 +102,14 @@ public class DatabaseInitializer {
     @PostConstruct
     public void init() {
 
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Adding users
+
         DBUser user1 = addUser("user1", "password");
 
         addUserCredentials(user1, "AWS", credentials[0]);
         addUserCredentials(user1, "GCP", credentials[1]);
-
-        UserDetails userDetails = userService.loadUserByUsername("user1");
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-//        addFunction(user1, "helloWorld1", implementations[0], handlers[0], Provider.AWS, 5, true);
-//        addFunction(user1, "helloWorld2", implementations[1], handlers[1], Provider.GCP, 2, false);
-
-//        List<APIFunction> allFunctions = this.functionService.getAllFunctions();
 
         DBUser user2 = addUser("user2", "password");
         addUserCredentials(user2, "AWS", credentials[0]);
@@ -124,13 +117,99 @@ public class DatabaseInitializer {
 
         DBUser user3 = addUser("user3", "password");
 
-        DBWorkflow workflow1 = addAbstractWorkflowFromFile(workflows[0]);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Adding workflows now in context of user1
+
+        UserDetails userDetails = userService.loadUserByUsername("user1");
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        addWorkflow0(user1);
+        addWorkflow1(user1);
+
+
+    }
+
+    private void addWorkflow0(DBUser user) {
+
+        DBWorkflow workflow = addAbstractWorkflow(
+                "My Workflow",
+                "This is a test workflow",
+                Map.of(
+                        "function1", "type1",
+                        "function2", "type2",
+                        "function3", "type3"
+                )
+        );
+
+        DBFunctionImplementation fi1 = addWorkflowImplementation(implementations[0], workflow.getFunctions().get(0).getFunctionType());
+        DBFunctionImplementation fi2 = addWorkflowImplementation(implementations[0], workflow.getFunctions().get(1).getFunctionType());
+        DBFunctionImplementation fi3 = addWorkflowImplementation(implementations[0], workflow.getFunctions().get(2).getFunctionType());
+        List<DBFunctionImplementation> dbFunctionImplementationsAWS = List.of(fi1, fi2, fi3);
+
+        // GCP
+        DBFunctionImplementation fi4 = addWorkflowImplementation(implementations[1], workflow.getFunctions().get(0).getFunctionType());
+        DBFunctionImplementation fi5 = addWorkflowImplementation(implementations[1], workflow.getFunctions().get(1).getFunctionType());
+        DBFunctionImplementation fi6 = addWorkflowImplementation(implementations[1], workflow.getFunctions().get(2).getFunctionType());
+        List<DBFunctionImplementation> dbFunctionImplementationsGCP = List.of(fi4, fi5, fi6);
+
+
+        Map<DBFunction, DBFunctionDeployment> dbFunctionDeployments = new HashMap<>();
+
+        for(int i = 0; i < 3; i++) {
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user,
+                    handlers[0],
+                    RuntimeAWS.JAVA_17.getRuntimeCode(),
+                    Provider.AWS,
+                    dbFunctionImplementationsAWS.get(i),
+                    workflow.getFunctions().get(i),
+                    true
+            );
+            dbFunctionDeployments.put(workflow.getFunctions().get(i), dbFunctionDeployment);
+        }
+
+        addWorkflowDeployment("Deployment for AWS", user, workflow, dbFunctionDeployments);
+
+        dbFunctionDeployments = new HashMap<>();
+        for(int i = 0; i < 3; i++) {
+            DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user,
+                    handlers[1],
+                    RuntimeGCP.JAVA_17.getRuntimeCode(),
+                    Provider.GCP,
+                    dbFunctionImplementationsGCP.get(i),
+                    workflow.getFunctions().get(i),
+                    true
+            );
+            dbFunctionDeployments.put(workflow.getFunctions().get(i), dbFunctionDeployment);
+        }
+
+        addWorkflowDeployment("Deployment for GCP", user, workflow, dbFunctionDeployments);
+
+
+    }
+
+    private void addWorkflow1(DBUser user) {
+
+        String description = "Genome1000 (GEN) is a scientific workflow which identifies mutational overlaps " +
+                "using data from the 1000 Genomes project in order to provide a null distribution for rigorous " +
+                "statistical evaluation of potential disease-related mutations. Each instance of the function " +
+                "Individual fetches and parses single nucleotide polymorphism (SNPs) variants in a chromosome " +
+                "and determines which individuals contain these variants. Individuals_merge merges all outputs " +
+                "of individuals, while Sifting computes the mutation for all SNP variants (SIFT scores). Next, " +
+                "Mutation_overlap measures SNP variants (the overlap in mutations), while Frequency measures " +
+                "the frequency of mutational overlaps. For every of the six super populations (such as African, " +
+                "Mixed American or East Asian) as well as for all populations, a separate instance of " +
+                "Mutations_overlap and Frequency is invoked in the last two parallel loops.";
+
+        DBWorkflow workflow = addAbstractWorkflowFromFile(workflows[0], description);
+
         List<DBFunctionImplementation> dbFunctionImplementations = addWorkflowImplementations(Map.of(
-                        implementations[3], workflow1.getFunctions().get(0).getFunctionType(),
-                        implementations[4], workflow1.getFunctions().get(1).getFunctionType(),
-                        implementations[5], workflow1.getFunctions().get(2).getFunctionType(),
-                        implementations[6], workflow1.getFunctions().get(3).getFunctionType(),
-                        implementations[7], workflow1.getFunctions().get(4).getFunctionType()
+                        implementations[3], workflow.getFunctions().get(0).getFunctionType(),
+                        implementations[4], workflow.getFunctions().get(1).getFunctionType(),
+                        implementations[5], workflow.getFunctions().get(2).getFunctionType(),
+                        implementations[6], workflow.getFunctions().get(3).getFunctionType(),
+                        implementations[7], workflow.getFunctions().get(4).getFunctionType()
                 )
         );
 
@@ -139,7 +218,7 @@ public class DatabaseInitializer {
 
 
             Map<DBFunction, DBFunctionDeployment> dbFunctionDeployments = new HashMap<>();
-            for (DBFunction function : workflow1.getFunctions()) {
+            for (DBFunction function : workflow.getFunctions()) {
 
                 String name = function.getFunctionType().getName();
 
@@ -150,13 +229,14 @@ public class DatabaseInitializer {
 
                 if (first.isPresent()) {
 
-                    DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user1,
-                            handlers[0], // TODO
+                    DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(user,
+                            handlers[2],
                             RuntimeAWS.PYTHON_3_12.getRuntimeCode(),
                             Provider.AWS,
                             first.get(),
                             function,
-                            true);
+                            true
+                    );
 
                     dbFunctionDeployments.put(function, dbFunctionDeployment);
 
@@ -164,15 +244,25 @@ public class DatabaseInitializer {
 
             }
 
-            addWorkflowDeployment("deployment" + i, user1, workflow1, dbFunctionDeployments);
+            addWorkflowDeployment("deployment" + i, user, workflow, dbFunctionDeployments);
 
         }
-
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Workflows
+
+    private DBFunctionImplementation addWorkflowImplementation(String functionImplementation, DBFunctionType functionType) {
+
+        DBFunctionImplementation dbFunctionImplementation = new DBFunctionImplementation();
+        dbFunctionImplementation.setFilePath(resourcesPath + functionImplementation);
+        dbFunctionImplementation.setFunctionType(functionType);
+
+        functionImplementationRepository.save(dbFunctionImplementation);
+
+        return dbFunctionImplementation;
+
+    }
 
     private List<DBFunctionImplementation> addWorkflowImplementations(Map<String, DBFunctionType> implementation) {
 
@@ -212,10 +302,10 @@ public class DatabaseInitializer {
 
     }
 
-    private DBWorkflow addAbstractWorkflowFromFile(String fileName) {
+    private DBWorkflow addAbstractWorkflowFromFile(String fileName, String description) {
 
         APIWorkflow workflow = AfclParser.getWorkflow(resourcesPath + fileName);
-        workflow.setDescription("Genome1000 (GEN) is a scientific workflow which identifies mutational overlaps using data from the 1000 Genomes project in order to provide a null distribution for rigorous statistical evaluation of potential disease-related mutations. Each instance of the function Individual fetches and parses single nucleotide polymorphism (SNPs) variants in a chromosome and determines which individuals contain these variants. Individuals_merge merges all outputs of individuals, while Sifting computes the mutation for all SNP variants (SIFT scores). Next, Mutation_overlap measures SNP variants (the overlap in mutations), while Frequency measures the frequency of mutational overlaps. For every of the six super populations (such as African, Mixed American or East Asian) as well as for all populations, a separate instance of Mutations_overlap and Frequency is invoked in the last two parallel loops.");
+        workflow.setDescription(description);
         workflow.setFilePath(resourcesPath + fileName);
 
         DBWorkflow dbWorkflow = DBWorkflow.fromAPIWorkflow(workflow);
@@ -242,9 +332,9 @@ public class DatabaseInitializer {
 
     }
 
-    private DBWorkflow addAbstractWorkflow(String workflowName, Map<String, String> functions) {
+    private DBWorkflow addAbstractWorkflow(String workflowName, String description, Map<String, String> functions) {
 
-        DBWorkflow workflow = addWorkflow(workflowName);
+        DBWorkflow workflow = addWorkflow(workflowName, description);
 
         workflow.setFunctions(new ArrayList<>());
 
@@ -261,11 +351,11 @@ public class DatabaseInitializer {
 
     }
 
-    private DBWorkflow addWorkflow(String workflowName) {
+    private DBWorkflow addWorkflow(String workflowName, String description) {
 
         DBWorkflow workflow = new DBWorkflow();
         workflow.setName(workflowName);
-        workflow.setDescription("description1");
+        workflow.setDescription(description);
 
         return workflowRepository.save(workflow);
 
@@ -362,7 +452,16 @@ public class DatabaseInitializer {
         dbFunctionDeployment.setRegion(provider == Provider.AWS ? "eu-west-2" : "europe-west2");
         dbFunctionDeployment.setRuntime(runtime);
 
-        dbFunctionDeployment.setMemory(random ? (int) (Math.random() * 10) + 128 : 128);
+        int randomMemory = 0;
+        if(provider == Provider.AWS) {
+            randomMemory = (int) (Math.random() * 2000) + 128;
+        } else {
+            int[] memory = {128, 256, 512, 1024, 2048, 4096, 8192};
+            int randomMemoryIndex = (int) (Math.random() * 7);
+            randomMemory = memory[randomMemoryIndex];
+        }
+
+        dbFunctionDeployment.setMemory(randomMemory);
         dbFunctionDeployment.setHandler(handlerPath);
         dbFunctionDeployment.setStatus(DeployStatus.CREATED);
         dbFunctionDeployment.setTimeoutSecs(random ? (int) (Math.random() * 10) + 3 : 3);

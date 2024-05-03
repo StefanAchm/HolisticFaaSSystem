@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,19 +34,19 @@ public class UploadFileService {
 
     public Path uploadZipFile(MultipartFile file, String subFolder) {
 
-        Path uploadedFilePath = uploadFile(file, subFolder);
+        Path uploadedFilePath = uploadFile(file, subFolder, true);
         return FileUtil.unzip(uploadedFilePath);
 
     }
 
 
-    public String uploadFileAndNormalize(MultipartFile file, String subFolder) {
+    public String uploadFileAndNormalize(MultipartFile file, String subFolder, boolean forceZip) {
 
-        return uploadFile(file, subFolder).normalize().toString();
+        return uploadFile(file, subFolder, forceZip).normalize().toString();
 
     }
 
-    public Path uploadFile(MultipartFile file, String subFolder) {
+    public Path uploadFile(MultipartFile file, String subFolder, boolean forceZip) {
 
         String fileName = file.getOriginalFilename();
 
@@ -70,19 +71,36 @@ public class UploadFileService {
             throw new HolisticFaaSException("Could not create directory " + destinationFolder);
         }
 
-        Path destinationPath = Paths.get(destinationFolder.toString()).resolve(fileName);
+        Path destinationFile = destinationFolder.resolve(fileName);
 
-        if (Files.exists(destinationPath)) {
-            throw new HolisticFaaSException("File " + destinationPath + " already exists");
+        if (Files.exists(destinationFile)) {
+            throw new HolisticFaaSException("File " + destinationFile + " already exists");
         }
 
         try {
 
-            Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 
-            logger.info("File uploaded to: {}", destinationPath.toAbsolutePath());
+            logger.info("File uploaded to: {}", destinationFile.toAbsolutePath());
 
-            return destinationPath.toAbsolutePath();
+            // If it is not a zip file, create a zip file
+            if(forceZip && !fileName.endsWith(".zip")) {
+
+                String fileNameWithoutEnding = fileName.substring(0, fileName.lastIndexOf("."));
+                Path destinationFileAsZip = destinationFolder.resolve(fileNameWithoutEnding + ".zip");
+
+                Files.createFile(destinationFileAsZip);
+                FileUtil.zipFiles(List.of(destinationFile), destinationFileAsZip);
+
+//                Files.delete(destinationPath);
+
+                destinationFile = destinationFileAsZip;
+
+                logger.info("File zipped to: {}", destinationFile.toAbsolutePath());
+
+            }
+
+            return destinationFile.toAbsolutePath();
 
         } catch (Exception e) {
 

@@ -30,10 +30,10 @@ export default {
     return {
       headers: [
 
-        {text: 'Function Implementation', value: 'functionImplementation.fileName'},
+        {text: 'Implementation', value: 'functionImplementation.fileName'},
 
-        {text: 'Function Name', value: 'function.name'},
-        {text: 'Function Type', value: 'function.functionType.name'},
+        {text: 'Name', value: 'function.name'},
+        {text: 'Type', value: 'function.functionType.name'},
 
         // {text: 'File Path', value: 'filePath'},
 

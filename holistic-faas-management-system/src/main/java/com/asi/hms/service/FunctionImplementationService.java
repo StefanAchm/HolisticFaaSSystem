@@ -41,7 +41,7 @@ public class FunctionImplementationService {
 
         String path = null;
         if(file != null) {
-            path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+            path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR, true);
         }
 
         apiFunctionImplementation.setFilePath(path);
@@ -74,7 +74,7 @@ public class FunctionImplementationService {
                 .orElseThrow(() -> new HolisticFaaSException("Function not found"));
 
         // TODO: delete old file
-        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR, true);
 
         dbFunctionImplementation.setFilePath(path);
         this.functionImplementationRepository.save(dbFunctionImplementation);

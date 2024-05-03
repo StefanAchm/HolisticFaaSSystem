@@ -324,19 +324,21 @@ export default {
 
       this.dialogLocal = val;
 
-      this.editItems = this.workflowDeployment.functionDefinitions
+      if(!val) {
+        return;
+      }
 
       HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
 
         this.functionImplementations = response.data
 
-        for (let i = 0; i < this.editItems.length; i++) {
-          this.updateItem(this.editItems[i])
+        for (let i = 0; i < this.workflowDeployment.functionDefinitions.length; i++) {
+          this.updateItem(this.workflowDeployment.functionDefinitions[i])
         }
 
+        this.editItems = this.workflowDeployment.functionDefinitions
+
       })
-
-
 
     },
 
@@ -345,7 +347,7 @@ export default {
   created() {
 
     this.init();
-    
+
   },
 
   methods: {

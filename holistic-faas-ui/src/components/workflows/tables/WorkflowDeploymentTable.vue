@@ -233,7 +233,7 @@ export default {
 
       let value = step / steps * 100
 
-      this.workflowDeploymentFromProps.functionDefinitions
+      this.workflowDeployment.functionDefinitions
           .filter(f => f.functionDeployment.id === id)
           .forEach(f => {
 

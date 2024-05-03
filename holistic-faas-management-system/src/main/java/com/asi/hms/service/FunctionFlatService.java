@@ -127,7 +127,7 @@ public class FunctionFlatService {
 
         // TODO: probably only a temp file needed?
 
-        Path path = this.uploadFileService.uploadFile(file, UploadFileService.UPLOADS_DIR);
+        Path path = this.uploadFileService.uploadFile(file, UploadFileService.UPLOADS_DIR, false);
 
         List<APIFunctionType> apiFunctions = YamlParser.readYamlAsTree(path);
 

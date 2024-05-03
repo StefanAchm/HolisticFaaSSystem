@@ -36,7 +36,7 @@ public class UserCredentialsService {
                 .findById(apiUserCredentials.getUserId())
                 .orElseThrow(() -> new HolisticFaaSException("User '" + apiUserCredentials.getUserId() + "' not found"));
 
-        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.CREDENTIALS_DIR);
+        String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.CREDENTIALS_DIR, false);
 
         DBUserCredentials dbUserCredentials = new DBUserCredentials();
 

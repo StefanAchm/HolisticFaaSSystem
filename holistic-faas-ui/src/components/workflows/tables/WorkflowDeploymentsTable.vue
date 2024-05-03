@@ -12,6 +12,11 @@
         <td><a @click="goToDetails(item.id)">{{ item.name }}</a></td>
         <td>{{ item.user.username }}</td>
         <td>{{ item.deploymentDetails }}</td>
+
+        <td>
+          <DeploymentChip :item="item"></DeploymentChip>
+        </td>
+
       </tr>
     </template>
 
@@ -21,7 +26,10 @@
 
 <script>
 
+import DeploymentChip from "@/components/function/icons/DeploymentChip.vue";
+
 export default {
+  components: {DeploymentChip},
 
   props: {
     workflow: {
@@ -39,7 +47,9 @@ export default {
       headers: [
         {text: 'Deployment', value: 'name'},
         {text: 'Created by', value: 'user.username'},
-        {text: 'Details', value: 'deploymentDetails'}
+        {text: 'Details', value: 'deploymentDetails'},
+        {text: 'Status', value: 'status'},
+
       ],
     };
   },
@@ -60,7 +70,7 @@ export default {
 
     goToDetails(id) {
       this.$router.push({ name: 'deployments', params: { id: this.workflow.id, deploymentId: id } });
-    }
+    },
 
   },
 

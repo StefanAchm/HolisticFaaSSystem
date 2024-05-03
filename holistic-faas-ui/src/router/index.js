@@ -59,6 +59,8 @@ router.beforeEach((to, from, next) => {
 
     const isAuthenticated = store.getters["isAuthenticated"]
 
+    document.title = to.name
+
     if (to.name === 'login') {
         next()
     } else if (!isAuthenticated) {

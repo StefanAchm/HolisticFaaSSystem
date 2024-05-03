@@ -62,7 +62,7 @@ public class WorkflowService {
 
         if(file != null) {
 
-            String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR);
+            String path = this.uploadFileService.uploadFileAndNormalize(file, UploadFileService.FUNCTIONS_DIR, false);
 
             APIWorkflow workflowFromFile = AfclParser.getWorkflow(file);
             workflow.setName(workflowFromFile.getName());

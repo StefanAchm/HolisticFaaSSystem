@@ -1,5 +1,7 @@
 package com.asi.hms.model.db;
 
+import com.asi.hms.enums.DeployStatus;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +16,12 @@ public class DBWorkflowDeployment {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private DeployStatus status;
+
+    @Column(columnDefinition = "TEXT")
+    private String statusMessage;
+
     @ManyToOne
     @JoinColumn(name = "workflow_id")
     private DBWorkflow workflow;
@@ -26,6 +34,8 @@ public class DBWorkflowDeployment {
     private DBUser user;
 
     public DBWorkflowDeployment() {
+        this.status = DeployStatus.CREATED;
+        this.statusMessage = "Deployment created";
     }
 
     public UUID getId() {
@@ -38,6 +48,22 @@ public class DBWorkflowDeployment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public DeployStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeployStatus status) {
+        this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
     }
 
     public DBWorkflow getWorkflow() {
