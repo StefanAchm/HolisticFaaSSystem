@@ -10,24 +10,28 @@ import at.uibk.dps.afcl.utils.Utils;
 import com.asi.hms.model.api.APIFunction;
 import com.asi.hms.model.api.APIFunctionType;
 import com.asi.hms.model.api.APIWorkflow;
+import com.asi.hms.utils.FileUtil;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-// SRC: https://github.com/mikahautz/enactmentengine/tree/f695910b9c21026b0e55982f460daee427b0a54a/externalJars
-// ExampleS: https://github.com/AFCLWorkflows
 public class AfclParser {
 
     private AfclParser() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static APIWorkflow getWorkflow(String file) {
+    public static APIWorkflow getWorkflow(String filePath) {
 
         try {
 
-            Workflow workflow = Utils.readYAMLNoValidation(file);
+            File file = new File(filePath);
+
+            Workflow workflow = Utils.readYAMLNoValidation(
+                    FileUtil.readFileToByteArray(file)
+            );
 
             return getAPIWorkflow(workflow);
 

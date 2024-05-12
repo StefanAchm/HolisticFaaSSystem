@@ -244,4 +244,17 @@ public class FileUtil {
 
     }
 
+    public static byte[] readFileToByteArray(File file) {
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            return data;
+
+        } catch (IOException e) {
+            throw new HolisticFaaSException(e);
+        }
+
+    }
 }

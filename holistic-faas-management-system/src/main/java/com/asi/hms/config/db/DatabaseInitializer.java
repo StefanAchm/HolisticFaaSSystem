@@ -48,7 +48,7 @@ public class DatabaseInitializer {
             "afcl_workflows\\genome\\genome.yaml"
     };
 
-    private final String resourcesPath = "C:\\Users\\Stefan\\Documents\\git\\HolisticFaaS\\holistic-faas-management-system\\src\\main\\resources\\";
+    private final String resourcesPath = "src\\main\\resources\\";
 
     private final PasswordEncoder passwordEncoder;
     private final FunctionDeploymentRepository functionDeploymentRepository;
