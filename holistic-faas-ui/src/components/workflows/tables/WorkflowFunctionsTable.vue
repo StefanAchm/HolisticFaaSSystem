@@ -64,7 +64,7 @@ export default {
         {text: 'Name', value: 'name'},
         {text: 'Type', value: 'functionType.name'},
         {text: 'Implementations', value: 'implementations'},
-        {text: '', value: 'addImplementation'}
+        // {text: '', value: 'addImplementation'}
       ],
       functionImplementationDialogVisible: false,
       selected: {},

@@ -32,8 +32,8 @@ export default {
 
         {text: 'Implementation', value: 'functionImplementation.fileName'},
 
-        {text: 'Name', value: 'function.name'},
-        {text: 'Type', value: 'function.functionType.name'},
+        // {text: 'Name', value: 'function.name'},
+        {text: 'Type', value: 'functionType.name'},
 
         // {text: 'File Path', value: 'filePath'},
 

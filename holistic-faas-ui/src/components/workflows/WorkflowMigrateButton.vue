@@ -5,6 +5,7 @@
         :dialog.sync="deploymentDialogVisible"
         @dialog-closed="close"
         :workflow-deployment="workflowDeploymentForMigration"
+        :workflow-deployment-migration-info="workflowDeploymentMigrationInfo"
     />
 
     <v-menu
@@ -97,6 +98,7 @@ export default {
   data: () => ({
 
     workflowDeploymentForMigration: {},
+    workflowDeploymentMigrationInfo: {},
     deploymentDialogVisible: false,
 
   }),
@@ -155,13 +157,16 @@ export default {
 
       HfApi.migrateWorkflowDeployment(migration).then((response) => {
 
-        if (!response.data.valid) {
-          this.workflowDeploymentForMigration = response.data
-          this.deploymentDialogVisible = true
-          this.$root.snackbar.showWarning({message: 'Could not auto migrate, please manually select deployment details'})
-        } else {
-          this.close(response.data, migration.target)
+        this.workflowDeploymentForMigration = response.data.workflowDeployment
+
+        this.workflowDeploymentMigrationInfo = {
+          userMigrations: response.data.userMigrations,
+          regionMigrations: response.data.regionMigrations,
+          runtimeMigrations: response.data.runtimeMigrations
         }
+
+        this.deploymentDialogVisible = true
+        // this.$root.snackbar.showWarning({message: 'Could not auto migrate, please manually select deployment details'})
 
       })
 

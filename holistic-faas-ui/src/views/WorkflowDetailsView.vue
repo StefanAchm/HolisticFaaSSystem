@@ -55,23 +55,28 @@ export default {
     },
 
     setImplementations() {
-      // this.functions = ; // Flatten this list!
-      // Each function has a name and a type, but multiple implementations
-      // We need to flatten this list to show all implementations
-      this.implementations = this.workflow.functions?.map(function (functionItem) {
 
-        if (functionItem.functionType.functionImplementations == null || functionItem.functionType.functionImplementations.length === 0) {
-          return [];
-        }
+      let functionTypes = this.workflow.functions
+          .map(function (functionItem) {
+            return functionItem.functionType;
+          })
+          .filter((functionType, index, self) =>
+              index === self.findIndex((t) => (
+                  t.id === functionType.id
+              ))
+      );
 
-        return functionItem.functionType.functionImplementations.map(function (functionImplementation) {
-          return {
-            function: functionItem,
+
+      this.implementations = []
+      for(let functionType of functionTypes) {
+        for(let functionImplementation of functionType.functionImplementations) {
+          this.implementations.push({
+            functionType: functionType,
             functionImplementation: functionImplementation
-          }
-        });
-      }).flat()
-          .filter(item => Object.keys(item).length !== 0); // Filter out empty objects
+          })
+        }
+      }
+
     },
 
     loadDeployments() {

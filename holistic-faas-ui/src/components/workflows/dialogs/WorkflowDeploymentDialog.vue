@@ -18,14 +18,51 @@
 
         <v-card-text>
 
+          <v-row>
 
-          <v-text-field
-              v-model="name"
-              label="Name of the Deployment"
-              style="width: 30%"
-              required
-              :rules="[v => !!v || 'Name is required']"
-          ></v-text-field>
+            <v-col cols="8">
+
+              <v-text-field
+                  v-model="name"
+                  label="Name of the Deployment"
+                  style="width: 30%"
+                  required
+                  :rules="[v => !!v || 'Name is required']"
+              ></v-text-field>
+
+            </v-col>
+
+<!--            <v-col>-->
+
+
+<!--              <div v-if="workflowDeploymentMigrationInfo">-->
+
+<!--                <h3>Region Migrations:</h3>-->
+<!--                <div v-for="(migration, index) in workflowDeploymentMigrationInfo.regionMigrations" :key="index">-->
+<!--                  <p>{{ migration.source }} &ndash;&gt; {{ migration.target }}</p>-->
+<!--                </div>-->
+
+<!--              </div>-->
+
+<!--            </v-col>-->
+
+<!--            <v-col>-->
+
+
+<!--              <div v-if="workflowDeploymentMigrationInfo">-->
+
+<!--                <h3>Runtime Migrations:</h3>-->
+<!--                <div v-for="(migration, index) in workflowDeploymentMigrationInfo.runtimeMigrations" :key="index">-->
+<!--                  <p>{{ migration.source }} &ndash;&gt; {{ migration.target }}</p>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--            </v-col>-->
+
+          </v-row>
+
+
+
 
 
         </v-card-text>
@@ -289,6 +326,7 @@ export default {
   props: {
     dialog: Boolean,
     workflowDeployment: {},
+    workflowDeploymentMigrationInfo: {},
   },
 
   data: () => ({
@@ -328,6 +366,8 @@ export default {
         return;
       }
 
+      console.log(this.workflowDeploymentMigrationInfo)
+
       HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
 
         this.functionImplementations = response.data
@@ -356,7 +396,7 @@ export default {
       this.dialogLocal = false
       this.isValid = false
       this.$emit('dialog-closed', workflowDeployment)
-      this.$refs.form.reset(); // reset the form validation
+      // this.$refs.form.reset(); // reset the form validation
     },
 
     save() {

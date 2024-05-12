@@ -24,11 +24,8 @@ public class APIWorkflowDeployment {
 
     private DeployStatus status;
 
-    private boolean isValid;
-
     public APIWorkflowDeployment() {
         this.functionDefinitions = new ArrayList<>();
-        this.isValid = true;
     }
 
     public UUID getId() {
@@ -77,14 +74,6 @@ public class APIWorkflowDeployment {
 
     public void setUser(APIUser user) {
         this.user = user;
-    }
-
-    public boolean isValid() {
-        return isValid;
-    }
-
-    public void setValid(boolean valid) {
-        isValid = valid;
     }
 
     public DeployStatus getStatus() {

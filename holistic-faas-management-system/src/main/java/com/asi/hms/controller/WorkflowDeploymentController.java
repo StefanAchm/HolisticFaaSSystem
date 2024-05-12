@@ -2,6 +2,7 @@ package com.asi.hms.controller;
 
 import com.asi.hms.model.api.APIWorkflowDeployment;
 import com.asi.hms.model.api.APIWorkflowDeploymentMigration;
+import com.asi.hms.model.api.APIWorkflowDeploymentMigrationResponse;
 import com.asi.hms.service.WorkflowDeploymentService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class WorkflowDeploymentController {
     }
 
     @PostMapping(value = "/migrate")
-    public ResponseEntity<APIWorkflowDeployment> migrate(@RequestBody APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
+    public ResponseEntity<APIWorkflowDeploymentMigrationResponse> migrate(@RequestBody APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
         return ResponseEntity.ok(this.workflowDeploymentService.migrate(apiWorkflowDeploymentMigration));
     }
 

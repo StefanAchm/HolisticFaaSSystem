@@ -1,5 +1,6 @@
 package com.asi.hms.service;
 
+import com.asi.hms.enums.MigrationType;
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.*;
 import com.asi.hms.model.db.*;
@@ -135,7 +136,7 @@ public class WorkflowDeploymentService {
 
     }
 
-    public APIWorkflowDeployment migrate(APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
+    public APIWorkflowDeploymentMigrationResponse migrate(APIWorkflowDeploymentMigration apiWorkflowDeploymentMigration) {
 
         List<APIUser> users = this.userService.getAllUser();
 
@@ -154,13 +155,16 @@ public class WorkflowDeploymentService {
         apiWorkflowDeployment.setName(apiWorkflowDeploymentMigration.getWorkflowDeployment().getName());
         apiWorkflowDeployment.setFunctionDefinitions(apiMigration.getFunctions());
 
-        if (apiMigration.isValid()) {
+        if (apiMigration.isValid() && apiWorkflowDeploymentMigration.getMigrationType().equals(MigrationType.FUNCTION_USER)) {
             apiWorkflowDeployment = this.add(apiWorkflowDeployment);
         }
 
-        apiWorkflowDeployment.setValid(apiMigration.isValid());
+        APIWorkflowDeploymentMigrationResponse apiWorkflowDeploymentMigrationResponse = new APIWorkflowDeploymentMigrationResponse(apiWorkflowDeployment);
+        apiWorkflowDeploymentMigrationResponse.setUserMigrations(apiMigration.getUserMigrations());
+        apiWorkflowDeploymentMigrationResponse.setRegionMigrations(apiMigration.getRegionMigrations());
+        apiWorkflowDeploymentMigrationResponse.setRuntimeMigrations(apiMigration.getRuntimeMigrations());
 
-        return apiWorkflowDeployment;
+        return apiWorkflowDeploymentMigrationResponse;
 
     }
 
