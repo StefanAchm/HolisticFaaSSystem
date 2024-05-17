@@ -30,6 +30,8 @@ dependencies {
     // V2
     implementation 'software.amazon.awssdk:sdk-core:2.24.9'
     implementation 'software.amazon.awssdk:lambda:2.24.9'
+    implementation 'software.amazon.awssdk:iam:2.25.53'
+
 
     ////////////////////////////////////////////////////////////////////////
     // GCP

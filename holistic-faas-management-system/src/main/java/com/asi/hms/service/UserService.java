@@ -1,5 +1,6 @@
 package com.asi.hms.service;
 
+import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APILoginResponse;
 import com.asi.hms.model.api.APIUser;
 import com.asi.hms.model.db.DBUser;
@@ -37,6 +38,11 @@ public class UserService implements UserDetailsService {
     }
 
     public APIUser register(APIUser user) {
+
+        // check if user already exists
+        if (this.userRepository.findByUsername(user.getUsername()) != null) {
+            throw new HolisticFaaSException("User already exists");
+        }
 
         DBUser dbUser = new DBUser();
         dbUser.setUsername(user.getUsername());

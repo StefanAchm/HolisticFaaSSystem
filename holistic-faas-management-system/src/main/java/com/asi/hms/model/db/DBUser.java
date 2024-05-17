@@ -12,6 +12,7 @@ public class DBUser {
     @GeneratedValue
     private UUID id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;

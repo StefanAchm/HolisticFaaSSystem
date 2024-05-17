@@ -41,7 +41,8 @@ public class DatabaseInitializer {
 
     private final String[] credentials = {
             "auth\\stefan01\\aws.properties",
-            "auth\\stefan01\\gcp.json"
+            "auth\\stefan01\\gcp.json",
+            "auth\\stefan01\\aws-2.properties",
     };
 
     private final String[] workflows = {
@@ -116,6 +117,7 @@ public class DatabaseInitializer {
         addUserCredentials(user2, "GCP", credentials[1]);
 
         DBUser user3 = addUser("user3", "password");
+        addUserCredentials(user3, "AWS", credentials[2]);
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

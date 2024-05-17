@@ -90,6 +90,15 @@
                   @click:append="showPassword = !showPassword"
               ></v-text-field>
 
+              <v-alert
+                  dense
+                  v-if="error"
+                  type="error"
+                  class="my-5"
+              >
+                {{ error }}
+              </v-alert>
+
               <v-btn
                   width="100%"
                   color="primary"
@@ -142,7 +151,6 @@ export default {
       registerForm: false,
       showPassword: false,
       error: null,
-
     };
   },
 
@@ -153,6 +161,7 @@ export default {
         username: '',
         password: '',
       };
+      this.error = null;
     },
 
     login() {
@@ -179,10 +188,12 @@ export default {
     register() {
       HfApi.register(this.user)
           .then(() => {
+            this.$root.snackbar.showSuccess({message: 'User registered successfully'});
             this.changeForm();
           })
-          .catch(() => {
-            this.error = 'Could not register';
+          .catch((err) => {
+            console.log(err)
+            this.error = err.response.data.message;
           })
     },
 
