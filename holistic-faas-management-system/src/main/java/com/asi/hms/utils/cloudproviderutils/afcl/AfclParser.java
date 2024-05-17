@@ -5,11 +5,11 @@ import at.uibk.dps.afcl.SubFC;
 import at.uibk.dps.afcl.Workflow;
 import at.uibk.dps.afcl.functions.*;
 import at.uibk.dps.afcl.functions.objects.Case;
+import at.uibk.dps.afcl.functions.objects.PropertyConstraint;
 import at.uibk.dps.afcl.functions.objects.Section;
 import at.uibk.dps.afcl.utils.Utils;
-import com.asi.hms.model.api.APIFunction;
-import com.asi.hms.model.api.APIFunctionType;
-import com.asi.hms.model.api.APIWorkflow;
+import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.api.*;
 import com.asi.hms.utils.FileUtil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +53,45 @@ public class AfclParser {
             throw new RuntimeException(e);
         }
 
+
+    }
+
+    public static void createWorkflowAtPath(File sourceFile,
+                                            APIWorkflowDeployment workflowDeployment,
+                                            String destinationFile) {
+
+        try {
+
+            Workflow workflow = Utils.readYAMLNoValidation(
+                    FileUtil.readFileToByteArray(sourceFile)
+            );
+
+            List<AtomicFunction> functionsFromWorkflow = getFunctionsFromWorkflow(workflow);
+
+            for(AtomicFunction af : functionsFromWorkflow) {
+
+                APIFunctionFlat apiFunctionFlat = workflowDeployment.getFunctionDefinitions()
+                        .stream()
+                        .filter(fd -> fd.getFunction().getName().equals(af.getName()))
+                        .findFirst()
+                        .orElseThrow(() -> new HolisticFaaSException("Function not found"));
+
+                if(af.getProperties() == null) {
+                    af.setProperties(new ArrayList<>());
+                }
+
+                af.getProperties().add(
+                        new PropertyConstraint("resource", apiFunctionFlat.getFunctionDeployment().getResource())
+                );
+
+            }
+
+            // Afcl writes file to root directory, which is a bit annoying
+            Utils.writeYamlNoValidation(workflow, destinationFile);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

@@ -32,6 +32,8 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
     @Column(columnDefinition = "TEXT")
     private String statusMessage;
 
+    private String resource;
+
     @ManyToOne
     @JoinColumn(name = "function_implementation_id")
     private DBFunctionImplementation functionImplementation;
@@ -68,6 +70,7 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
         dbFunctionDeployment.setHandler(apiFunctionDeployment.getHandler());
         dbFunctionDeployment.setRegion(apiFunctionDeployment.getRegion());
         dbFunctionDeployment.setRuntime(apiFunctionDeployment.getRuntime());
+        dbFunctionDeployment.setResource(apiFunctionDeployment.getResource());
 
         dbFunctionDeployment.setUser(dbUser);
         dbFunctionDeployment.setFunctionImplementation(dbFunctionImplementation);
@@ -185,5 +188,13 @@ public class DBFunctionDeployment implements ProgressObjectInterface {
 
     public void setWorkflowDeployment(DBWorkflowDeployment workflowDeployment) {
         this.workflowDeployment = workflowDeployment;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 }

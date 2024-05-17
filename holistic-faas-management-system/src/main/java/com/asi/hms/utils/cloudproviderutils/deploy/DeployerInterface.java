@@ -5,8 +5,8 @@ import com.asi.hms.utils.ProgressHandler;
 
 public interface DeployerInterface {
 
-    boolean deployFunction(Function function, ProgressHandler progressHandler);
+    String deployFunction(Function function, ProgressHandler progressHandler);
 
-    boolean updateFunction(Function function, ProgressHandler progressHandler);
+    void updateFunction(Function function, ProgressHandler progressHandler);
 
 }

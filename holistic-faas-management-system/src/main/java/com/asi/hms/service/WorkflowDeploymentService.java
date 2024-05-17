@@ -7,9 +7,11 @@ import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
 import com.asi.hms.utils.FileUtil;
 import com.asi.hms.utils.cloudproviderutils.YamlParser;
+import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
 import com.asi.hms.utils.cloudproviderutils.migrate.MigrationRunner;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -208,6 +210,32 @@ public class WorkflowDeploymentService {
 
         // 5. Copy the zip file into the output stream
         Files.copy(zipOutFile, outputStream);
+
+    }
+
+    public byte[] downloadYaml(UUID workflowDeploymentId) throws IOException {
+
+        DBWorkflowDeployment dbWorkflowDeployment = this.workflowDeploymentRepository.findById(workflowDeploymentId).orElseThrow(
+                () -> new HolisticFaaSException("Workflow deployment not found")
+        );
+
+        String workflowFilePathAsString = dbWorkflowDeployment.getWorkflow().getFilePath();
+
+        String outfileName = "workflow_" + dbWorkflowDeployment.getId() +" .yaml";
+
+        AfclParser.createWorkflowAtPath(
+                Path.of(workflowFilePathAsString).toFile(),
+                APIWorkflowDeployment.fromDBWorkflowDeployment(dbWorkflowDeployment),
+                outfileName
+        );
+
+        byte[] bytes = Files.readAllBytes(Path.of(outfileName));
+
+        // Delete the file after reading
+        File file = new File(outfileName);
+        file.delete();
+
+        return bytes;
 
     }
 

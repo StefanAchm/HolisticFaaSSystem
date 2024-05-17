@@ -86,7 +86,7 @@ export default {
     downloadWorkflow() {
       HfApi.downloadWorkflowDeployment(this.workflowDeployment.id)
           .then(response => {
-            download.downloadFile(response.data, this.workflowDeployment.name + '.zip')
+            download.downloadFile(response.data, this.workflowDeployment.name + '.yaml')
           })
     },
 

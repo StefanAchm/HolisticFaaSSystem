@@ -37,7 +37,7 @@ class DeployerInterfaceTest {
 
         DeployAWS deployAws = new DeployAWS(UserAWS.fromFile(filePath));
 
-        Assertions.assertTrue(deployAws.deployFunction(function, null));
+        deployAws.deployFunction(function, null);
 
     }
 
@@ -57,8 +57,7 @@ class DeployerInterfaceTest {
 
         DeployGCP deployGcp = new DeployGCP(UserGCP.fromFile(filePath));
 
-        Assertions.assertTrue(deployGcp.deployFunction(function, null));
-
+        deployGcp.deployFunction(function, null);
 
     }
 

@@ -20,6 +20,8 @@ public class APIFunctionDeployment {
     private String handler;
     private String region;
     private String runtime;
+    private String resource;
+
     private DeployStatus status;
     private String statusMessage;
 
@@ -42,6 +44,8 @@ public class APIFunctionDeployment {
         apiFunctionDeployment.setHandler(dbFunctionDeployment.getHandler());
         apiFunctionDeployment.setRegion(dbFunctionDeployment.getRegion());
         apiFunctionDeployment.setRuntime(dbFunctionDeployment.getRuntime());
+        apiFunctionDeployment.setResource(dbFunctionDeployment.getResource());
+
         apiFunctionDeployment.setStatus(dbFunctionDeployment.getStatus());
         apiFunctionDeployment.setStatusMessage(dbFunctionDeployment.getStatusMessage());
 
@@ -158,6 +162,14 @@ public class APIFunctionDeployment {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 
     public UUID getFunctionImplementationId() {

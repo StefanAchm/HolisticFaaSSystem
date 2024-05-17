@@ -269,7 +269,7 @@ export default {
     },
 
     downloadWorkflowDeployment(id) {
-        return apiClient.post('/workflow_deployment/' + id + '/download',
+        return apiClient.post('/workflow_deployment/' + id + '/downloadYaml',
             {responseType: 'blob'});
     },
 

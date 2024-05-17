@@ -148,10 +148,18 @@ public class FunctionDeploymentService {
             DeployerInterface deployer = function.getProvider().getDeployer(user);
 
             // Actual deployment
-            boolean success = isUpdate
-                    ? deployer.updateFunction(function, progressHandler)
-                    : deployer.deployFunction(function, progressHandler);
 
+            boolean success = false;
+            if(isUpdate) {
+                deployer.updateFunction(function, progressHandler);
+                success = true;
+            } else {
+                String resource = deployer.deployFunction(function, progressHandler);
+                if(resource != null && !resource.isEmpty()) {
+                    dbFunctionDeployment.setResource(resource);
+                    success = true;
+                }
+            }
 
             dbFunctionDeployment.setStatusWithMessage(
                     success ? DeployStatus.DEPLOYED : DeployStatus.FAILED,

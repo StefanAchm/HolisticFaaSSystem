@@ -34,7 +34,7 @@ public class DeployAWS implements DeployerInterface {
     }
 
     @Override
-    public boolean deployFunction(Function function, ProgressHandler progressHandler) {
+    public String deployFunction(Function function, ProgressHandler progressHandler) {
 
         LambdaClient awsLambda = createLambdaClient(function, progressHandler);
 
@@ -80,11 +80,11 @@ public class DeployAWS implements DeployerInterface {
 
             awsLambda.close();
 
+            return functionResponse.functionArn();
+
         } catch (LambdaException | IOException e) {
             throw new HolisticFaaSException(e);
         }
-
-        return true;
 
     }
 
@@ -182,11 +182,13 @@ public class DeployAWS implements DeployerInterface {
     }
 
     @Override
-    public boolean updateFunction(Function function, ProgressHandler progressHandler) {
+    public void updateFunction(Function function, ProgressHandler progressHandler) {
 
         try {
 
             LambdaClient awsLambda = createLambdaClient(function, progressHandler);
+
+            String roleArn = getOrCreateRoleArn();
 
             LambdaWaiter waiter = awsLambda.waiter();
 
@@ -215,7 +217,7 @@ public class DeployAWS implements DeployerInterface {
             UpdateFunctionConfigurationRequest updateConfigRequest = UpdateFunctionConfigurationRequest.builder()
                     .functionName(function.getName())
                     .handler(function.getHandler())
-                    .role(this.user.getRoleArn())
+                    .role(roleArn)
                     .runtime(function.getRuntime().getRuntimeCode())
                     .memorySize(function.getMemory())
                     .timeout(function.getTimeoutSecs())
@@ -229,25 +231,11 @@ public class DeployAWS implements DeployerInterface {
                     .response()
                     .ifPresent(l -> progressHandler.update("Function configuration updated"));
 
-            // Publish a new version
-//            PublishVersionRequest publishVersionRequest = PublishVersionRequest.builder()
-//                    .functionName(function.getName())
-//                    .build();
-//
-//            awsLambda.publishVersion(publishVersionRequest);
-//
-//            waiter.waitUntilFunctionUpdatedV2(getFunctionRequest)
-//                    .matched()
-//                    .response()
-//                    .ifPresent(l -> progressHandler.update("Function version published"));
-
             awsLambda.close();
 
         } catch (LambdaException | IOException e) {
             throw new HolisticFaaSException(e);
         }
-
-        return true;
 
     }
 

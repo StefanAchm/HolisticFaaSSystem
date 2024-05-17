@@ -24,16 +24,16 @@ public class DeployGCP implements DeployerInterface {
     }
 
     @Override
-    public boolean deployFunction(Function function, ProgressHandler progressHandler) {
+    public String deployFunction(Function function, ProgressHandler progressHandler) {
         return deployOrUpdateFunction(function, progressHandler, false);
     }
 
     @Override
-    public boolean updateFunction(Function function, ProgressHandler progressHandler) {
-        return deployOrUpdateFunction(function, progressHandler, true);
+    public void updateFunction(Function function, ProgressHandler progressHandler) {
+        deployOrUpdateFunction(function, progressHandler, true);
     }
 
-    private boolean deployOrUpdateFunction(Function function, ProgressHandler progressHandler, boolean update) {
+    private String deployOrUpdateFunction(Function function, ProgressHandler progressHandler, boolean update) {
 
         try {
 
@@ -68,11 +68,11 @@ public class DeployGCP implements DeployerInterface {
 
         String name = function.getName().toLowerCase().replaceAll("[^a-z0-9]", "-");
 
-        return name + "-bucket";
+        return name + "-bucket-hf";
 
     }
 
-    private static boolean create(Function function,
+    private static String create(Function function,
                                   UserGCP user,
                                   String sourceZipFile,
                                   ProgressHandler progressHandler) throws IOException, ExecutionException, InterruptedException {
@@ -113,16 +113,17 @@ public class DeployGCP implements DeployerInterface {
 
             progressHandler.update("Function created: " + cloudFunction1.getName());
 
-        }
+            // return something like: https://europe-west2-meedesoro.cloudfunctions.net/function3
+            return cloudFunction1.getHttpsTrigger().getUrl();
 
-        return true;
+        }
 
     }
 
-    private static boolean update(Function function,
-                                  UserGCP user,
-                                  String sourceZipFile,
-                                  ProgressHandler progressHandler) throws IOException, ExecutionException, InterruptedException {
+    private static String update(Function function,
+                                 UserGCP user,
+                                 String sourceZipFile,
+                                 ProgressHandler progressHandler) throws IOException, ExecutionException, InterruptedException {
 
         CloudFunctionsServiceSettings cloudFunctionsServiceSettings;
 
@@ -168,9 +169,9 @@ public class DeployGCP implements DeployerInterface {
 
             progressHandler.update("Function updated: " + cloudFunction1.getName());
 
-        }
+            return cloudFunction1.getHttpsTrigger().getUrl();
 
-        return true;
+        }
 
     }
 

@@ -54,20 +54,31 @@ public class WorkflowDeploymentController {
             }
         };
 
-//        byte[] content = null;
-//        try {
-//            content = this.workflowDeploymentService.download(workflowDeploymentId, outputStream);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=.zip");
-//        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(content.length));
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(stream);
+
+    }
+
+    @PostMapping("{workflowDeploymentId}/downloadYaml")
+    public ResponseEntity<byte[]> downloadYaml(@PathVariable UUID workflowDeploymentId) {
+
+        byte[] content;
+        try {
+            content = this.workflowDeploymentService.downloadYaml(workflowDeploymentId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=.yaml");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(content);
 
     }
 
