@@ -104,6 +104,9 @@ export default {
 
       if(item.functionDeployment.status === 'CREATED') {
         HfApi.deployFunctionDeployment(item.functionDeployment.id)
+            .catch(() => {
+              this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.function.name})
+            })
       }
 
     },

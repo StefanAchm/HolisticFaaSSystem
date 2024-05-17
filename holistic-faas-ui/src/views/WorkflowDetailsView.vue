@@ -8,6 +8,7 @@
 
     <WorkflowDetailsHeader
         :workflow="workflow"
+        :deployments="deployments"
         @workflow-updated="loadWorkflow"
     ></WorkflowDetailsHeader>
 

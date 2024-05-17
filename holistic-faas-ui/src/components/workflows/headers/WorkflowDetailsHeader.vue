@@ -23,6 +23,7 @@
       <v-btn
           color="primary"
           class="mx-2"
+          :disabled="deployments?.length > 0"
           @click="openFunctionDialog">
 
         <v-icon
@@ -120,6 +121,10 @@ export default {
       type: Object,
       required: true
     },
+    deployments: {
+      type: Array,
+      required: false
+    }
   },
 
   components: {

@@ -22,7 +22,7 @@
       </v-btn>
 
       <v-btn
-          :disabled="undeployedFunctions?.length === 0"
+          :disabled="deploymentDisabled()"
           color="primary"
           class="mx-2"
           @click="deployUndeployed">
@@ -97,10 +97,14 @@ export default {
             .then(() => {
             })
             .catch(() => {
-              this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.functionDeployment.name})
+              this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.function.name})
             })
       })
 
+    },
+
+    deploymentDisabled() {
+      return this.undeployedFunctions?.length === 0 || this.workflowDeployment.user?.username !== this.$store.state.username
     },
 
     deployAll() {

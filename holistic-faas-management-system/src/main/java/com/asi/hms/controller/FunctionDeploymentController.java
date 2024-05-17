@@ -30,6 +30,11 @@ public class FunctionDeploymentController {
 
     @PostMapping(value = "/deploy")
     public ResponseEntity<String> deploy(@RequestParam UUID functionId) {
+
+        if(!this.functionDeploymentService.validateUser(functionId)) {
+            return ResponseEntity.badRequest().body("Current user is not allowed to deploy this function!");
+        }
+
         this.functionDeploymentService.deploy(functionId);
         return ResponseEntity.ok("Function deployment started");
     }

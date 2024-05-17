@@ -12,6 +12,7 @@ import com.asi.hms.model.UserInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
@@ -115,6 +116,16 @@ public class FunctionDeploymentService {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Deployment logic:
+
+    public boolean validateUser(UUID functionDeploymentId) {
+
+        DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
+
+        DBUser dbUser = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getDbUser();
+
+        return dbUser.getId().equals(dbFunctionDeployment.getUser().getId());
+
+    }
 
     @Async
     public void deploy(UUID functionDeploymentId) {

@@ -140,7 +140,7 @@ export default {
               this.deploymentDialogVisible = true
               this.$root.snackbar.showWarning({message: 'Could not auto migrate, please manually select deployment details'})
             } else {
-              this.close(response.data, this.$store.state.username)
+              this.close(response.data.workflowDeployment, this.$store.state.username)
             }
 
           })
