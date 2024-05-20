@@ -91,7 +91,7 @@ public class FileUtil {
             return null;
         }
 
-        return filePath.substring(filePath.lastIndexOf("\\") + 1);
+        return Paths.get(filePath).getFileName().toString();
 
     }
 
