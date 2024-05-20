@@ -19,7 +19,7 @@
           <v-spacer></v-spacer>
 
           <v-card-text>
-            Holistic FaaS is a serverless platform that allows you to deploy and manage your functions in a simple and
+            Holistic FaaS is a serverless platform that allows you to deploy and manage your workflows in a simple and
             efficient way.
           </v-card-text>
 
@@ -54,25 +54,25 @@
 
       </v-col>
 
-      <v-col>
+<!--      <v-col>-->
 
-        <v-card>
+<!--        <v-card>-->
 
-          <v-card-title>
-            <span class="text-h5">Functions</span>
-          </v-card-title>
+<!--          <v-card-title>-->
+<!--            <span class="text-h5">Functions</span>-->
+<!--          </v-card-title>-->
 
-          <v-card-text>
-            Add and deploy Functions
-          </v-card-text>
+<!--          <v-card-text>-->
+<!--            Add and deploy Functions-->
+<!--          </v-card-text>-->
 
-          <v-card-actions>
-            <v-btn color="primary" text @click="$router.push({ path: '/functions'})">Explore</v-btn>
-          </v-card-actions>
+<!--          <v-card-actions>-->
+<!--            <v-btn color="primary" text @click="$router.push({ path: '/functions'})">Explore</v-btn>-->
+<!--          </v-card-actions>-->
 
-        </v-card>
+<!--        </v-card>-->
 
-      </v-col>
+<!--      </v-col>-->
 
 
       <v-col>

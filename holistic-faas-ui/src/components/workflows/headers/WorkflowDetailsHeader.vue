@@ -19,58 +19,20 @@
 
       </v-btn>
 
+      <WorkflowAddMenu
+          :workflow-deployment="workflowDeployment"
+          :workflow="workflow"
+          :deployments="deployments"
+          @workflow-updated="workflowUpdated()"
+      >
 
-      <v-btn
-          color="primary"
-          class="mx-2"
-          :disabled="deployments?.length > 0"
-          @click="openFunctionDialog">
-
-        <v-icon
-            left>
-          mdi-plus
-        </v-icon>
-
-
-        Add Function
-      </v-btn>
-
-
-      <v-btn
-          color="primary"
-          class="mx-2"
-          @click="openFunctionImplementationDialog">
-
-        <v-icon
-            left>
-          mdi-plus
-        </v-icon>
-
-        Add Implementation
-
-      </v-btn>
-
-
-      <v-btn
-          color="primary"
-          class="mx-2"
-          @click="openDeploymentDialog">
-
-        <v-icon
-            left>
-          mdi-plus
-        </v-icon>
-
-        Add Deployment
-
-      </v-btn>
-
+      </WorkflowAddMenu>
 
     </v-toolbar>
 
-    <!-- Add a v-card here to display the workflow details -->
     <v-card elevation="0" class="pb-6">
-      <!--      <v-card-title> Details: </v-card-title>-->
+
+      <v-divider></v-divider>
 
       <v-card-text>
         <strong> Created by: </strong>
@@ -84,35 +46,14 @@
 
     </v-card>
 
-    <!-- Dialogs -->
-    <FunctionImplementationDialogExtended
-        :dialog.sync="functionImplementationDialogVisible"
-        :workflow="workflow"
-        @dialog-closed="dialogClosed()"
-    />
-
-    <FunctionWithTypeDialog
-        :dialog.sync="functionDialogVisible"
-        :workflow="workflow"
-        @dialog-closed="dialogClosed()"
-    />
-
-    <WorkflowDeploymentDialog
-        :dialog.sync="deploymentDialogVisible"
-        :workflow-deployment="workflowDeployment"
-        @dialog-closed="dialogClosed()"
-    />
   </div>
 </template>
 
 <script>
 
 import HfApi from "@/utils/hf-api";
-import FunctionImplementationDialogExtended
-  from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
-import WorkflowDeploymentDialog from "@/components/workflows/dialogs/WorkflowDeploymentDialog.vue";
-import FunctionWithTypeDialog from "@/components/function/dialogs/FunctionWithTypeDialog.vue";
 import download from "@/utils/download";
+import WorkflowAddMenu from "@/components/workflows/WorkflowAddMenu.vue";
 
 export default {
 
@@ -127,22 +68,12 @@ export default {
     }
   },
 
-  components: {
-    FunctionWithTypeDialog,
-    WorkflowDeploymentDialog,
-    FunctionImplementationDialogExtended
-  },
+  components: {WorkflowAddMenu,},
 
   data() {
 
     return {
-
       workflowDeployment: {}, // This will hold the fetched workflow deployment
-
-      functionImplementationDialogVisible: false,
-      deploymentDialogVisible: false,
-      functionDialogVisible: false
-
     };
 
   },
@@ -155,21 +86,9 @@ export default {
 
   methods: {
 
-    dialogClosed() {
+    workflowUpdated() {
       this.getWorkflowDeployment();
       this.$emit('workflow-updated');
-    },
-
-    openFunctionDialog() {
-      this.functionDialogVisible = true;
-    },
-
-    openFunctionImplementationDialog() {
-      this.functionImplementationDialogVisible = true;
-    },
-
-    openDeploymentDialog() {
-      this.deploymentDialogVisible = true;
     },
 
     downloadWorkflow() {

@@ -12,8 +12,14 @@
       <v-card-text>
 
         <v-row>
-          <v-col cols="12" v-if="store.state.awsSessionToken !== ''">
-            <strong>Current Token:</strong> {{ store.state.awsSessionToken }}
+          <v-col cols="12">
+            <strong>Current Token:</strong>
+
+            <span v-if="store.state.awsSessionToken === ''">
+              No token set!
+            </span>
+
+            {{ store.state.awsSessionToken }}
           </v-col>
         </v-row>
 
@@ -44,7 +50,7 @@
         </v-btn>
 
         <v-btn
-            v-if="store.state.awsSessionToken !== ''"
+            :disabled="store.state.awsSessionToken === ''"
             color="error"
             @click="deleteToken">Delete</v-btn>
 
@@ -88,9 +94,11 @@ export default {
     },
     save() {
       this.$store.commit('setAwsSessionToken', this.awsSessionToken)
+      this.awsSessionToken = ''
     },
     deleteToken() {
       this.$store.commit('setAwsSessionToken', '')
+      this.awsSessionToken = ''
     }
   }
 }

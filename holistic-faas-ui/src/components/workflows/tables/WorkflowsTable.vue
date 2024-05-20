@@ -8,9 +8,23 @@
       item-key="id"
       :items-per-page="10"
       loading="deployments.length === 0"
+      :search="search"
   >
 
     <template v-slot:top>
+
+      <v-toolbar
+          elevation="0"
+      >
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+        ></v-text-field>
+      </v-toolbar>
+
 
     </template>
 
@@ -40,6 +54,7 @@ export default {
 
   data: () => ({
     selected: [],
+    search: '',
     headers: [
 
       {text: 'Name', value: 'name', sortable: true, width: '20%'},
@@ -68,7 +83,7 @@ export default {
     },
 
     goToDetails(id) {
-      this.$router.push({ name: 'workflow', params: { id } });
+      this.$router.push({name: 'workflow', params: {id}});
     },
 
   },

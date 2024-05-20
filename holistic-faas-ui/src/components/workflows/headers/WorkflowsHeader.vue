@@ -4,7 +4,7 @@
       elevation="0"
   >
 
-    <v-toolbar-title>Workflows</v-toolbar-title>
+    <v-toolbar-title>Explore Workflows</v-toolbar-title>
 
     <v-spacer></v-spacer>
 

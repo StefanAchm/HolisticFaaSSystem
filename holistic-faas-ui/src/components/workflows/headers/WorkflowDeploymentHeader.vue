@@ -40,13 +40,12 @@
           :workflow-deployment="workflowDeployment"
       ></WorkflowMigrateButton>
 
-      <!--      <v-btn color="primary" class="mx-2" @click="openDeploymentDialog">Migrate</v-btn>-->
-
     </v-toolbar>
 
-    <!-- Add a v-card here to display the workflow details -->
     <v-card elevation="0" class="pb-6">
-      <!--      <v-card-title> Details: </v-card-title>-->
+
+      <v-divider></v-divider>
+
       <v-card-text>
         <strong> Created by: </strong> {{ workflowDeployment.user?.username }}
       </v-card-text>

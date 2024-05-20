@@ -2,7 +2,9 @@
 
   <v-toolbar
       flat
+      fluid
   >
+
     <v-breadcrumbs
         class="mx-2"
         :items="breadcrumbs"

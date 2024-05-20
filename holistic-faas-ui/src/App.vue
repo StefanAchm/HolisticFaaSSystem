@@ -16,11 +16,17 @@
           nav
       >
 
-        <v-list-item v-if="mini" @click.stop="mini = !mini" class="mb-7">
+        <v-list-item v-if="mini" class="mb-2 px-0">
 
-          <v-list-item-icon>
-            <v-icon>mdi-menu</v-icon>
-          </v-list-item-icon>
+<!--          <v-list-item-icon>-->
+<!--            <v-icon>mdi-chevron-right</v-icon>-->
+<!--          </v-list-item-icon>-->
+
+          <v-list-item-action>
+            <v-btn icon @click.stop="mini = !mini">
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+          </v-list-item-action>
 
         </v-list-item>
 
@@ -117,7 +123,7 @@
     <v-main>
 
       <!-- Provides the application the proper gutter -->
-      <v-sheet class="ma-0 pa-5" color="neutral" min-height="100%">
+      <v-sheet class="ma-0 pa-3" color="neutral" min-height="100%">
         <router-view></router-view>
       </v-sheet>
 
@@ -150,7 +156,7 @@ export default {
       items: [
         {title: 'Home', icon: 'mdi-bank', route: '/'},
         {title: 'Workflows', icon: 'mdi-sitemap-outline', route: '/workflows'},
-        {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
+        // {title: 'Functions', icon: 'mdi-lambda', route: '/functions'},
         // {title: 'Users', icon: 'mdi-account-multiple', route: '/users'}, // TODO: Should only be a admin view?
         {title: 'Profile', icon: 'mdi-card-account-details-outline', route: '/profile'},
       ],
