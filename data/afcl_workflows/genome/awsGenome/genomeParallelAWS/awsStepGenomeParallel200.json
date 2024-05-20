@@ -1,0 +1,2617 @@
+{
+  "Comment": "GenomeParallel",
+  "StartAt": "parallelIndividualSifting",
+  "States": {
+    "parallelIndividualSifting": {
+      "Type": "Parallel",
+      "ResultPath": "$.par",
+      "Next": "parallelMutationsOverlapFrequency",
+      "Branches": [
+        {
+          "StartAt": "parallelIndividuals",
+          "States": {
+            "parallelIndividuals": {
+              "Type": "Parallel",
+              "Next": "individualsMerge",
+              "Branches": [
+                {
+                  "StartAt": "individual1",
+                  "States": {
+                    "individual1": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual1",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual2",
+                  "States": {
+                    "individual2": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual2",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual3",
+                  "States": {
+                    "individual3": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual3",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual4",
+                  "States": {
+                    "individual4": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual4",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual5",
+                  "States": {
+                    "individual5": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual5",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual6",
+                  "States": {
+                    "individual6": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual6",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual7",
+                  "States": {
+                    "individual7": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual7",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual8",
+                  "States": {
+                    "individual8": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual8",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual9",
+                  "States": {
+                    "individual9": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual9",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual10",
+                  "States": {
+                    "individual10": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual10",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual11",
+                  "States": {
+                    "individual11": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual11",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual12",
+                  "States": {
+                    "individual12": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual12",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual13",
+                  "States": {
+                    "individual13": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual13",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual14",
+                  "States": {
+                    "individual14": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual14",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual15",
+                  "States": {
+                    "individual15": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual15",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual16",
+                  "States": {
+                    "individual16": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual16",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual17",
+                  "States": {
+                    "individual17": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual17",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual18",
+                  "States": {
+                    "individual18": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual18",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual19",
+                  "States": {
+                    "individual19": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual19",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual20",
+                  "States": {
+                    "individual20": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual20",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual21",
+                  "States": {
+                    "individual21": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual21",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual22",
+                  "States": {
+                    "individual22": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual22",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual23",
+                  "States": {
+                    "individual23": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual23",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual24",
+                  "States": {
+                    "individual24": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual24",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual25",
+                  "States": {
+                    "individual25": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual25",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual26",
+                  "States": {
+                    "individual26": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual26",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual27",
+                  "States": {
+                    "individual27": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual27",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual28",
+                  "States": {
+                    "individual28": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual28",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual29",
+                  "States": {
+                    "individual29": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual29",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual30",
+                  "States": {
+                    "individual30": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual30",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual31",
+                  "States": {
+                    "individual31": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual31",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual32",
+                  "States": {
+                    "individual32": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual32",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual33",
+                  "States": {
+                    "individual33": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual33",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual34",
+                  "States": {
+                    "individual34": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual34",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual35",
+                  "States": {
+                    "individual35": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual35",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual36",
+                  "States": {
+                    "individual36": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual36",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual37",
+                  "States": {
+                    "individual37": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual37",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual38",
+                  "States": {
+                    "individual38": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual38",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual39",
+                  "States": {
+                    "individual39": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual39",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual40",
+                  "States": {
+                    "individual40": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual40",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual41",
+                  "States": {
+                    "individual41": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual41",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual42",
+                  "States": {
+                    "individual42": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual42",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual43",
+                  "States": {
+                    "individual43": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual43",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual44",
+                  "States": {
+                    "individual44": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual44",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual45",
+                  "States": {
+                    "individual45": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual45",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual46",
+                  "States": {
+                    "individual46": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual46",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual47",
+                  "States": {
+                    "individual47": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual47",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual48",
+                  "States": {
+                    "individual48": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual48",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual49",
+                  "States": {
+                    "individual49": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual49",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual50",
+                  "States": {
+                    "individual50": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual50",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual51",
+                  "States": {
+                    "individual51": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual51",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual52",
+                  "States": {
+                    "individual52": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual52",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual53",
+                  "States": {
+                    "individual53": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual53",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual54",
+                  "States": {
+                    "individual54": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual54",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual55",
+                  "States": {
+                    "individual55": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual55",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual56",
+                  "States": {
+                    "individual56": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual56",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual57",
+                  "States": {
+                    "individual57": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual57",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual58",
+                  "States": {
+                    "individual58": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual58",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual59",
+                  "States": {
+                    "individual59": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual59",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual60",
+                  "States": {
+                    "individual60": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual60",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual61",
+                  "States": {
+                    "individual61": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual61",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual62",
+                  "States": {
+                    "individual62": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual62",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual63",
+                  "States": {
+                    "individual63": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual63",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual64",
+                  "States": {
+                    "individual64": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual64",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual65",
+                  "States": {
+                    "individual65": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual65",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual66",
+                  "States": {
+                    "individual66": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual66",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual67",
+                  "States": {
+                    "individual67": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual67",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual68",
+                  "States": {
+                    "individual68": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual68",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual69",
+                  "States": {
+                    "individual69": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual69",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual70",
+                  "States": {
+                    "individual70": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual70",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual71",
+                  "States": {
+                    "individual71": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual71",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual72",
+                  "States": {
+                    "individual72": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual72",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual73",
+                  "States": {
+                    "individual73": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual73",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual74",
+                  "States": {
+                    "individual74": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual74",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual75",
+                  "States": {
+                    "individual75": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual75",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual76",
+                  "States": {
+                    "individual76": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual76",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual77",
+                  "States": {
+                    "individual77": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual77",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual78",
+                  "States": {
+                    "individual78": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual78",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual79",
+                  "States": {
+                    "individual79": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual79",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual80",
+                  "States": {
+                    "individual80": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual80",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual81",
+                  "States": {
+                    "individual81": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual81",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual82",
+                  "States": {
+                    "individual82": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual82",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual83",
+                  "States": {
+                    "individual83": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual83",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual84",
+                  "States": {
+                    "individual84": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual84",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual85",
+                  "States": {
+                    "individual85": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual85",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual86",
+                  "States": {
+                    "individual86": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual86",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual87",
+                  "States": {
+                    "individual87": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual87",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual88",
+                  "States": {
+                    "individual88": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual88",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual89",
+                  "States": {
+                    "individual89": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual89",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual90",
+                  "States": {
+                    "individual90": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual90",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual91",
+                  "States": {
+                    "individual91": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual91",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual92",
+                  "States": {
+                    "individual92": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual92",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual93",
+                  "States": {
+                    "individual93": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual93",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual94",
+                  "States": {
+                    "individual94": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual94",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual95",
+                  "States": {
+                    "individual95": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual95",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual96",
+                  "States": {
+                    "individual96": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual96",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual97",
+                  "States": {
+                    "individual97": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual97",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual98",
+                  "States": {
+                    "individual98": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual98",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual99",
+                  "States": {
+                    "individual99": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual99",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual100",
+                  "States": {
+                    "individual100": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual100",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual101",
+                  "States": {
+                    "individual101": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual101",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual102",
+                  "States": {
+                    "individual102": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual102",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual103",
+                  "States": {
+                    "individual103": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual103",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual104",
+                  "States": {
+                    "individual104": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual104",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual105",
+                  "States": {
+                    "individual105": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual105",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual106",
+                  "States": {
+                    "individual106": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual106",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual107",
+                  "States": {
+                    "individual107": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual107",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual108",
+                  "States": {
+                    "individual108": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual108",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual109",
+                  "States": {
+                    "individual109": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual109",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual110",
+                  "States": {
+                    "individual110": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual110",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual111",
+                  "States": {
+                    "individual111": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual111",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual112",
+                  "States": {
+                    "individual112": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual112",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual113",
+                  "States": {
+                    "individual113": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual113",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual114",
+                  "States": {
+                    "individual114": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual114",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual115",
+                  "States": {
+                    "individual115": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual115",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual116",
+                  "States": {
+                    "individual116": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual116",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual117",
+                  "States": {
+                    "individual117": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual117",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual118",
+                  "States": {
+                    "individual118": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual118",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual119",
+                  "States": {
+                    "individual119": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual119",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual120",
+                  "States": {
+                    "individual120": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual120",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual121",
+                  "States": {
+                    "individual121": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual121",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual122",
+                  "States": {
+                    "individual122": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual122",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual123",
+                  "States": {
+                    "individual123": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual123",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual124",
+                  "States": {
+                    "individual124": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual124",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual125",
+                  "States": {
+                    "individual125": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual125",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual126",
+                  "States": {
+                    "individual126": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual126",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual127",
+                  "States": {
+                    "individual127": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual127",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual128",
+                  "States": {
+                    "individual128": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual128",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual129",
+                  "States": {
+                    "individual129": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual129",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual130",
+                  "States": {
+                    "individual130": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual130",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual131",
+                  "States": {
+                    "individual131": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual131",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual132",
+                  "States": {
+                    "individual132": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual132",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual133",
+                  "States": {
+                    "individual133": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual133",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual134",
+                  "States": {
+                    "individual134": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual134",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual135",
+                  "States": {
+                    "individual135": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual135",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual136",
+                  "States": {
+                    "individual136": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual136",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual137",
+                  "States": {
+                    "individual137": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual137",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual138",
+                  "States": {
+                    "individual138": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual138",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual139",
+                  "States": {
+                    "individual139": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual139",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual140",
+                  "States": {
+                    "individual140": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual140",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual141",
+                  "States": {
+                    "individual141": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual141",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual142",
+                  "States": {
+                    "individual142": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual142",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual143",
+                  "States": {
+                    "individual143": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual143",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual144",
+                  "States": {
+                    "individual144": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual144",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual145",
+                  "States": {
+                    "individual145": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual145",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual146",
+                  "States": {
+                    "individual146": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual146",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual147",
+                  "States": {
+                    "individual147": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual147",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual148",
+                  "States": {
+                    "individual148": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual148",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual149",
+                  "States": {
+                    "individual149": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual149",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual150",
+                  "States": {
+                    "individual150": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual150",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual151",
+                  "States": {
+                    "individual151": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual151",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual152",
+                  "States": {
+                    "individual152": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual152",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual153",
+                  "States": {
+                    "individual153": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual153",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual154",
+                  "States": {
+                    "individual154": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual154",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual155",
+                  "States": {
+                    "individual155": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual155",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual156",
+                  "States": {
+                    "individual156": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual156",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual157",
+                  "States": {
+                    "individual157": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual157",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual158",
+                  "States": {
+                    "individual158": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual158",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual159",
+                  "States": {
+                    "individual159": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual159",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual160",
+                  "States": {
+                    "individual160": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual160",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual161",
+                  "States": {
+                    "individual161": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual161",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual162",
+                  "States": {
+                    "individual162": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual162",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual163",
+                  "States": {
+                    "individual163": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual163",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual164",
+                  "States": {
+                    "individual164": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual164",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual165",
+                  "States": {
+                    "individual165": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual165",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual166",
+                  "States": {
+                    "individual166": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual166",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual167",
+                  "States": {
+                    "individual167": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual167",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual168",
+                  "States": {
+                    "individual168": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual168",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual169",
+                  "States": {
+                    "individual169": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual169",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual170",
+                  "States": {
+                    "individual170": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual170",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual171",
+                  "States": {
+                    "individual171": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual171",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual172",
+                  "States": {
+                    "individual172": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual172",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual173",
+                  "States": {
+                    "individual173": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual173",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual174",
+                  "States": {
+                    "individual174": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual174",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual175",
+                  "States": {
+                    "individual175": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual175",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual176",
+                  "States": {
+                    "individual176": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual176",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual177",
+                  "States": {
+                    "individual177": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual177",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual178",
+                  "States": {
+                    "individual178": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual178",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual179",
+                  "States": {
+                    "individual179": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual179",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual180",
+                  "States": {
+                    "individual180": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual180",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual181",
+                  "States": {
+                    "individual181": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual181",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual182",
+                  "States": {
+                    "individual182": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual182",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual183",
+                  "States": {
+                    "individual183": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual183",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual184",
+                  "States": {
+                    "individual184": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual184",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual185",
+                  "States": {
+                    "individual185": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual185",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual186",
+                  "States": {
+                    "individual186": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual186",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual187",
+                  "States": {
+                    "individual187": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual187",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual188",
+                  "States": {
+                    "individual188": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual188",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual189",
+                  "States": {
+                    "individual189": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual189",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual190",
+                  "States": {
+                    "individual190": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual190",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual191",
+                  "States": {
+                    "individual191": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual191",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual192",
+                  "States": {
+                    "individual192": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual192",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual193",
+                  "States": {
+                    "individual193": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual193",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual194",
+                  "States": {
+                    "individual194": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual194",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual195",
+                  "States": {
+                    "individual195": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual195",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual196",
+                  "States": {
+                    "individual196": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual196",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual197",
+                  "States": {
+                    "individual197": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual197",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual198",
+                  "States": {
+                    "individual198": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual198",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual199",
+                  "States": {
+                    "individual199": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual199",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual200",
+                  "States": {
+                    "individual200": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual200",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                }
+              ]
+            },
+            "individualsMerge": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individuals_merge",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "sifting",
+          "States": {
+            "sifting": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_sifting",
+              "InputPath": "$.sifting",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "parallelMutationsOverlapFrequency": {
+      "Type": "Parallel",
+      "ResultPath": "$.par",
+      "End": true,
+      "Branches": [
+        {
+          "StartAt": "mutationsOverlapEUR",
+          "States": {
+            "mutationsOverlapEUR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popEUR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapAFR",
+          "States": {
+            "mutationsOverlapAFR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popAFR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapEAS",
+          "States": {
+            "mutationsOverlapEAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popEAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapALL",
+          "States": {
+            "mutationsOverlapALL": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popALL",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapGBR",
+          "States": {
+            "mutationsOverlapGBR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popGBR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapSAS",
+          "States": {
+            "mutationsOverlapSAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popSAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapAMR",
+          "States": {
+            "mutationsOverlapAMR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popAMR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyEUR",
+          "States": {
+            "frequencyEUR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popEUR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyAFR",
+          "States": {
+            "frequencyAFR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popAFR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyEAS",
+          "States": {
+            "frequencyEAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popEAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyALL",
+          "States": {
+            "frequencyALL": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popALL",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyGBR",
+          "States": {
+            "frequencyGBR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popGBR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencySAS",
+          "States": {
+            "frequencySAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popSAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyAMR",
+          "States": {
+            "frequencyAMR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popAMR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

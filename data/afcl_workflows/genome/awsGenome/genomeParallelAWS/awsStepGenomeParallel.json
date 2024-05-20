@@ -1,0 +1,339 @@
+{
+  "Comment": "GenomeParallel",
+  "StartAt": "parallelIndividualSifting",
+  "States": {
+    "parallelIndividualSifting": {
+      "Type": "Parallel",
+      "ResultPath": "$.par",
+      "Next": "parallelMutationsOverlapFrequency",
+      "Branches": [
+        {
+          "StartAt": "parallelIndividuals",
+          "States": {
+            "parallelIndividuals": {
+              "Type": "Parallel",
+              "ResultPath": "$.par",
+              "Next": "individualsMerge",
+              "Branches": [
+                {
+                  "StartAt": "individual1",
+                  "States": {
+                    "individual1": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual1",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual2",
+                  "States": {
+                    "individual2": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual2",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual3",
+                  "States": {
+                    "individual3": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual3",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual4",
+                  "States": {
+                    "individual4": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual4",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual5",
+                  "States": {
+                    "individual5": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual5",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual6",
+                  "States": {
+                    "individual6": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual6",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual7",
+                  "States": {
+                    "individual7": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual7",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual8",
+                  "States": {
+                    "individual8": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual8",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual9",
+                  "States": {
+                    "individual9": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual9",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                },
+                {
+                  "StartAt": "individual10",
+                  "States": {
+                    "individual10": {
+                      "Type": "Task",
+                      "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                      "InputPath": "$.individual10",
+                      "ResultPath": "$",
+                      "End": true
+                    }
+                  }
+                }
+              ]
+            },
+            "individualsMerge": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individuals_merge",
+              "InputPath": "$.individualsMerge",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "sifting",
+          "States": {
+            "sifting": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_sifting",
+              "InputPath": "$.sifting",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "parallelMutationsOverlapFrequency": {
+      "Type": "Parallel",
+      "ResultPath": "$.par",
+      "End": true,
+      "Branches": [
+        {
+          "StartAt": "mutationsOverlapEUR",
+          "States": {
+            "mutationsOverlapEUR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popEUR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapAFR",
+          "States": {
+            "mutationsOverlapAFR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popAFR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapEAS",
+          "States": {
+            "mutationsOverlapEAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popEAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapALL",
+          "States": {
+            "mutationsOverlapALL": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popALL",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapGBR",
+          "States": {
+            "mutationsOverlapGBR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popGBR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapSAS",
+          "States": {
+            "mutationsOverlapSAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popSAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "mutationsOverlapAMR",
+          "States": {
+            "mutationsOverlapAMR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+              "InputPath": "$.popAMR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyEUR",
+          "States": {
+            "frequencyEUR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popEUR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyAFR",
+          "States": {
+            "frequencyAFR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popAFR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyEAS",
+          "States": {
+            "frequencyEAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popEAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyALL",
+          "States": {
+            "frequencyALL": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popALL",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyGBR",
+          "States": {
+            "frequencyGBR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popGBR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencySAS",
+          "States": {
+            "frequencySAS": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popSAS",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "frequencyAMR",
+          "States": {
+            "frequencyAMR": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+              "InputPath": "$.popAMR",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

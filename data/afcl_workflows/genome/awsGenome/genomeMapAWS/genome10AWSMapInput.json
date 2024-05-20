@@ -1,0 +1,107 @@
+{
+    "INPUT": {
+        "values": [
+          {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 1,
+			"stop": 1001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 1001,
+			"stop": 2001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 2001,
+			"stop": 3001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 3001,
+			"stop": 4001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 4001,
+			"stop": 5001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 5001,
+			"stop": 6001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 6001,
+			"stop": 7001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 7001,
+			"stop": 8001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 8001,
+			"stop": 9001,
+			"chromNr": 22
+		  },
+		  {
+			"key_input": "ALL.chr22.80000.vcf.gz",
+			"counter": 9001,
+			"stop": 10001,
+			"chromNr": 22
+		  }
+        ]
+    },
+    "key": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf.gz",
+    "chromNr": "22",
+    "ARRAY": {
+        "values":[
+          {
+            "chromNr": "22",
+            "POP": "EUR",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "AFR",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "EAS",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "ALL",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "GBR",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "SAS",
+            "bucketName": "genome-project"
+          },
+          {
+            "chromNr": "22",
+            "POP": "AMR",
+            "bucketName": "genome-project"
+          }
+        ]
+    }
+}

@@ -1,0 +1,117 @@
+{
+  "Comment": "GenomeIterator",
+  "StartAt": "parallelIndividualSifting",
+  "States": {
+    "parallelIndividualSifting": {
+      "Type": "Parallel",
+      "ResultPath": "$.parIndSif",
+      "Next" : "parallelMutationsOverlapFrequency",
+      "Branches": [
+        {
+          "StartAt": "Individuals",
+          "States": {
+            "Individuals": {
+              "Type": "Map",
+                "InputPath": "$.INPUT",
+                "ItemsPath": "$.values",
+              "MaxConcurrency": 200,
+              "Iterator": {
+                "StartAt": "Call_Individual",
+                "States": {
+                  "Call_Individual": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individual",
+                    "End": true
+                   }
+                }
+              },
+              "Next": "individualsMerge"
+            },
+            "individualsMerge": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_individuals_merge",
+              "ResultPath": "$",
+              "Parameters": {
+                "chromNr":22,
+                "keys": [
+                    "chr22n-1-1001.tar.gz",
+                    "chr22n-1001-2001.tar.gz",
+                    "chr22n-2001-3001.tar.gz",
+                    "chr22n-3001-4001.tar.gz",
+                    "chr22n-4001-5001.tar.gz",
+                    "chr22n-5001-6001.tar.gz",
+                    "chr22n-6001-7001.tar.gz",
+                    "chr22n-7001-8001.tar.gz",
+                    "chr22n-8001-9001.tar.gz",
+                    "chr22n-9001-10001.tar.gz"
+                  ]},
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "sifting",
+          "States": {
+            "sifting": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_sifting",
+              "ResultPath": "$",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "parallelMutationsOverlapFrequency": {
+      "Type": "Parallel",
+      "ResultPath": "$.parMutFreq",
+      "End": true,
+      "Branches": [
+        {
+          "StartAt": "Mutations",
+          "States": {
+            "Mutations": {
+              "Type": "Map",
+                "InputPath": "$.ARRAY",
+                "ItemsPath": "$.values",
+              "MaxConcurrency": 7,
+              "Iterator": {
+                "StartAt": "Call_Multations",
+                "States": {
+                  "Call_Multations": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_mutual_overlap",
+                    "End": true
+                   }
+                }
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "Frequencies",
+          "States": {
+            "Frequencies": {
+              "Type": "Map",
+                "InputPath": "$.ARRAY",
+                "ItemsPath": "$.values",
+              "MaxConcurrency": 7,
+              "Iterator": {
+                "StartAt": "Call_Frequency",
+                "States": {
+                  "Call_Frequency": {
+                    "Type": "Task",
+                    "Resource": "arn:aws:lambda:us-east-1:170392512081:function:genome_frequency",
+                    "End": true
+                   }
+                }
+              },
+              "End": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

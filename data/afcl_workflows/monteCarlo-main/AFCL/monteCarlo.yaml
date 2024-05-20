@@ -1,0 +1,164 @@
+---
+name: "monteCarlo"
+dataIns:
+- name: "samples"
+  type: "number"
+  source: "samples"
+- name: "workers"
+  type: "number"
+  source: "workers"
+workflowBody:
+- parallel:
+    name: "parallelized_ParallelFor"
+    dataIns:
+    - name: "num_samples"
+      type: "number"
+      source: "monteCarlo/samples"
+    - name: "num_workers"
+      type: "number"
+      source: "monteCarlo/workers"
+    parallelBody:
+    - section:
+      - parallelFor:
+          name: "ParallelFor_AWS1"
+          dataIns:
+          - name: "num_samples"
+            type: "number"
+            source: "parallelized_ParallelFor/num_samples"    
+            constraints:
+            - name: "distribution"
+              value: "REPLICATE(*)"
+          loopCounter:
+            type: "number"
+            from: "0"
+            to: "parallelized_ParallelFor/num_workers"
+            step: "1"
+          loopBody:
+          - function:
+              name: "monteCarlo_AWS1"
+              type: "monteCarloType"
+              deployment: "monteCarlo_AWS_asia-east2_128"
+              dataIns:
+              - name: "num_samples"
+                type: "number"
+                source: "ParallelFor_AWS1/num_samples"
+              dataOuts:
+              - name: "userData_result"
+                type: "number"
+              properties:
+              - name: "resource"
+                value: "python:TODO"
+          constraints:
+            - name: "concurrency"
+              value: "30"
+          dataOuts:
+          - name: "results"
+            type: "collection"
+            source: "monteCarlo_AWS1/userData_result"
+    - section:
+      - parallelFor:
+          name: "ParallelFor_AWS2"
+          dataIns:
+          - name: "num_samples"
+            type: "number"
+            source: "parallelized_ParallelFor/num_samples"
+            constraints:
+            - name: "distribution"
+              value: "REPLICATE(*)"
+          loopCounter:
+            type: "number"
+            from: "0"
+            to: "parallelized_ParallelFor/num_workers"
+            step: "1"
+          loopBody:
+          - function:
+              name: "monteCarlo_AWS2"
+              type: "monteCarloType"
+              deployment: "monteCarlo_AWS_asia-east2_128"
+              dataIns:
+              - name: "num_samples"
+                type: "number"
+                source: "ParallelFor_AWS2/num_samples"
+              dataOuts:
+              - name: "userData_result"
+                type: "number"
+              properties:
+              - name: "resource"
+                value: "python:TODO"
+          constraints:
+            - name: "concurrency"
+              value: "30"
+          dataOuts:
+          - name: "results"
+            type: "collection"
+            source: "monteCarlo_AWS2/userData_result"
+    - section:
+      - parallelFor:
+          name: "ParallelFor_AWS3"
+          dataIns:
+          - name: "num_samples"
+            type: "number"
+            source: "parallelized_ParallelFor/num_samples"
+            constraints:
+            - name: "distribution"
+              value: "REPLICATE(*)"
+          loopCounter:
+            type: "number"
+            from: "0"
+            to: "parallelized_ParallelFor/num_workers"
+            step: "1"
+          loopBody:
+          - function:
+              name: "monteCarlo_AWS3"
+              type: "monteCarloType"
+              deployment: "monteCarlo_AWS_asia-east2_128"
+              dataIns:
+              - name: "num_samples"
+                type: "number"
+                source: "ParallelFor_AWS3/num_samples"
+              dataOuts:
+              - name: "userData_result"
+                type: "number"
+              properties:
+              - name: "resource"
+                value: "python:TODO"
+          constraints:
+            - name: "concurrency"
+              value: "30"
+          dataOuts:
+          - name: "results"
+            type: "collection"
+            source: "monteCarlo_AWS3/userData_result"
+    dataOuts:
+    - name: "results_AWS1"
+      type: "collection"
+      source: "ParallelFor_AWS1/results"
+    - name: "results_AWS2"
+      type: "collection"
+      source: "ParallelFor_AWS2/results"
+    - name: "results_AWS3"
+      type: "collection"
+      source: "ParallelFor_AWS3/results"
+- function:
+    name: "averagePi"
+    type: "averagePiType"
+    dataIns:
+    - name: "piValue_AWS1"
+      type: "collection"
+      source: "parallelized_ParallelFor/results_AWS1"
+    - name: "piValue_AWS2"
+      type: "collection"
+      source: "parallelized_ParallelFor/results_AWS2"
+    - name: "piValue_AWS3"
+      type: "collection"
+      source: "parallelized_ParallelFor/results_AWS3"
+    dataOuts:
+    - name: "userData_result"
+      type: "number"
+    properties:
+    - name: "resource"
+      value: "python:TODO"
+dataOuts:
+- name: "pi"
+  type: "number"
+  source: "estimatePi/userData_result"
