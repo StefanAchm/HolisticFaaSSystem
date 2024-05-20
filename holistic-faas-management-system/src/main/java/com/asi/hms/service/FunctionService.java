@@ -2,15 +2,15 @@ package com.asi.hms.service;
 
 import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APIFunction;
-import com.asi.hms.model.db.DBFunction;
-import com.asi.hms.model.db.DBFunctionType;
-import com.asi.hms.model.db.DBWorkflow;
+import com.asi.hms.model.db.*;
 import com.asi.hms.repository.FunctionRepository;
 import com.asi.hms.repository.FunctionTypeRepository;
 import com.asi.hms.repository.WorkflowRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FunctionService {
@@ -49,6 +49,19 @@ public class FunctionService {
         dbFunction.setFunctionType(dbFunctionType);
 
         return APIFunction.fromDBFunction(this.functionRepository.save(dbFunction));
+
+    }
+
+    public boolean validateUser(UUID workflowId) {
+
+        DBWorkflow workflow = this.workflowRepository
+                .findById(workflowId)
+                .orElseThrow(() -> new HolisticFaaSException("Workflow not found"));
+
+
+        DBUser dbUser = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getDbUser();
+
+        return dbUser.getId().equals(workflow.getCreatedBy().getId());
 
     }
 

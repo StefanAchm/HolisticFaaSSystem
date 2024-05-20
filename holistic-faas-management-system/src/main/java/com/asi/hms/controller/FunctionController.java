@@ -20,7 +20,13 @@ public class FunctionController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<APIFunction> add(@RequestBody APIFunction apiFunction) {
+
+        if(!this.functionService.validateUser(apiFunction.getWorkflowId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.ok(this.functionService.add(apiFunction));
+
     }
 
 }

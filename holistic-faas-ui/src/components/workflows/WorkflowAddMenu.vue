@@ -45,7 +45,7 @@
           <v-list-item-title>Add Deployment</v-list-item-title>
         </v-list-item>
         <v-list-item
-            :disabled="deployments?.length > 0"
+            :disabled="functionAddDisabled()"
             @click="openFunctionDialog">
           <v-list-item-icon>
             <v-icon>mdi-lambda</v-icon>
@@ -111,6 +111,9 @@ export default {
     },
     dialogClosed() {
       this.$emit('workflow-updated');
+    },
+    functionAddDisabled() {
+      return this.deployments?.length > 0 || this.workflow.createdBy !== this.$store.state.username
     },
   },
 };
