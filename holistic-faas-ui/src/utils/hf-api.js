@@ -78,11 +78,11 @@ export default {
         return apiClient.post('/function_deployment/update', data);
     },
 
-    deployFunctionDeployment(id) {
+    deployFunctionDeployment(id, awsSessionToken) {
         return apiClient.post(
-            '/function_deployment/deploy/?', // + new URLSearchParams({functionId: id, localOnly: false}));
+            '/function_deployment/deploy/?',
             null,
-            {params: {functionId: id, localOnly: false}}
+            {params: {functionId: id, awsSessionToken: awsSessionToken}}
         );
     },
 

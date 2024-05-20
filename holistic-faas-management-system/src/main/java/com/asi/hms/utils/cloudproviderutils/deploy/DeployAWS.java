@@ -4,9 +4,6 @@ import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.utils.cloudproviderutils.model.Function;
 import com.asi.hms.model.UserAWS;
 import com.asi.hms.utils.ProgressHandler;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.regions.Region;
@@ -82,7 +79,7 @@ public class DeployAWS implements DeployerInterface {
 
             return functionResponse.functionArn();
 
-        } catch (LambdaException | IOException e) {
+        } catch (LambdaException | IOException | IamException e) {
             throw new HolisticFaaSException(e);
         }
 
@@ -233,7 +230,7 @@ public class DeployAWS implements DeployerInterface {
 
             awsLambda.close();
 
-        } catch (LambdaException | IOException e) {
+        } catch (LambdaException | IOException | IamException e) {
             throw new HolisticFaaSException(e);
         }
 

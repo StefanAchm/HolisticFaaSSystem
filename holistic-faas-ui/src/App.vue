@@ -63,6 +63,15 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item @click="awsSessionTokenDialogOpen = true">
+          <v-list-item-icon>
+            <v-icon>mdi-key-variant</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>AWS Session token</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
       </v-list>
 
       <template v-slot:append>
@@ -116,6 +125,11 @@
 
     <snackbar ref="snackbar"></snackbar>
 
+    <awsSessionTokenDialog
+        :dialog.sync="awsSessionTokenDialogOpen"
+        @close="awsSessionTokenDialogOpen = false"
+    ></awsSessionTokenDialog>
+
   </v-app>
 
 </template>
@@ -123,10 +137,11 @@
 <script>
 
 import snackbar from "@/components/SnackBar.vue";
+import awsSessionTokenDialog from "@/components/AwsSessionTokenDialog.vue";
 
 export default {
 
-  components: {snackbar},
+  components: {snackbar, awsSessionTokenDialog},
 
   name: 'App',
 
@@ -140,6 +155,7 @@ export default {
         {title: 'Profile', icon: 'mdi-card-account-details-outline', route: '/profile'},
       ],
       right: null,
+      awsSessionTokenDialogOpen : false
     }
   },
 

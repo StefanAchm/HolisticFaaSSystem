@@ -93,7 +93,7 @@ export default {
     deployUndeployed() {
 
       this.undeployedFunctions.forEach(item => {
-        HfApi.deployFunctionDeployment(item.functionDeployment.id)
+        HfApi.deployFunctionDeployment(item.functionDeployment.id, this.$store.state.awsSessionToken)
             .then(() => {
             })
             .catch(() => {
@@ -110,7 +110,7 @@ export default {
     deployAll() {
 
       this.workflowDeployment.functionDefinitions.forEach(item => {
-        HfApi.deployFunctionDeployment(item.functionDeployment.id)
+        HfApi.deployFunctionDeployment(item.functionDeployment.id, this.$store.state.awsSessionToken)
       })
 
     },

@@ -183,7 +183,7 @@ export default {
     deployAll() {
 
       this.selected.forEach(item => {
-        HfApi.deployFunctionDeployment(item.functionDeployment.id)
+        HfApi.deployFunctionDeployment(item.functionDeployment.id, this.$store.state.awsSessionToken)
       })
       this.close()
     },

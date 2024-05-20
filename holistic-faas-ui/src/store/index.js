@@ -10,7 +10,8 @@ export default new Vuex.Store({
         username: null,
         userId: null,
         treeView: false,
-        miniVariant: false
+        miniVariant: false,
+        awsSessionToken: null
     },
 
     mutations: {
@@ -21,7 +22,7 @@ export default new Vuex.Store({
             state.userId = localStorage.getItem('userId');
             state.treeView = localStorage.getItem('treeView') === 'true';
             state.miniVariant = localStorage.getItem('miniVariant') === 'true';
-
+            state.awsSessionToken = localStorage.getItem('awsSessionToken');
         },
 
         setToken(state, token) {
@@ -36,6 +37,11 @@ export default new Vuex.Store({
         setMiniVariant(state, value) {
             state.miniVariant = value;
             localStorage.setItem('miniVariant', value);
+        },
+
+        setAwsSessionToken(state, token) {
+            state.awsSessionToken = token;
+            localStorage.setItem('awsSessionToken', token);
         }
 
     },

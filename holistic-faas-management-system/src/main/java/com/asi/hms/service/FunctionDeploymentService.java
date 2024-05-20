@@ -2,6 +2,7 @@ package com.asi.hms.service;
 
 import com.asi.hms.enums.DeployStatus;
 import com.asi.hms.exceptions.HolisticFaaSException;
+import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.api.APIFunctionDeployment;
 import com.asi.hms.model.db.*;
 import com.asi.hms.repository.*;
@@ -128,7 +129,7 @@ public class FunctionDeploymentService {
     }
 
     @Async
-    public void deploy(UUID functionDeploymentId) {
+    public void deploy(UUID functionDeploymentId, String awsSessionToken) {
 
         DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
         DBUserCredentials userCredentials = getDbUserCredentials(dbFunctionDeployment);
@@ -156,6 +157,11 @@ public class FunctionDeploymentService {
             );
 
             UserInterface user = function.getProvider().getUserFromFile(Paths.get(userCredentials.getCredentialsFilePath()));
+
+            if(user instanceof UserAWS userAWS && awsSessionToken != null) {
+                userAWS.setSessionToken(awsSessionToken);
+            }
+
             DeployerInterface deployer = function.getProvider().getDeployer(user);
 
             // Actual deployment
@@ -180,6 +186,11 @@ public class FunctionDeploymentService {
         } catch (HolisticFaaSException e) {
 
             dbFunctionDeployment.setStatusWithMessage(DeployStatus.FAILED, e.getMessage());
+            logger.error("{} error:", action, e);
+
+        } catch (Exception e) {
+
+            dbFunctionDeployment.setStatusWithMessage(DeployStatus.FAILED, action + " error");
             logger.error("{} error:", action, e);
 
         } finally {
