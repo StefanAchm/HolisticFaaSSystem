@@ -34,6 +34,8 @@
           />
 
           <v-file-input
+              append-icon="mdi-paperclip"
+              prepend-icon=""
               v-model="currentFile"
               truncate-length="60"
               label="Workflow definition (optional)"

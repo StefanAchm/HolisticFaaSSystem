@@ -14,6 +14,8 @@ public class APIFunctionImplementation {
 
     private String filePath;
 
+    private String name;
+
     private UUID functionTypeId;
 
     private List<APIFunctionDeployment> functionDeployments;
@@ -43,6 +45,14 @@ public class APIFunctionImplementation {
         return FileUtil.getFileNameFromPath(this.filePath);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public UUID getFunctionTypeId() {
         return functionTypeId;
     }
@@ -65,6 +75,7 @@ public class APIFunctionImplementation {
 
         apiFunctionImplementation.setId(dbFunctionImplementation.getId());
         apiFunctionImplementation.setFilePath(dbFunctionImplementation.getFilePath());
+        apiFunctionImplementation.setName(dbFunctionImplementation.getName());
 
         apiFunctionImplementation.setFunctionTypeId(dbFunctionImplementation.getFunctionType().getId());
 

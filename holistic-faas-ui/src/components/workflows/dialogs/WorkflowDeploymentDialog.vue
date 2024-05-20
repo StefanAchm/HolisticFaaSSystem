@@ -32,38 +32,7 @@
 
             </v-col>
 
-<!--            <v-col>-->
-
-
-<!--              <div v-if="workflowDeploymentMigrationInfo">-->
-
-<!--                <h3>Region Migrations:</h3>-->
-<!--                <div v-for="(migration, index) in workflowDeploymentMigrationInfo.regionMigrations" :key="index">-->
-<!--                  <p>{{ migration.source }} &ndash;&gt; {{ migration.target }}</p>-->
-<!--                </div>-->
-
-<!--              </div>-->
-
-<!--            </v-col>-->
-
-<!--            <v-col>-->
-
-
-<!--              <div v-if="workflowDeploymentMigrationInfo">-->
-
-<!--                <h3>Runtime Migrations:</h3>-->
-<!--                <div v-for="(migration, index) in workflowDeploymentMigrationInfo.runtimeMigrations" :key="index">-->
-<!--                  <p>{{ migration.source }} &ndash;&gt; {{ migration.target }}</p>-->
-<!--                </div>-->
-<!--              </div>-->
-
-<!--            </v-col>-->
-
           </v-row>
-
-
-
-
 
         </v-card-text>
 
@@ -83,7 +52,6 @@
               <th class="text-left">TimeoutSecs</th>
               <th class="text-left">Memory</th>
               <th class="text-left">Runtime</th>
-              <!--            <th class="text-left">User</th>-->
             </tr>
             </thead>
 
@@ -278,15 +246,6 @@
                     required
                     :rules="[v => !!v || 'Runtime is required']"
                 ></v-autocomplete>
-              </td>
-
-              <td>
-
-                <!--              <v-text-field-->
-                <!--                  class="column-username"-->
-                <!--                  type="text"-->
-                <!--                  v-model="item.userName"-->
-                <!--                  disabled></v-text-field>-->
               </td>
 
             </tr>
@@ -491,7 +450,7 @@ export default {
           .filter((impl) => impl.functionTypeId === item.functionType.id)
           .map((item) => {
             return {
-              title: item.fileName,
+              title: item.name,
               value: item.id
             }
           })

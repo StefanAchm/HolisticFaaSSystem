@@ -15,7 +15,7 @@
           <v-col cols="12">
             <strong>Current Token:</strong>
 
-            <span v-if="store.state.awsSessionToken === ''">
+            <span v-if="!store.state.awsSessionToken || store.state.awsSessionToken === ''">
               No token set!
             </span>
 
@@ -41,7 +41,7 @@
 
         <v-btn color="neutral" @click="close">Close</v-btn>
 
-        <v-btn color="primary" @click="save" v-if="store.state.awsSessionToken === ''">
+        <v-btn color="primary" @click="save" v-if="!store.state.awsSessionToken || store.state.awsSessionToken === ''">
           Save
         </v-btn>
 
@@ -50,7 +50,7 @@
         </v-btn>
 
         <v-btn
-            :disabled="store.state.awsSessionToken === ''"
+            :disabled="!store.state.awsSessionToken || store.state.awsSessionToken === ''"
             color="error"
             @click="deleteToken">Delete</v-btn>
 
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      awsSessionToken: ''
+      awsSessionToken: null
     }
   },
   computed: {
@@ -88,17 +88,17 @@ export default {
   },
   methods: {
     close() {
-      this.awsSessionToken = ''
+      this.awsSessionToken = null
       this.awsSessionTokenDialogOpen = false
       this.$emit('dialog-closed')
     },
     save() {
       this.$store.commit('setAwsSessionToken', this.awsSessionToken)
-      this.awsSessionToken = ''
+      this.awsSessionToken = null
     },
     deleteToken() {
-      this.$store.commit('setAwsSessionToken', '')
-      this.awsSessionToken = ''
+      this.$store.commit('setAwsSessionToken', null)
+      this.awsSessionToken = null
     }
   }
 }

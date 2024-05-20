@@ -2,18 +2,21 @@
   <div>
 
     <!-- Tabs -->
-    <v-tabs v-model="tab" class="pl-5">
+    <v-tabs v-model="tab">
 
       <v-tab key="deployments">
         Deployments ({{ deployments?.length || 0 }})
       </v-tab>
-      <v-tab key="abstract">Functions ({{ workflow.functions?.length || 0 }})</v-tab>
+      <v-tab key="functions">Functions ({{ workflow.functions?.length || 0 }})</v-tab>
+      <v-tab key="types">Types ({{ types?.length || 0 }})
+        <v-icon v-if="isAnyTypeWithoutImplementation" right color="warning">mdi-alert</v-icon>
+      </v-tab>
       <v-tab key="implementations">Implementations ({{ implementations?.length || 0 }})</v-tab>
 
     </v-tabs>
 
     <!-- Tab content -->
-    <v-card tile>
+    <v-card tile elevation="0">
       <v-tabs-items v-model="tab">
 
         <v-tab-item key="deployments">
@@ -22,10 +25,18 @@
               :deployments="deployments"/>
         </v-tab-item>
 
-        <v-tab-item key="abstract">
+        <v-tab-item key="functions">
           <WorkflowFunctionsTable
               @dialog-closed="$emit('workflow-updated')"
               :workflow="workflow"/>
+        </v-tab-item>
+
+        <v-tab-item key="types">
+          <WorkflowFunctionTypesTable
+              @dialog-closed="$emit('workflow-updated')"
+              :workflow="workflow"
+              :types="types"
+          />
         </v-tab-item>
 
         <v-tab-item key="implementations">
@@ -45,16 +56,18 @@
 import WorkflowFunctionsTable from "@/components/workflows/tables/WorkflowFunctionsTable.vue";
 import WorkflowDeployment from "@/components/workflows/tables/WorkflowDeploymentsTable.vue";
 import FunctionImplementations from "@/components/workflows/tables/WorkflowImplementationsTable.vue";
+import WorkflowFunctionTypesTable from "@/components/workflows/tables/WorkflowFunctionTypesTable.vue";
 
 export default {
 
   props: {
     workflow: {},
     implementations: {},
-    deployments: {}
+    deployments: {},
+    types: {},
   },
 
-  components: {FunctionImplementations, WorkflowDeployment, WorkflowFunctionsTable},
+  components: {WorkflowFunctionTypesTable, FunctionImplementations, WorkflowDeployment, WorkflowFunctionsTable},
 
   data() {
     return {
@@ -64,6 +77,12 @@ export default {
 
   created() {
 
+  },
+
+  computed: {
+    isAnyTypeWithoutImplementation() {
+      return this.types.some(type => type.functionImplementations.length === 0);
+    },
   },
 
   methods: {

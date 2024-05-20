@@ -102,7 +102,7 @@ export default {
 
     deployFunction(item) {
 
-      if(item.functionDeployment.status === 'CREATED') {
+      if(item.functionDeployment.status !== 'DEPLOYED') {
         HfApi.deployFunctionDeployment(item.functionDeployment.id, this.$store.state.awsSessionToken)
             .catch(() => {
               this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.function.name})

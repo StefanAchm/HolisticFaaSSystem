@@ -7,49 +7,13 @@
       class="elevation-1"
   >
 
-    <template v-slot:top>
-
-      <FunctionImplementationDialogExtended
-          :dialog.sync="functionImplementationDialogVisible"
-          :workflow="workflow"
-          :implementation="selected"
-          @dialog-closed="close"
-      />
-
-    </template>
-
-    <template v-slot:[`item.addImplementation`]="{ item }">
-
-      <v-btn
-          color="secondary"
-          outlined
-          rounded
-          small
-          @click="addImplementation(item)"
-      >
-
-        <v-icon left>
-          mdi-plus
-        </v-icon>
-
-        Add Implementation
-
-      </v-btn>
-
-    </template>
-
-
   </v-data-table>
 
 </template>
 
 <script>
 
-import FunctionImplementationDialogExtended
-  from "@/components/function/dialogs/FunctionImplementationDialogExtended.vue";
-
 export default {
-  components: {FunctionImplementationDialogExtended},
 
   props: {
     workflow: {
@@ -61,12 +25,10 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Name', value: 'name'},
-        {text: 'Type', value: 'functionType.name'},
-        {text: 'Implementations', value: 'implementations'},
-        // {text: '', value: 'addImplementation'}
+        {text: 'Functionname', value: 'name'},
+        {text: 'Functiontype', value: 'functionType.name'},
+        {text: 'Nr. of implementations', value: 'implementations'},
       ],
-      functionImplementationDialogVisible: false,
       selected: {},
     };
   },
@@ -99,16 +61,6 @@ export default {
   },
 
   methods: {
-
-    addImplementation(item) {
-      this.selected = item;
-      this.functionImplementationDialogVisible = true;
-    },
-
-    close() {
-      this.functionImplementationDialogVisible = false;
-      this.$emit('dialog-closed');
-    }
 
   },
 

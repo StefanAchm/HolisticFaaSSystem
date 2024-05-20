@@ -28,12 +28,14 @@
               item-text="name"
               item-value="id"
               label="Function Type"
-              :disabled="implementation"
+              :disabled="type"
               required
               :rules="[v => !!v || 'Function Type is required']"
           ></v-select>
 
           <v-file-input
+              append-icon="mdi-paperclip"
+              prepend-icon=""
               v-model="currentFile"
               truncate-length="60"
               @change="selectFile"
@@ -41,6 +43,14 @@
               required
               :rules="[v => !!v || 'Function implementation is required']"
           ></v-file-input>
+
+          <v-text-field
+              v-model="functionImplementationName"
+              label="Function Implementation Name"
+              required
+              :rules="[v => !!v || 'Name is required']">
+
+          </v-text-field>
 
         </v-form>
 
@@ -75,6 +85,10 @@ export default {
     implementation: {
       type: Object,
       default: null
+    },
+    type: {
+      type: Object,
+      default: null
     }
 
   },
@@ -82,6 +96,7 @@ export default {
   data: () => ({
     currentFile: null,
     functionType: null,
+    functionImplementationName: null,
     isValid: false
   }),
 
@@ -113,7 +128,7 @@ export default {
     dialog(val) {
       if (val) {
         this.currentFile = null
-        this.functionType = this.implementation?.functionType?.id
+        this.functionType = this.type?.id
       }
     }
   },
@@ -137,6 +152,7 @@ export default {
 
       let functionImplementation = {
         functionTypeId: this.functionType,
+        name: this.functionImplementationName
       }
 
       HfApi.uploadFunction(this.currentFile, functionImplementation)

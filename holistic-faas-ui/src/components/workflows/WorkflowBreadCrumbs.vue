@@ -3,10 +3,11 @@
   <v-toolbar
       flat
       fluid
+
   >
 
     <v-breadcrumbs
-        class="mx-2"
+        class="mx-2 pl-0 ml-0"
         :items="breadcrumbs"
     >
 

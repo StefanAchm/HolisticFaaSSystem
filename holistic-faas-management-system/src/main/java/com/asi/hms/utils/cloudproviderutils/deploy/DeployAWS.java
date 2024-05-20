@@ -33,11 +33,11 @@ public class DeployAWS implements DeployerInterface {
     @Override
     public String deployFunction(Function function, ProgressHandler progressHandler) {
 
-        LambdaClient awsLambda = createLambdaClient(function, progressHandler);
-
-        String roleArn = getOrCreateRoleArn();
-
         try {
+
+            LambdaClient awsLambda = createLambdaClient(function, progressHandler);
+
+            String roleArn = getOrCreateRoleArn();
 
             InputStream is = Files.newInputStream(function.getFilePath());
             SdkBytes fileToUpload = SdkBytes.fromInputStream(is);

@@ -63,7 +63,7 @@ public class UserAWS implements UserInterface {
     }
 
     public boolean isWithSessionToken() {
-        return this.sessionToken != null;
+        return this.sessionToken != null && !this.sessionToken.isEmpty();
     }
 
     public AwsCredentials getAwsCredentials() {

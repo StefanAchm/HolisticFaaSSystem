@@ -14,6 +14,8 @@ public class DBFunctionImplementation {
 
     private String filePath;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "function_type_id")
     private DBFunctionType functionType;
@@ -34,6 +36,14 @@ public class DBFunctionImplementation {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<DBFunctionDeployment> getFunctionDeployments() {

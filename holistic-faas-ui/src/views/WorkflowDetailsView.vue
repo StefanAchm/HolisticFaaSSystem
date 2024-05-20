@@ -16,6 +16,7 @@
         :workflow="workflow"
         :deployments="deployments"
         :implementations="implementations"
+        :types="functionTypes"
         @workflow-updated="loadWorkflow"
     />
 
@@ -36,7 +37,8 @@ export default {
   data: () => ({
     workflow: {},
     deployments: [],
-    implementations: []
+    implementations: [],
+    functionTypes: []
   }),
 
   created() {
@@ -57,19 +59,8 @@ export default {
 
     setImplementations() {
 
-      let functionTypes = this.workflow.functions
-          .map(function (functionItem) {
-            return functionItem.functionType;
-          })
-          .filter((functionType, index, self) =>
-              index === self.findIndex((t) => (
-                  t.id === functionType.id
-              ))
-      );
-
-
       this.implementations = []
-      for(let functionType of functionTypes) {
+      for(let functionType of this.functionTypes) {
         for(let functionImplementation of functionType.functionImplementations) {
           this.implementations.push({
             functionType: functionType,
@@ -77,6 +68,20 @@ export default {
           })
         }
       }
+
+    },
+
+    setTypes() {
+
+      this.functionTypes = this.workflow.functions
+          .map(function (functionItem) {
+            return functionItem.functionType;
+          })
+          .filter((functionType, index, self) =>
+                  index === self.findIndex((t) => (
+                      t.id === functionType.id
+                  ))
+          );
 
     },
 
@@ -97,6 +102,7 @@ export default {
             this.workflow = response.data;
 
             this.loadDeployments()
+            this.setTypes()
             this.setImplementations()
 
           })

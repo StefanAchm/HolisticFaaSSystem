@@ -54,6 +54,7 @@ public class FunctionImplementationService {
 
         DBFunctionImplementation dbFunctionImplementation = new DBFunctionImplementation();
         dbFunctionImplementation.setFilePath(apiFunctionImplementation.getFilePath());
+        dbFunctionImplementation.setName(apiFunctionImplementation.getName());
 
         DBFunctionType dbFunctionType = this.functionTypeRepository
                 .findById(apiFunctionImplementation.getFunctionTypeId())

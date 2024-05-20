@@ -41,7 +41,12 @@ export default new Vuex.Store({
 
         setAwsSessionToken(state, token) {
             state.awsSessionToken = token;
-            localStorage.setItem('awsSessionToken', token);
+
+            if(!token) {
+                localStorage.removeItem('awsSessionToken');
+            } else {
+                localStorage.setItem('awsSessionToken', token);
+            }
         }
 
     },

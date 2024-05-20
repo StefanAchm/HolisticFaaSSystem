@@ -8,6 +8,7 @@ import com.asi.hms.repository.*;
 import com.asi.hms.service.FunctionFlatService;
 import com.asi.hms.service.UserService;
 import com.asi.hms.utils.cloudproviderutils.afcl.AfclParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,9 @@ import java.util.*;
 
 @Component
 public class DatabaseInitializer {
+
+    @Value("${app.with-demo-data:false}")
+    private String withDemoData;
 
 
     private final String[] implementations = {
@@ -102,6 +106,10 @@ public class DatabaseInitializer {
 
     @PostConstruct
     public void init() {
+
+        if(withDemoData == null || withDemoData.equals("false")) {
+            return;
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
