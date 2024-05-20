@@ -4,7 +4,7 @@ services:
       context: ./holistic-faas-db
     container_name: holistic-faas-db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: hf
       POSTGRES_USER: postgres
@@ -22,6 +22,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hf
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
+    volumes:
+      - uploads_volume:/app/uploads
 
   frontend:
     build:
@@ -29,3 +31,6 @@ services:
     container_name: holistic-faas-ui
     ports:
       - "80:80"
+
+volumes:
+  uploads_volume:
