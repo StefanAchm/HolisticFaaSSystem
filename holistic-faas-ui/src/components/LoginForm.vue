@@ -192,8 +192,7 @@ export default {
             this.changeForm();
           })
           .catch((err) => {
-            console.log(err)
-            this.error = err.response.data.message;
+            this.error = err.response.data;
           })
     },
 

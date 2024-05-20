@@ -37,12 +37,9 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public APIUser register(APIUser user) {
 
-        // check if user already exists
-        if (this.userRepository.findByUsername(user.getUsername()) != null) {
-            throw new HolisticFaaSException("User already exists");
-        }
+
+    public APIUser register(APIUser user) {
 
         DBUser dbUser = new DBUser();
         dbUser.setUsername(user.getUsername());
@@ -74,6 +71,10 @@ public class UserService implements UserDetailsService {
 
         return new UserPrincipal(dbUser);
 
+    }
+
+    public boolean checkIfUserExists(String username) {
+        return this.userRepository.findByUsername(username) != null;
     }
 
 }

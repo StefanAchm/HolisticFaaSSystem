@@ -32,7 +32,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<APIUser> register(@RequestBody APIUser user) {
+    public ResponseEntity<?> register(@RequestBody APIUser user) {
+
+        if(this.userService.checkIfUserExists(user.getUsername())) {
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("User already exists");
+
+        }
+
         return ResponseEntity.ok(this.userService.register(user));
     }
 
