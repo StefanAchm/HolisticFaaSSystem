@@ -10,6 +10,9 @@ import java.util.Properties;
 
 public class UserAWS implements UserInterface {
 
+    private static final String ROLE_NAME = "lambda-execution-role-hf";
+    private static final String ROLE_NAME_ACADEMY = "LabRole";
+
     private String accessKeyId;
     private String secretAccessKey;
     private String sessionToken;
@@ -23,7 +26,9 @@ public class UserAWS implements UserInterface {
         UserAWS user = new UserAWS();
         user.setAccessKeyId(properties.getProperty("aws.accessKeyId"));
         user.setSecretAccessKey(properties.getProperty("aws.secretAccessKey"));
+
         user.setRoleArn(properties.getProperty("aws.roleArn"));
+
         user.setSessionToken(properties.getProperty("aws.sessionToken"));
 
         return user;
@@ -64,6 +69,10 @@ public class UserAWS implements UserInterface {
 
     public boolean isWithSessionToken() {
         return this.sessionToken != null && !this.sessionToken.isEmpty();
+    }
+
+    public String getRoleName() {
+        return this.isWithSessionToken() ? ROLE_NAME_ACADEMY : ROLE_NAME;
     }
 
     public AwsCredentials getAwsCredentials() {

@@ -20,8 +20,6 @@ import java.nio.file.Files;
 
 public class DeployAWS implements DeployerInterface {
 
-    private static final String ROLE_NAME = "lambda-execution-role-hf";
-
     public static final int STEPS = 6;
 
     private final UserAWS user;
@@ -130,7 +128,7 @@ public class DeployAWS implements DeployerInterface {
                     + "}";
 
             CreateRoleRequest createRoleRequest = CreateRoleRequest.builder()
-                    .roleName(ROLE_NAME)
+                    .roleName(user.getRoleName())
                     .assumeRolePolicyDocument(assumeRolePolicyDocument)
                     .description("Role for Lambda execution")
                     .build();
@@ -154,7 +152,7 @@ public class DeployAWS implements DeployerInterface {
             ListRolesResponse listRolesResponse = iamClient.listRoles(listRolesRequest);
 
             return listRolesResponse.roles().stream()
-                    .filter(r -> r.roleName().equals(ROLE_NAME))
+                    .filter(r -> r.roleName().equals(user.getRoleName()))
                     .findFirst()
                     .map(Role::arn)
                     .orElse(null);
