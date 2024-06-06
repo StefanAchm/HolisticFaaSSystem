@@ -17,34 +17,6 @@
 - Test also with AWS academy account
   - Therefore, a user needs to add a token for the academy account
 
-### AWS Credentials (properties)
-```properties
-aws.accessKeyId=YOUR_ACCESS_KEY
-aws.secretAccessKey=YOUR_SECRET_KEY
-
-# Optional, you can add a role ARN, eg:
-aws.roleArn=YOUR_ROLE_ARN
-```
-
-### GCP Credentials (JSON)
-```json
-
-{
-  "type": "service_account",
-  "project_id": "YOUR_PROJECT_ID",
-  "private_key_id": "YOUR_PRIVATE_KEY_ID",
-  "private_key": "YOUR_PRIVATE_KEY", 
-  "client_email": "YOUR_CLIENT_EMAIL",
-  "client_id": "YOUR_CLIENT_ID",
-  "auth_uri": "...",
-  "token_uri": "...",
-  "auth_provider_x509_cert_url": "...",
-  "client_x509_cert_url": "...",
-  "universe_domain": "googleapis.com"
-}
-
-```
-
 
 ## 2. Workflow Management
 
