@@ -63,12 +63,18 @@ public class DeployGCP implements DeployerInterface {
     }
 
 
-
+    /**
+     * Returns a bucket name for a function. <br>
+     * The bucket name must comply with some rules, read: <a href="https://cloud.google.com/storage/docs/buckets#naming">here</a>
+     *
+     * TODO: probably we should create one bucket per workflow, instead of one bucket per function
+     *
+     * @param function the function, containing the id
+     * @return the bucket name
+     */
     private static String getBucketName(Function function) {
 
-        String name = function.getName().toLowerCase().replaceAll("[^a-z0-9]", "-");
-
-        return name + "-bucket-hf";
+        return function.getId() + "-bucket-hf";
 
     }
 

@@ -69,7 +69,7 @@ public class Function {
 
         Function function = new Function();
 
-        function.setId(dbFunctionImplementation.getId());
+        function.setId(dbFunctionDeployment.getId());
 
         function.setFilePath(Paths.get(dbFunctionImplementation.getFilePath()));
 

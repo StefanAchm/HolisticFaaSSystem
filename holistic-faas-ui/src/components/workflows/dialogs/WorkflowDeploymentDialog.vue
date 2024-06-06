@@ -89,6 +89,7 @@
                     item-text="title"
                     item-value="value"
                     @change="updateEditItemsForProvider"
+                    autocomplete="none"
                 ></v-autocomplete>
 
               </td>
@@ -317,6 +318,13 @@ export default {
 
   watch: {
 
+    editItems: {
+      handler: function () {
+        this.updateCommon()
+      },
+      deep: true
+    },
+
     dialog(val) {
 
       this.dialogLocal = val;
@@ -325,7 +333,7 @@ export default {
         return;
       }
 
-      console.log(this.workflowDeploymentMigrationInfo)
+      this.name = ''
 
       HfApi.getWorkflowFunctionImplementations(this.$route.params.id).then((response) => {
 
@@ -337,7 +345,11 @@ export default {
 
         this.editItems = this.workflowDeployment.functionDefinitions
 
+        this.updateCommon();
+
       })
+
+
 
     },
 
@@ -391,8 +403,6 @@ export default {
 
       // If all items have the same provider, update the provider
 
-      const names = this.editItems.map(item => item.functionType?.name)
-      const implementations = this.editItems.map(item => item.functionImplementation?.id)
       const providers = this.editItems.map(item => item.functionDeployment?.provider)
       const regions = this.editItems.map(item => item.functionDeployment?.region)
       const runtimes = this.editItems.map(item => item.functionDeployment?.runtime)
@@ -401,42 +411,50 @@ export default {
       const handlers = this.editItems.map(item => item.functionDeployment?.handler)
       const users = this.editItems.map(item => item.functionDeployment?.userName)
 
-      if (names.every((val, i, arr) => val === arr[0])) {
-        this.common.function.name = names[0]
-      }
-
-      if (implementations.every((val, i, arr) => val === arr[0])) {
-        this.common.functionImplementation.id = implementations[0]
-      }
-
       if (providers.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.provider = providers[0]
         this.common.runtimes = this.getRuntimes(this.common.functionDeployment.provider)
         this.common.regions = this.getRegions(this.common.functionDeployment.provider)
+      } else {
+        this.common.functionDeployment.provider = ''
+        this.common.runtimes = []
+        this.common.regions = []
       }
 
       if (regions.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.region = regions[0]
+      } else {
+        this.common.functionDeployment.region = ''
       }
 
       if (runtimes.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.runtime = runtimes[0]
+      } else {
+        this.common.functionDeployment.runtime = ''
       }
 
       if (timeoutSecs.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.timeoutSecs = timeoutSecs[0]
+      } else {
+        this.common.functionDeployment.timeoutSecs = null
       }
 
       if (memory.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.memory = memory[0]
+      } else {
+        this.common.functionDeployment.memory = null
       }
 
       if (handlers.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.handler = handlers[0]
+      } else {
+        this.common.functionDeployment.handler = ''
       }
 
       if (users.every((val, i, arr) => val === arr[0])) {
         this.common.functionDeployment.userName = users[0]
+      } else {
+        this.common.functionDeployment.userName = ''
       }
 
     },
@@ -455,7 +473,9 @@ export default {
             }
           })
 
-      item.functionImplementation.id = item.functionImplementations[0].value
+      if(!item.functionImplementation.id) {
+        item.functionImplementation.id = item.functionImplementations[0].value
+      }
 
     },
 

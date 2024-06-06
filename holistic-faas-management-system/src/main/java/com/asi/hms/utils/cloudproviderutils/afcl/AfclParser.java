@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AfclParser {
 
@@ -80,9 +81,21 @@ public class AfclParser {
                     af.setProperties(new ArrayList<>());
                 }
 
-                af.getProperties().add(
-                        new PropertyConstraint("resource", apiFunctionFlat.getFunctionDeployment().getResource())
-                );
+                String resourceValue = apiFunctionFlat.getFunctionDeployment().getResource();
+                if(resourceValue != null && !resourceValue.isEmpty()) {
+
+                    af.getProperties()
+                            .stream()
+                            .filter(propertyConstraint -> propertyConstraint.getName().equals("resource"))
+                            .findFirst()
+                            .ifPresentOrElse(
+                                    propertyConstraint -> propertyConstraint.setValue(resourceValue),
+                                    () -> af.getProperties().add(
+                                            new PropertyConstraint("resource", resourceValue)
+                                    )
+                            );
+
+                }
 
             }
 
