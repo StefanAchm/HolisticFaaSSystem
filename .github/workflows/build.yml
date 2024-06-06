@@ -1,0 +1,119 @@
+name: Build Application and Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-jar:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle Wrapper
+        run: cd holistic-faas-management-system && ./gradlew build -x test
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-jar
+          path: holistic-faas-management-system/build/libs/*.jar
+
+  build-node:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Cache Node.js dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: cd holistic-faas-ui && npm install
+
+    - name: Build
+      run: cd holistic-faas-ui && npm run build
+
+    - name: Upload Node.js build
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-node
+        path: holistic-faas-ui/dist
+
+  build-docker:
+    # Wait for the build-jar and build-node jobs to complete
+    needs: [build-jar, build-node]
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        path: .
+    - name: Move JAR
+      run: |
+        mkdir -p ./holistic-faas-management-system/build/libs
+        mv app-jar/* ./holistic-faas-management-system/build/libs
+    - name: Move Node.js build
+      run: |
+        mkdir -p ./holistic-faas-ui/dist
+        mv app-node/* ./holistic-faas-ui/dist
+
+    - name: Build Docker image
+      run: docker-compose build
+
+    - name: Save Docker images
+      run: |
+        docker save -o holistic-faas-db.tar holistic-faas-db:latest
+        docker save -o holistic-faas-management-system.tar holistic-faas-management-system:latest
+        docker save -o holistic-faas-ui.tar holistic-faas-ui:latest
+
+    - name: Upload Docker images
+      uses: actions/upload-artifact@v2
+      with:
+        name: holistic-faas-images
+        path: |
+          ./holistic-faas-db.tar
+          ./holistic-faas-management-system.tar
+          ./holistic-faas-ui.tar
+          ./docker-compose.yml
