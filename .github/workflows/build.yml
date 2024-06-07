@@ -104,16 +104,12 @@ jobs:
 
     - name: Save Docker images
       run: |
-        docker save -o holistic-faas-db.tar holistic-faas-db:latest
-        docker save -o holistic-faas-management-system.tar holistic-faas-management-system:latest
-        docker save -o holistic-faas-ui.tar holistic-faas-ui:latest
+        docker save -o holistic-faas.tar holistic-faas-db:latest  holistic-faas-management-system:latest holistic-faas-ui:latest
 
     - name: Upload Docker images
       uses: actions/upload-artifact@v2
       with:
         name: holistic-faas-images
         path: |
-          ./holistic-faas-db.tar
-          ./holistic-faas-management-system.tar
-          ./holistic-faas-ui.tar
+          ./holistic-faas.tar
           ./docker-compose.yml
