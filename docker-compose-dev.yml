@@ -1,9 +1,9 @@
-version: '3.8'
-
 services:
   db:
+    build:
+      context: ./holistic-faas-db
     container_name: holistic-faas-db
-    image: ghcr.io/stefanachm/holistic-faas-db:latest
+    image: holistic-faas-db:latest
     ports:
       - "5433:5432"
     environment:
@@ -12,8 +12,10 @@ services:
       POSTGRES_PASSWORD: password
 
   backend:
+    build:
+      context: ./holistic-faas-management-system
     container_name: holistic-faas-management-system
-    image: ghcr.io/stefanachm/holistic-faas-management-system:latest
+    image: holistic-faas-management-system:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -26,8 +28,10 @@ services:
       - uploads_volume:/app/uploads
 
   frontend:
+    build:
+      context: ./holistic-faas-ui
     container_name: holistic-faas-ui
-    image: ghcr.io/stefanachm/holistic-faas-ui:latest
+    image: holistic-faas-ui:latest
     ports:
       - "80:80"
 

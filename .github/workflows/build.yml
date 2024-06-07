@@ -7,7 +7,6 @@ on:
 
 jobs:
   build-jar:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,10 +19,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/setup-gradle@v3.1.0
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
@@ -43,73 +40,76 @@ jobs:
           path: holistic-faas-management-system/build/libs/*.jar
 
   build-node:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Cache Node.js dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Install dependencies
-      run: cd holistic-faas-ui && npm install
+      - name: Install dependencies
+        run: cd holistic-faas-ui && npm install
 
-    - name: Build
-      run: cd holistic-faas-ui && npm run build
+      - name: Build
+        run: cd holistic-faas-ui && npm run build
 
-    - name: Upload Node.js build
-      uses: actions/upload-artifact@v2
-      with:
-        name: app-node
-        path: holistic-faas-ui/dist
+      - name: Upload Node.js build
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-node
+          path: holistic-faas-ui/dist
 
   build-docker:
-    # Wait for the build-jar and build-node jobs to complete
-    needs: [build-jar, build-node]
-
+    needs: [ build-jar, build-node ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write  # This is necessary to publish to GHCR
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        path: .
-    - name: Move JAR
-      run: |
-        mkdir -p ./holistic-faas-management-system/build/libs
-        mv app-jar/* ./holistic-faas-management-system/build/libs
-    - name: Move Node.js build
-      run: |
-        mkdir -p ./holistic-faas-ui/dist
-        mv app-node/* ./holistic-faas-ui/dist
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: app-jar
+          path: holistic-faas-management-system/build/libs
 
-    - name: Build Docker image
-      run: docker-compose build
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-node
+          path: holistic-faas-ui/dist
 
-    - name: Save Docker images
-      run: |
-        docker save -o holistic-faas.tar holistic-faas-db:latest  holistic-faas-management-system:latest holistic-faas-ui:latest
+      - name: Build Docker image
+        run: docker-compose -f docker-compose-build.yml build
 
-    - name: Upload Docker images
-      uses: actions/upload-artifact@v2
-      with:
-        name: holistic-faas-images
-        path: |
-          ./holistic-faas.tar
-          ./docker-compose.yml
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Set repository owner lowercase
+        id: repo_owner
+        run: echo "OWNER_LOWER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Tag Docker image
+        run: |
+          docker tag holistic-faas-management-system:latest ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-management-system:latest
+          docker tag holistic-faas-ui:latest ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-ui:latest
+          docker tag holistic-faas-db:latest ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-db:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-management-system:latest
+          docker push ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-ui:latest
+          docker push ghcr.io/${{ env.OWNER_LOWER }}/holistic-faas-db:latest

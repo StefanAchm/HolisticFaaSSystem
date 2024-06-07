@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    build:
+      context: ./holistic-faas-db
+    image: holistic-faas-db:latest
+
+  backend:
+    build:
+      context: ./holistic-faas-management-system
+    image: holistic-faas-management-system:latest
+
+  frontend:
+    build:
+      context: ./holistic-faas-ui
+    image: holistic-faas-ui:latest
