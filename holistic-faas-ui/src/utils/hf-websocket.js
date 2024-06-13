@@ -1,5 +1,5 @@
 
-const ws = new WebSocket('ws://localhost:8080/hf/websocket');
+const ws = new WebSocket(process.env.VUE_APP_WS_BASE_URL);
 
 export default {
 

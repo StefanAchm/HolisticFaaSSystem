@@ -1,0 +1,4 @@
+window.env = {
+    VUE_APP_API_BASE_URL: "${VUE_APP_API_BASE_URL}",
+    VUE_APP_WS_BASE_URL: "${VUE_APP_WS_BASE_URL}"
+}
