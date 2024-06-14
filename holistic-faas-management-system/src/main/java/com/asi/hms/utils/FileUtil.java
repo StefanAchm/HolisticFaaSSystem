@@ -48,36 +48,21 @@ public class FileUtil {
 
     }
 
-    public static JsonObject getJsonFromFile(Path fileName) {
-
-        try (InputStream inputStream = Paths.get(fileName.toString()).toUri().toURL().openStream()) {
-
-            if (inputStream == null) {
-                throw new HolisticFaaSException("File not found: " + fileName);
-            } else {
-                return JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
-            }
-
-        } catch (Exception e) {
-
-            throw new HolisticFaaSException("Error reading file: " + fileName);
-
-        }
-
-
+    public static JsonObject getJsonFromInputStream(InputStream inputStream) {
+        return JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
     }
 
-    public static Properties getPropertiesFromFile(Path filePath) {
+    public static Properties getPropertiesFromInputStream(InputStream inputStream) {
 
         Properties properties = new Properties();
 
-        try (InputStream inputStream = Paths.get(filePath.toString()).toUri().toURL().openStream()) {
+        try {
 
             properties.load(inputStream);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
 
-            throw new HolisticFaaSException("Error reading properties file: " + filePath);
+            throw new HolisticFaaSException("Error reading properties file");
 
         }
 
@@ -257,4 +242,5 @@ public class FileUtil {
         }
 
     }
+
 }

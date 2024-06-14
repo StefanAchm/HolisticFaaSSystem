@@ -5,6 +5,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Properties;
 
@@ -19,9 +20,9 @@ public class UserAWS implements UserInterface {
 
     private String roleArn;
 
-    public static UserAWS fromFile(Path filePath) {
+    public static UserAWS fromInputStream(InputStream inputStream) {
 
-        Properties properties = FileUtil.getPropertiesFromFile(filePath);
+        Properties properties = FileUtil.getPropertiesFromInputStream(inputStream);
 
         UserAWS user = new UserAWS();
         user.setAccessKeyId(properties.getProperty("aws.accessKeyId"));

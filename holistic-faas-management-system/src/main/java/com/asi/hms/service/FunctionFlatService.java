@@ -143,7 +143,7 @@ public class FunctionFlatService {
         Path path;
 
         try {
-            path = this.uploadFileService.uploadZipFile(file, UploadFileService.UPLOADS_DIR);
+            path = this.uploadFileService.uploadZipFileAndUnzip(file, UploadFileService.UPLOADS_DIR);
         } catch (Exception e) {
             throw new HolisticFaaSException("Can not upload package");
         }

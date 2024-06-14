@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Paths;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,12 +34,15 @@ public class FunctionDeploymentService {
 
     private final WebSocketSessionService sessionService;
 
+    private final UserCredentialsService userCredentialsService;
+
     public FunctionDeploymentService(UserRepository userRepository,
                                      UserCredentialsRepository userCredentialsRepository,
                                      FunctionImplementationRepository functionImplementationRepository,
                                      FunctionDeploymentRepository functionDeploymentRepository,
                                      FunctionRepository functionRepository,
-                                     WebSocketSessionService sessionService) {
+                                     WebSocketSessionService sessionService,
+                                     UserCredentialsService userCredentialsService) {
 
         this.userRepository = userRepository;
         this.userCredentialsRepository = userCredentialsRepository;
@@ -49,6 +52,8 @@ public class FunctionDeploymentService {
         this.functionRepository = functionRepository;
 
         this.sessionService = sessionService;
+
+        this.userCredentialsService = userCredentialsService;
 
     }
 
@@ -132,7 +137,7 @@ public class FunctionDeploymentService {
     public void deploy(UUID functionDeploymentId, String awsSessionToken) {
 
         DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
-        DBUserCredentials userCredentials = getDbUserCredentials(dbFunctionDeployment);
+        DBUser dbUser = dbFunctionDeployment.getUser();
 
         Function function = Function.fromDbFunction(dbFunctionDeployment);
         ProgressHandler progressHandler = function.getProvider().getProgressHandler(dbFunctionDeployment, this.sessionService);
@@ -152,11 +157,18 @@ public class FunctionDeploymentService {
                             function.getName(),
                             function.getProvider(),
                             function.getRegion(),
-                            userCredentials.getUser().getUsername()
+                            dbUser.getUsername()
                     )
             );
 
-            UserInterface user = function.getProvider().getUserFromFile(Paths.get(userCredentials.getCredentialsFilePath()));
+            UserInterface user = function.getProvider().getUserFromInputStream(
+                    new ByteArrayInputStream(
+                            userCredentialsService.getCredentials(
+                                    dbUser.getId(),
+                                    dbFunctionDeployment.getProvider()
+                            ).getBytes()
+                    )
+            );
 
             if(user instanceof UserAWS userAWS && awsSessionToken != null) {
                 userAWS.setSessionToken(awsSessionToken);
@@ -200,16 +212,6 @@ public class FunctionDeploymentService {
 
         }
 
-    }
-
-    private DBUserCredentials getDbUserCredentials(DBFunctionDeployment dbFunctionDeployment) {
-
-        return this.userCredentialsRepository
-                .findDBUserCredentialsByUserAndProvider(
-                        dbFunctionDeployment.getUser(),
-                        dbFunctionDeployment.getProvider()
-                )
-                .orElseThrow(() -> new HolisticFaaSException("User credentials not found"));
     }
 
     private DBFunctionDeployment getDbFunctionDeployment(UUID functionDeploymentId) {

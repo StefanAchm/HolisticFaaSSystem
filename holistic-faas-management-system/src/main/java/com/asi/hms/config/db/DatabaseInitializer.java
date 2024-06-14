@@ -407,7 +407,7 @@ public class DatabaseInitializer {
     private void addUserCredentials(DBUser user, String provider, String credentialsFilePath) {
 
         DBUserCredentials credentials = new DBUserCredentials();
-        credentials.setCredentialsFilePath(resourcesPath + credentialsFilePath);
+        credentials.setCredentialsFile(credentialsFilePath); // TODO: fix me
         credentials.setProvider(provider);
         credentials.setUser(user);
 

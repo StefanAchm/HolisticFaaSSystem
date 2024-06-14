@@ -1,7 +1,6 @@
 package com.asi.hms.model.db;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -12,7 +11,8 @@ public class DBUserCredentials {
     @GeneratedValue
     private UUID id;
 
-    private String credentialsFilePath; // TODO: security issue, should be stored in a secure way
+    @Column(columnDefinition = "TEXT")
+    private String credentialsFile;
 
     private String provider;
 
@@ -31,12 +31,12 @@ public class DBUserCredentials {
         this.id = id;
     }
 
-    public String getCredentialsFilePath() {
-        return credentialsFilePath;
+    public String getCredentialsFile() {
+        return credentialsFile;
     }
 
-    public void setCredentialsFilePath(String credentialsFilePath) {
-        this.credentialsFilePath = credentialsFilePath;
+    public void setCredentialsFile(String credentialsFile) {
+        this.credentialsFile = credentialsFile;
     }
 
     public String getProvider() {

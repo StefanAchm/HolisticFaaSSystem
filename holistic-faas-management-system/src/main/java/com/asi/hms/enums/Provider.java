@@ -10,6 +10,7 @@ import com.asi.hms.model.UserAWS;
 import com.asi.hms.model.UserGCP;
 import com.asi.hms.model.UserInterface;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -28,10 +29,10 @@ public enum Provider {
         };
     }
 
-    public UserInterface getUserFromFile(Path filePath) {
+    public UserInterface getUserFromInputStream(InputStream inputStream) {
         return switch (this) {
-            case AWS -> UserAWS.fromFile(filePath);
-            case GCP -> UserGCP.fromFile(filePath);
+            case AWS -> UserAWS.fromInputStream(inputStream);
+            case GCP -> UserGCP.fromInputStream(inputStream);
         };
     }
 

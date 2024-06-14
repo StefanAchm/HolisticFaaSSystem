@@ -17,25 +17,34 @@
 
     <v-divider></v-divider>
 
-    <v-card-text>
+    <v-card-text :key="cardKey">
 
-      <v-list v-for="(provider) in providers" :key="provider.name">
+      <v-list v-for="(credentials) in credentialsList" :key="credentials.name">
 
         <v-row class="py-3">
 
           <v-col :cols="3" class="align-self-center">
-            <strong>Credentials for {{ provider.name }}:</strong>
+            <strong>Credentials for {{ credentials.provider }}:</strong>
           </v-col>
 
           <v-col class="align-self-center" :class="{
-            'info--text': provider.inputFile,
+            'info--text': credentials.fileName,
             }">
+            
+            <span v-if="credentials.fileName">
+              {{ credentials.fileName }}
+              <v-icon color="info" small>mdi-alert-circle-outline</v-icon>
+            </span>
+            
+            <span v-else-if="credentials.configured">
+              Configured
+              <v-icon color="success" small>mdi-check-circle-outline</v-icon>
+            </span>
 
-            {{ provider.fileName }}
-
-            <v-icon color="info" v-if="provider.inputFile" small>mdi-alert-circle-outline</v-icon>
-            <v-icon color="success" v-else-if="provider.path" small>mdi-check-circle-outline</v-icon>
-            <v-icon color="error" v-else small>mdi-alert-circle-outline</v-icon>
+            <span v-else>
+              Not configured
+              <v-icon color="error" small>mdi-alert-circle-outline</v-icon>
+            </span>
 
           </v-col>
 
@@ -44,7 +53,7 @@
             <v-file-input
                 class="pt-0 mt-0"
                 hide-input
-                @change="selectFile($event, provider)"
+                @change="selectFile($event, credentials)"
             ></v-file-input>
 
           </v-col>
@@ -59,8 +68,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn :disabled="!hasChanged()" color="neutral" @click="init()">Cancel</v-btn>
-      <v-btn :disabled="!hasChanged()" color="primary" @click="save">Save</v-btn>
+      <v-btn :disabled="!hasChanged" color="neutral" @click="init()">Cancel</v-btn>
+      <v-btn :disabled="!hasChanged" color="primary" @click="save()">Save</v-btn>
 
     </v-card-actions>
 
@@ -81,13 +90,16 @@ export default {
 
       username: this.$store.state.username,
 
-      defaultAccount: {
-        name: '',
-        path: '',
-        fileName: 'No credentials file selected'
+      defaultCredentials: {
+        configured: false,
+        provider: null,
+        fileName: null,
+        inputFile: null
       },
 
-      providers: [],
+      credentialsList: [],
+
+      cardKey: 0
 
     }
 
@@ -97,17 +109,23 @@ export default {
     this.init()
   },
 
+  computed: {
+    hasChanged() {
+      return this.credentialsList.some(credentials => credentials.inputFile)
+    }
+  },
+
   methods: {
 
     init() {
 
-      let awsAccount = Object.assign({}, this.defaultAccount)
-      awsAccount.name = 'AWS'
+      let awsAccount = Object.assign({}, this.defaultCredentials)
+      awsAccount.provider = 'AWS'
 
-      let gcpAccount = Object.assign({}, this.defaultAccount)
-      gcpAccount.name = 'GCP'
+      let gcpAccount = Object.assign({}, this.defaultCredentials)
+      gcpAccount.provider = 'GCP'
 
-      this.providers = [awsAccount, gcpAccount]
+      this.credentialsList = [awsAccount, gcpAccount]
 
       HfApi.getUserCredentials(this.$store.getters.getUser)
           .then(response => {
@@ -116,14 +134,15 @@ export default {
 
               let currentData = response.data[i];
               let currentAccount = {
-                name: currentData.provider,
-                path: currentData.credentialsFilePath,
-                fileName: currentData.fileName
+                provider: currentData.provider,
+                configured: true,
+                fileName: null,
+                inputFile: null
               }
 
               // Update the corresponding account in the list with the new data
-              this.providers = this.providers.map(account => {
-                if (account.name === currentAccount.name) {
+              this.credentialsList = this.credentialsList.map(account => {
+                if (account.provider === currentAccount.provider) {
                   return currentAccount
                 }
                 return account
@@ -131,37 +150,42 @@ export default {
 
             }
 
+            this.cardKey++
+
           })
 
     },
 
-    selectFile(file, provider) {
-      provider.fileName = file.name
-      provider.inputFile = file
+    selectFile(file, credentials) {
+      credentials.fileName = file.name
+      credentials.inputFile = file
     },
 
     save() {
 
-      this.providers
-          .filter(provider => provider.inputFile)
-          .forEach(provider => this.upload(provider))
+      Promise.all(
+          this.credentialsList
+              .filter(credentials => credentials.inputFile)
+              .map(credentials => this.upload(credentials))
+      ).then(() => {
+        this.init()
+      })
 
     },
 
-    hasChanged() {
-      return this.providers.some(provider => provider.inputFile)
-    },
-
-    upload(provider) {
+    upload(credentials) {
 
       let request = {
-        provider: provider.name,
+        provider: credentials.provider,
         userId: this.$store.state.userId
       };
 
-      HfApi.uploadUserCredentials(provider.inputFile, request)
+      HfApi.uploadUserCredentials(credentials.inputFile, request)
           .then(() => {
-            this.init()
+            this.$root.snackbar.showSuccess({message: 'Credentials uploaded successfully'});
+          })
+          .catch(() => {
+            this.$root.snackbar.showError({message: 'Error uploading credentials for ' + credentials.provider});
           })
 
     }

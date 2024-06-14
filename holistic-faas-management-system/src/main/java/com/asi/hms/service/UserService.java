@@ -1,11 +1,11 @@
 package com.asi.hms.service;
 
-import com.asi.hms.exceptions.HolisticFaaSException;
 import com.asi.hms.model.api.APILoginResponse;
 import com.asi.hms.model.api.APIUser;
 import com.asi.hms.model.db.DBUser;
 import com.asi.hms.model.db.UserPrincipal;
 import com.asi.hms.repository.UserRepository;
+import com.asi.hms.utils.EncryptionUtil;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +44,7 @@ public class UserService implements UserDetailsService {
         DBUser dbUser = new DBUser();
         dbUser.setUsername(user.getUsername());
         dbUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        dbUser.setEncryptionKey(EncryptionUtil.generateKey());
 
         this.userRepository.save(dbUser);
 

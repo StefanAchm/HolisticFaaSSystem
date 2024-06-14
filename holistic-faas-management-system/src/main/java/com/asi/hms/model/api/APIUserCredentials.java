@@ -10,8 +10,6 @@ public class APIUserCredentials {
 
     private APIUser user;
 
-    private String credentialsFilePath;
-
     private String provider;
 
     private UUID userId;
@@ -20,7 +18,6 @@ public class APIUserCredentials {
 
         APIUserCredentials apiUserCredentials = new APIUserCredentials();
         apiUserCredentials.setUser(APIUser.fromDBUser(dbUserCredentials.getUser()));
-        apiUserCredentials.setCredentialsFilePath(dbUserCredentials.getCredentialsFilePath());
         apiUserCredentials.setProvider(dbUserCredentials.getProvider());
         apiUserCredentials.setUserId(dbUserCredentials.getUser().getId());
 
@@ -34,14 +31,6 @@ public class APIUserCredentials {
 
     public void setUser(APIUser user) {
         this.user = user;
-    }
-
-    public String getCredentialsFilePath() {
-        return credentialsFilePath;
-    }
-
-    public void setCredentialsFilePath(String credentialsFilePath) {
-        this.credentialsFilePath = credentialsFilePath;
     }
 
     public String getProvider() {
@@ -58,11 +47,6 @@ public class APIUserCredentials {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
-    }
-
-    @JsonGetter("fileName")
-    public String getFileName() {
-        return FileUtil.getFileNameFromPath(this.credentialsFilePath);
     }
 
 }

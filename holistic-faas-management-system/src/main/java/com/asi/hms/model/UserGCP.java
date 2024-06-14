@@ -6,6 +6,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -16,41 +17,43 @@ public class UserGCP implements UserInterface {
     private String projectName;
     private GoogleCredentials googleCredentials;
 
-    public static UserGCP fromFile(Path filePath) {
+    public static UserGCP fromInputStream(InputStream inputStream) {
 
-        UserGCP user = new UserGCP();
+        try {
 
-        try (InputStream reader = Paths.get(filePath.toString()).toUri().toURL().openStream()) {
+            UserGCP user = new UserGCP();
+
+            byte[] bytes = inputStream.readAllBytes();
 
             GoogleCredentials googleCredentials = GoogleCredentials
-                    .fromStream(reader)
+                    .fromStream(new ByteArrayInputStream(bytes))
                     .createScoped("https://www.googleapis.com/auth/cloud-platform");
 
             user.setGoogleCredentials(googleCredentials);
 
+            JsonObject jsonFromResourcesFile = FileUtil.getJsonFromInputStream(new ByteArrayInputStream(bytes));
+
+            JsonElement projectId = jsonFromResourcesFile.get("project_id");
+
+            if (projectId == null) {
+                throw new HolisticFaaSException("project_id not found");
+            }
+
+            if (!projectId.isJsonPrimitive() || !projectId.getAsJsonPrimitive().isString()) {
+                throw new HolisticFaaSException("project_id is not a string");
+            }
+
+            String projectIdAsString = projectId.getAsString();
+
+            user.setProjectName(projectIdAsString);
+
+            return user;
+
         } catch (IOException e) {
 
-            throw new HolisticFaaSException("Error reading file: " + filePath);
+            throw new HolisticFaaSException("Error reading input stream");
 
         }
-
-        JsonObject jsonFromResourcesFile = FileUtil.getJsonFromFile(filePath);
-
-        JsonElement projectId = jsonFromResourcesFile.get("project_id");
-
-        if (projectId == null) {
-            throw new HolisticFaaSException("project_id not found in file: " + filePath);
-        }
-
-        if (!projectId.isJsonPrimitive() || !projectId.getAsJsonPrimitive().isString()) {
-            throw new HolisticFaaSException("project_id is not a string in file: " + filePath);
-        }
-
-        String projectIdAsString = projectId.getAsString();
-
-        user.setProjectName(projectIdAsString);
-
-        return user;
 
     }
 

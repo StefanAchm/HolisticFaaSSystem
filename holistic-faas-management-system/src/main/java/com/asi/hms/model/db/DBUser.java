@@ -17,6 +17,9 @@ public class DBUser {
 
     private String password;
 
+    @Column(nullable = false)
+    private String encryptionKey;
+
     @OneToMany(mappedBy = "user")
     private List<DBUserCredentials> userCredentials;
 
@@ -42,6 +45,14 @@ public class DBUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEncryptionKey() {
+        return encryptionKey;
+    }
+
+    public void setEncryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
     }
 
     public List<DBUserCredentials> getUserCredentials() {
