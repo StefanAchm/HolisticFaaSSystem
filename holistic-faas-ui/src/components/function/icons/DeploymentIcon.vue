@@ -9,7 +9,7 @@
           v-bind="attrs"
           @click="deployFunction(item)"
           :class="{
-                'pulsate-icon': item.functionDeployment?.status === 'STARTED',
+                'pulsate-icon': item.functionDeployment?.status === 'STARTED' || item.functionDeployment?.status === 'WAITING'
               }"
       >
         {{ getIcon(item) }}
@@ -23,7 +23,7 @@
 
   </v-tooltip>
 </template>
-<script >
+<script>
 
 import HfApi from "@/utils/hf-api";
 
@@ -53,8 +53,10 @@ export default {
         return 'mdi-progress-alert'
       } else if (status === 'STARTED') {
         return 'mdi-progress-upload'
-      } else if (status === 'CREATED') {
+      } else if (status === 'WAITING') {
         return 'mdi-progress-clock'
+      } else if (status === 'CREATED') {
+        return 'mdi-progress-star'
       } else if (status === 'CHANGED') {
         return 'mdi-progress-wrench'
       } else {
@@ -76,6 +78,8 @@ export default {
         return 'error'
       } else if (status === 'STARTED') {
         return 'info'
+      } else if (status === 'WAITING') {
+        return 'warning'
       } else if (status === 'CREATED') {
         return 'warning'
       } else if (status === 'CHANGED') {
@@ -102,7 +106,8 @@ export default {
 
     deployFunction(item) {
 
-      if(item.functionDeployment.status !== 'DEPLOYED') {
+      let status = item.functionDeployment.status
+      if (status !== 'DEPLOYED' && status !== 'STARTED' && status !== 'WAITING') {
         HfApi.deployFunctionDeployment(item.functionDeployment.id, this.$store.state.awsSessionToken)
             .catch(() => {
               this.$root.snackbar.showError({message: 'Unable to deploy function: ' + item.function.name})

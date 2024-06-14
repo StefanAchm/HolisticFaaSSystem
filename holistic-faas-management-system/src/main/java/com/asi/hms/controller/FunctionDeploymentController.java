@@ -36,7 +36,10 @@ public class FunctionDeploymentController {
             return ResponseEntity.badRequest().body("Current user is not allowed to deploy this function!");
         }
 
+        this.functionDeploymentService.prepareDeployment(functionId);
+
         this.functionDeploymentService.deploy(functionId, awsSessionToken);
+
         return ResponseEntity.ok("Function deployment started");
     }
 

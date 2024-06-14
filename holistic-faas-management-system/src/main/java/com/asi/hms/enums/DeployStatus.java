@@ -6,6 +6,8 @@ public enum DeployStatus {
 
     CHANGED,
 
+    WAITING,
+
     STARTED,
 
     FAILED,

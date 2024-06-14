@@ -41,6 +41,10 @@ public class ProgressHandler {
         this.send(message, this.step++);
     }
 
+    public void waiting() {
+        this.send("Waiting", this.step);
+    }
+
     public void start() {
         this.step = 1; // Start at 1
         this.send("Progress started", this.step++);

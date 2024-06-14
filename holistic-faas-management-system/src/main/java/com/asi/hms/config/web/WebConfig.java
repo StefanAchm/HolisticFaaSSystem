@@ -15,14 +15,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebConfig.class);
 
-    @Value("${CORS_ALLOWED_ORIGINS}")
+    @Value("${cors.allowed.origins}")
     private String[] allowedOrigins;
 
     @PostConstruct
     public void init() {
-        logger.info("CORS_ALLOWED_ORIGINS: {}", (Object) allowedOrigins);
+        logger.info("cors.allowed.origins: {}", (Object) allowedOrigins);
     }
-
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

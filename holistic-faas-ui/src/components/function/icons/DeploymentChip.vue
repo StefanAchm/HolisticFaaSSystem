@@ -29,6 +29,8 @@ export default {
         return 'error'
       } else if (item.status === 'STARTED') {
         return 'info'
+      } else if (item.status === 'WAITING') {
+        return 'warning'
       } else if (item.status === 'CREATED') {
         return 'warning'
       } else if (item.status === 'CHANGED') {

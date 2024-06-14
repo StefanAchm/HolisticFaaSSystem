@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    @Value("${CORS_ALLOWED_ORIGINS}")
+    @Value("${cors.allowed.origins}")
     private String[] allowedOrigins;
 
     private final WebSocketHandler myHandler;

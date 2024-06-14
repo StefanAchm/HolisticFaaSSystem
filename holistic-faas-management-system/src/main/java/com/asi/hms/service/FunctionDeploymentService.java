@@ -133,7 +133,7 @@ public class FunctionDeploymentService {
 
     }
 
-    @Async
+    @Async("deploymentExecutor")
     public void deploy(UUID functionDeploymentId, String awsSessionToken) {
 
         DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
@@ -211,6 +211,24 @@ public class FunctionDeploymentService {
             progressHandler.finish(dbFunctionDeployment.getStatusMessage());
 
         }
+
+    }
+
+    public void prepareDeployment(UUID functionDeploymentId) {
+
+        DBFunctionDeployment dbFunctionDeployment = getDbFunctionDeployment(functionDeploymentId);
+
+        Function function = Function.fromDbFunction(dbFunctionDeployment);
+        ProgressHandler progressHandler = function.getProvider().getProgressHandler(dbFunctionDeployment, this.sessionService);
+
+        boolean isUpdate = dbFunctionDeployment.getStatus().canUpdate();
+        String action = isUpdate ? "Update" : "Deployment";
+
+        // Start deployment
+        dbFunctionDeployment.setStatusWithMessage(DeployStatus.WAITING, action + " waiting");
+        this.functionDeploymentRepository.save(dbFunctionDeployment);
+
+        progressHandler.waiting();
 
     }
 

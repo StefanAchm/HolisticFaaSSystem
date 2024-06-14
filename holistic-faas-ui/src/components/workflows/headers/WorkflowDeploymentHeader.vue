@@ -76,7 +76,11 @@ export default {
 
   computed: {
     undeployedFunctions() {
-      return this.workflowDeployment.functionDefinitions?.filter(item => item.functionDeployment.status !== 'DEPLOYED' && item.functionDeployment.status !== 'STARTED')
+      return this.workflowDeployment.functionDefinitions?.filter(item =>
+          item.functionDeployment.status !== 'DEPLOYED'
+          && item.functionDeployment.status !== 'STARTED'
+          &&  item.functionDeployment.status !== 'WAITING'
+      )
     }
   },
 
