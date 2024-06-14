@@ -22,6 +22,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hf
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
+      CORS_ALLOWED_ORIGINS: https://holisticfaas.uibk-serverless.cloudns.ch
     volumes:
       - uploads_volume:/app/uploads
 
@@ -29,8 +30,8 @@ services:
     container_name: holistic-faas-ui
     image: ghcr.io/stefanachm/holistic-faas-ui:latest
     environment:
-      - VUE_APP_API_BASE_URL=http://localhost:8080/hf/api
-      - VUE_APP_WS_BASE_URL=ws://localhost:8080/hf/ws
+      - VUE_APP_API_BASE_URL=https://holisticfaas.uibk-serverless.cloudns.ch/hf/api
+      - VUE_APP_WS_BASE_URL=ws://holisticfaas.uibk-serverless.cloudns.ch/hf/ws
     ports:
       - "8081:80"
 
