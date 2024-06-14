@@ -1,5 +1,5 @@
 
-const ws = new WebSocket(process.env.VUE_APP_WS_BASE_URL);
+const ws = new WebSocket(window.env.VUE_APP_WS_BASE_URL);
 
 export default {
 
