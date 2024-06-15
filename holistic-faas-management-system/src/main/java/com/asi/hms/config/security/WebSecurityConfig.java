@@ -54,6 +54,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/user/login").permitAll()
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/websocket/**").permitAll()
+                .antMatchers("/api/system/info").permitAll()
 
                 // TODO, Allow swagger:
 //                .antMatchers(

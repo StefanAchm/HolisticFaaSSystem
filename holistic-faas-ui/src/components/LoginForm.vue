@@ -72,6 +72,10 @@
                 Register here
               </v-btn>
 
+              <span class="d-flex justify-center" style="font-size: small">
+                Version: {{ store.state.systemInfo?.systemVersion }}
+              </span>
+
             </v-form>
 
 
@@ -80,12 +84,28 @@
                 @submit.prevent="register"
             >
 
-              <v-text-field v-model="user.username" label="Username" required></v-text-field>
+              <v-text-field
+                  v-model="user.username"
+                  label="Username"
+                  required
+                  :rules="userRules"
+              ></v-text-field>
+
               <v-text-field
                   :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="showPassword ? 'text' : 'password'"
                   v-model="user.password"
                   label="Password"
+                  required
+                  :rules="passwordRules"
+                  @click:append="showPassword = !showPassword"
+              ></v-text-field>
+
+              <v-text-field
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="showPassword ? 'text' : 'password'"
+                  v-model="user.passwordConfirm"
+                  label="Confirm Password"
                   required
                   @click:append="showPassword = !showPassword"
               ></v-text-field>
@@ -104,6 +124,7 @@
                   color="primary"
                   type="submit"
                   class="my-5"
+                  :disabled="!isRegisterFormValid()"
               >
                 Register
               </v-btn>
@@ -123,6 +144,9 @@
                 Go to login
               </v-btn>
 
+              <span class="d-flex justify-center" style="font-size: small">
+                Version: {{ store.state.systemInfo?.systemVersion }}
+              </span>
 
             </v-form>
 
@@ -150,18 +174,39 @@ export default {
       dialog: true,
       registerForm: false,
       showPassword: false,
+      showPasswordConfirm: false,
       error: null,
+      passwordRules: [],
+      userRules: [],
     };
+  },
+
+  computed: {
+
+    store() {
+      return this.$store;
+    },
+
   },
 
   methods: {
 
     init() {
       this.user = {
-        username: '',
-        password: '',
+        username: null,
+        password: null,
+        passwordConfirm: null,
       };
+
+      this.passwordRules = []
+      this.userRules = []
+
       this.error = null;
+
+    },
+
+    isRegisterFormValid() {
+      return this.user.username && this.user.password && this.user.passwordConfirm
     },
 
     login() {
@@ -186,6 +231,26 @@ export default {
     },
 
     register() {
+
+      this.passwordRules = [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 8) || 'Min 8 characters',
+        v => (v && v.length <= 20) || 'Max 20 characters',
+        v => /[A-Z]/.test(v) || 'At least one uppercase letter',
+        v => /[a-z]/.test(v) || 'At least one lowercase letter',
+        v => /[0-9]/.test(v) || 'At least one number',
+      ]
+
+      this.userRules = [
+        v => !!v || 'Username is required',
+        v => (v && v.length >= 4) || 'Min 4 characters',
+      ]
+
+      if(this.user.password !== this.user.passwordConfirm) {
+        this.error = 'Passwords do not match';
+        return;
+      }
+
       HfApi.register(this.user)
           .then(() => {
             this.$root.snackbar.showSuccess({message: 'User registered successfully'});

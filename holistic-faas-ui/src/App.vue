@@ -100,15 +100,19 @@
 
               </div>
 
+              <v-list-item-subtitle class="d-flex justify-center">
+                Version: {{ store.state.systemInfo?.systemVersion }}
+              </v-list-item-subtitle>
+
             </v-list-item-content>
 
           </v-list-item>
 
           <v-list-item v-if="mini" @click="logout()">
 
-
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
+
             </v-list-item-icon>
 
           </v-list-item>
@@ -144,6 +148,7 @@
 
 import snackbar from "@/components/SnackBar.vue";
 import awsSessionTokenDialog from "@/components/AwsSessionTokenDialog.vue";
+import HfApi from "@/utils/hf-api";
 
 export default {
 
@@ -166,7 +171,13 @@ export default {
   },
 
   mounted() {
+
     this.$root.snackbar = this.$refs.snackbar;
+
+    HfApi.getSystemInfo().then((response) => {
+      this.$store.commit('setSystemInfo', response.data);
+    });
+
   },
 
   methods: {

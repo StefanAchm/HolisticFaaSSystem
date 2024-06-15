@@ -273,5 +273,13 @@ export default {
             {responseType: 'blob'});
     },
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Other
+
+
+    getSystemInfo() {
+        return apiClient.get('/system/info');
+    }
+
 
 }
