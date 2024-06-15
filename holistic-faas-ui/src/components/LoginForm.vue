@@ -80,8 +80,10 @@
 
 
             <v-form
+                ref="registerFormForm"
                 v-if="registerForm"
                 @submit.prevent="register"
+                lazy-validation
             >
 
               <v-text-field
@@ -198,15 +200,30 @@ export default {
         passwordConfirm: null,
       };
 
-      this.passwordRules = []
-      this.userRules = []
+      this.passwordRules = [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 8) || 'Min 8 characters',
+        v => (v && v.length <= 20) || 'Max 20 characters',
+        v => /[A-Z]/.test(v) || 'At least one uppercase letter',
+        v => /[a-z]/.test(v) || 'At least one lowercase letter',
+        v => /[0-9]/.test(v) || 'At least one number',
+      ]
+
+      this.userRules = [
+        v => !!v || 'Username is required',
+        v => (v && v.length >= 4) || 'Min 4 characters',
+      ]
 
       this.error = null;
+
+      this.$nextTick(() => {
+        this.$refs.registerFormForm?.reset();
+      });
 
     },
 
     isRegisterFormValid() {
-      return this.user.username && this.user.password && this.user.passwordConfirm
+      return this.$refs.registerFormForm?.validate();
     },
 
     login() {
@@ -232,22 +249,12 @@ export default {
 
     register() {
 
-      this.passwordRules = [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 8) || 'Min 8 characters',
-        v => (v && v.length <= 20) || 'Max 20 characters',
-        v => /[A-Z]/.test(v) || 'At least one uppercase letter',
-        v => /[a-z]/.test(v) || 'At least one lowercase letter',
-        v => /[0-9]/.test(v) || 'At least one number',
-      ]
-
-      this.userRules = [
-        v => !!v || 'Username is required',
-        v => (v && v.length >= 4) || 'Min 4 characters',
-      ]
-
       if(this.user.password !== this.user.passwordConfirm) {
         this.error = 'Passwords do not match';
+        return;
+      }
+
+      if(!this.isRegisterFormValid()) {
         return;
       }
 
@@ -259,6 +266,7 @@ export default {
           .catch((err) => {
             this.error = err.response.data;
           })
+
     },
 
     getCardTitle() {
@@ -266,8 +274,8 @@ export default {
     },
 
     changeForm() {
-      this.init();
       this.registerForm = !this.registerForm;
+      this.init();
     },
 
   },

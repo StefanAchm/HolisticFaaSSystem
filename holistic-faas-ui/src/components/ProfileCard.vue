@@ -180,7 +180,7 @@ export default {
         userId: this.$store.state.userId
       };
 
-      HfApi.uploadUserCredentials(credentials.inputFile, request)
+      return HfApi.uploadUserCredentials(credentials.inputFile, request)
           .then(() => {
             this.$root.snackbar.showSuccess({message: 'Credentials uploaded successfully'});
           })
