@@ -137,10 +137,6 @@
                 ></v-autocomplete>
               </td>
 
-              <td>
-
-              </td>
-
             </tr>
 
             <tr
