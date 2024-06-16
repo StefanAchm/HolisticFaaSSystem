@@ -28,7 +28,7 @@
               item-text="name"
               item-value="id"
               label="Function Type"
-              :disabled="type"
+              :disabled="type !== null"
               required
               :rules="[v => !!v || 'Function Type is required']"
           ></v-select>
@@ -48,7 +48,21 @@
               v-model="functionImplementationName"
               label="Function Implementation Name"
               required
-              :rules="[v => !!v || 'Name is required']">
+              :rules="[v => !!v || 'Name is required']"
+              append-icon="mdi-information-outline"
+          >
+
+            <template v-slot:append>
+              <v-tooltip bottom>
+                <template #activator="{on}">
+                  <v-icon v-on="on">mdi-information-outline</v-icon>
+                </template>
+                <span>
+                  Choose a unique name for the function-implementation <br>
+                  (e.g. 'AWS myFunction1' or 'GCP myFunction1')
+                </span>
+                </v-tooltip>
+            </template>
 
           </v-text-field>
 
