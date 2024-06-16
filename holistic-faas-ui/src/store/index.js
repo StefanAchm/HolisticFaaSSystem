@@ -12,7 +12,11 @@ export default new Vuex.Store({
         treeView: false,
         miniVariant: false,
         awsSessionToken: null,
-        systemInfo: null
+
+        systemInfo: {
+            systemVersion: 'unknown',
+        },
+        systemAlive: false
     },
 
     mutations: {
@@ -24,6 +28,10 @@ export default new Vuex.Store({
             state.treeView = localStorage.getItem('treeView') === 'true';
             state.miniVariant = localStorage.getItem('miniVariant') === 'true';
             state.awsSessionToken = localStorage.getItem('awsSessionToken');
+        },
+
+        setSystemAlive(state, alive) {
+            state.systemAlive = alive;
         },
 
         setSystemInfo(state, systemInfo) {

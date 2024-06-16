@@ -174,9 +174,15 @@ export default {
 
     this.$root.snackbar = this.$refs.snackbar;
 
-    HfApi.getSystemInfo().then((response) => {
-      this.$store.commit('setSystemInfo', response.data);
-    });
+    HfApi.getSystemInfo()
+        .then((response) => {
+          this.$store.commit('setSystemAlive', true);
+          this.$store.commit('setSystemInfo', response.data);
+        })
+        .catch(() => {
+          this.$store.commit('setSystemAlive', false);
+
+        });
 
   },
 

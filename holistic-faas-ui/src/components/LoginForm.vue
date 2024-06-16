@@ -74,6 +74,11 @@
 
               <span class="d-flex justify-center" style="font-size: small">
                 Version: {{ store.state.systemInfo?.systemVersion }}
+
+                <v-icon class="pl-2" small :color="store.state.systemAlive ? 'green' : 'red'">
+                  mdi-circle
+                </v-icon>
+
               </span>
 
             </v-form>
@@ -148,6 +153,11 @@
 
               <span class="d-flex justify-center" style="font-size: small">
                 Version: {{ store.state.systemInfo?.systemVersion }}
+
+                <v-icon class="pl-2"  small :color="store.state.systemAlive ? 'green' : 'red'">
+                  mdi-circle
+                </v-icon>
+
               </span>
 
             </v-form>

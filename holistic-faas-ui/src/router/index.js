@@ -40,6 +40,13 @@ const routes = [
         path: '/workflows/:id/deployments/:deploymentId',
         name: 'deployments',
         component: () => import('../views/WorkflowDeploymentView.vue')
+    },
+    {
+        path: '*',
+        beforeEnter: (to, from, next) => {
+            document.title = 'home'
+            next({name: 'home'})
+        }
     }
 
 ]
@@ -56,9 +63,13 @@ router.beforeEach((to, from, next) => {
 
     document.title = to.name
 
-    if (to.name === 'login') {
+    if (to.name === 'login' && !isAuthenticated) {
         next()
+    } else if (to.name === 'login' && isAuthenticated) {
+        document.title = 'home'
+        next({name: 'home'})
     } else if (!isAuthenticated) {
+        document.title = 'login'
         next({name: 'login'})
     } else {
         next()
