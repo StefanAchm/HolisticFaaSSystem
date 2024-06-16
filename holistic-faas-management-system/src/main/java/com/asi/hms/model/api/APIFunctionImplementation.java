@@ -70,6 +70,11 @@ public class APIFunctionImplementation {
     }
 
     public static APIFunctionImplementation fromDBFunctionImplementation(DBFunctionImplementation dbFunctionImplementation) {
+        // Adding deployments results in extremely large responses!
+        return fromDBFunctionImplementation(dbFunctionImplementation, false);
+    }
+
+    public static APIFunctionImplementation fromDBFunctionImplementation(DBFunctionImplementation dbFunctionImplementation, boolean withDeployments) {
 
         APIFunctionImplementation apiFunctionImplementation = new APIFunctionImplementation();
 
@@ -79,7 +84,7 @@ public class APIFunctionImplementation {
 
         apiFunctionImplementation.setFunctionTypeId(dbFunctionImplementation.getFunctionType().getId());
 
-        if(dbFunctionImplementation.getFunctionDeployments() != null) {
+        if(dbFunctionImplementation.getFunctionDeployments() != null && withDeployments) {
 
             dbFunctionImplementation.getFunctionDeployments()
                     .stream()
