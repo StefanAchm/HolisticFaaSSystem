@@ -112,6 +112,16 @@ export default {
         });
     },
 
+    deleteUserCredentials(userId) {
+
+        return apiClient.delete('/user_credentials/delete', {
+            params: {
+                userId: userId
+            }
+        });
+
+    },
+
     register(user) {
         return apiClient.post('/user/register', user);
     },
@@ -275,7 +285,7 @@ export default {
 
     getSystemInfo() {
         return apiClient.get('/system/info');
-    }
+    },
 
 
 }

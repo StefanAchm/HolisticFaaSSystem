@@ -43,7 +43,7 @@ export default {
       message: '',
       color: '',
       icon: '',
-      timer: 3000,
+      timer: 5000,
       route: ''
     }
   },

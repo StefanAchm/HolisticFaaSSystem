@@ -29,5 +29,11 @@ public class UserCredentialsController {
     public ResponseEntity<List<APIUserCredentials>> get(@RequestParam UUID userId) {
         return ResponseEntity.ok(this.userCredentialsService.get(userId));
     }
+    
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<String> delete(@RequestParam UUID userId) {
+        this.userCredentialsService.delete(userId);
+        return ResponseEntity.ok("User credentials deleted successfully");
+    }
 
 }

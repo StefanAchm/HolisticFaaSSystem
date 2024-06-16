@@ -17,4 +17,6 @@ public interface UserCredentialsRepository extends JpaRepository<DBUserCredentia
 
     Collection<DBUserCredentials> findByUser(DBUser dbUser);
 
+    void deleteByUser(DBUser dbUser);
+
 }

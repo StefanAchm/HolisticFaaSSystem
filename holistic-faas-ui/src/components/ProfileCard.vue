@@ -68,6 +68,8 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn :disabled="nrOfCredentials === 0" color="error" @click="deleteUserCredentials()">Delete</v-btn>
+
       <v-btn :disabled="!hasChanged" color="neutral" @click="init()">Cancel</v-btn>
       <v-btn :disabled="!hasChanged" color="primary" @click="save()">Save</v-btn>
 
@@ -99,7 +101,9 @@ export default {
 
       credentialsList: [],
 
-      cardKey: 0
+      cardKey: 0,
+
+      nrOfCredentials: 0
 
     }
 
@@ -150,6 +154,8 @@ export default {
 
             }
 
+            this.nrOfCredentials = response.data.length
+
             this.cardKey++
 
           })
@@ -159,6 +165,14 @@ export default {
     selectFile(file, credentials) {
       credentials.fileName = file.name
       credentials.inputFile = file
+    },
+
+    deleteUserCredentials() {
+      HfApi.deleteUserCredentials(this.$store.state.userId)
+          .then(() => {
+            this.init()
+            this.$root.snackbar.showWarning({message: 'Credentials deleted successfully'});
+          })
     },
 
     save() {

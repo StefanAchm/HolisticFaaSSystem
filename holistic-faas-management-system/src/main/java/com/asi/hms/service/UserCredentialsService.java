@@ -8,6 +8,7 @@ import com.asi.hms.repository.UserCredentialsRepository;
 import com.asi.hms.repository.UserRepository;
 import com.asi.hms.utils.EncryptionUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class UserCredentialsService {
 
         DBUserCredentials dbUserCredentials = new DBUserCredentials();
 
-        if(!alwaysCreate) {
+        if (!alwaysCreate) {
 
             dbUserCredentials = this.userCredentialsRepository.findDBUserCredentialsByUserAndProvider(
                             dbUser,
@@ -109,6 +110,15 @@ public class UserCredentialsService {
 
     }
 
+    @Transactional
+    public void delete(UUID userId) {
 
+        DBUser dbUser = this.userRepository
+                .findById(userId)
+                .orElseThrow(() -> new HolisticFaaSException("User '" + userId + "' not found"));
+
+        this.userCredentialsRepository.deleteByUser(dbUser);
+
+    }
 
 }
