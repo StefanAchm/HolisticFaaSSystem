@@ -21,15 +21,14 @@ public class WebSocketSessionService {
     private final Map<String, WebSocketSession> sessions = new HashMap<>();
 
     public void registerSession(WebSocketSession session) {
+        logger.info("Registered session: {}", session.getId());
         sessions.put(session.getId(), session);
     }
 
     public void unregisterSession(WebSocketSession session) {
 
-        try (WebSocketSession remove = sessions.remove(session.getId())) {
-
+        try (WebSocketSession ignored = sessions.remove(session.getId())) {
             logger.info("Unregistered session: {}", session.getId());
-
         } catch (IOException e) {
             throw new HolisticFaaSException(e);
         }
@@ -62,8 +61,16 @@ public class WebSocketSessionService {
     }
 
     public void sendMessage(Message message) {
-        logger.info("Sending message: {}", message);
+
+        if(sessions.isEmpty()) {
+            logger.warn("No sessions to send message to");
+            return;
+        }
+
+        logger.info("Sending message ({} sessions): {}", sessions.size(), message);
+
         sessions.values().forEach(session -> sendMessage(session.getId(), message));
+
     }
 
 }
