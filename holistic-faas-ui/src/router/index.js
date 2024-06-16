@@ -22,11 +22,6 @@ const routes = [
         component: () => import('../views/WorkflowsView.vue')
     },
     {
-        path: '/users',
-        name: 'users',
-        component: () => import('../views/UserView.vue')
-    },
-    {
         path: '/profile',
         name: 'profile',
         component: () => import('../views/ProfileView.vue')

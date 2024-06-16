@@ -56,14 +56,16 @@ public class WebSecurityConfig {
                 .antMatchers("/websocket/**").permitAll()
                 .antMatchers("/api/system/info").permitAll()
 
-                // TODO, Allow swagger:
-//                .antMatchers(
-//                        "/swagger-ui/**",
-//                        "/webjars/**"
-//                ).permitAll()
+                // Swagger
+                .antMatchers(
+                        "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/v2/api-docs"
+                ).permitAll()
 
                 .anyRequest().authenticated()
-
 
                 .and()
                 .cors() // Allow cors

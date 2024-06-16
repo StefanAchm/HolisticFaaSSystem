@@ -90,10 +90,6 @@ export default {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // User and user credentials
 
-    getAllUsers() {
-        return apiClient.get('/user_credentials/getAll');
-    },
-
     getUserCredentials(user) {
         // Need to set the user as body, not as query parameter
         return apiClient.get('/user_credentials/get', {

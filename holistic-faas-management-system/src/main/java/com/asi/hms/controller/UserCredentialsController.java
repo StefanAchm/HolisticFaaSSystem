@@ -19,23 +19,10 @@ public class UserCredentialsController {
         this.userCredentialsService = userCredentialsService;
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<APIUserCredentials> add(@RequestPart("file") MultipartFile file,
-                                      @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
-
-        return ResponseEntity.ok(this.userCredentialsService.addOrUpdate(file, apiUserCredentials, true));
-
-    }
-
     @PostMapping(value = "/addOrUpdate")
     public ResponseEntity<APIUserCredentials> addOrUpdate(@RequestPart("file") MultipartFile file,
                                               @RequestPart(value = "apiUserCredentials") APIUserCredentials apiUserCredentials){
         return ResponseEntity.ok(this.userCredentialsService.addOrUpdate(file, apiUserCredentials, false));
-    }
-
-    @GetMapping(value = "/getAll")
-    public ResponseEntity<List<APIUserCredentials>> getAllUser() {
-        return ResponseEntity.ok(this.userCredentialsService.getAllUser());
     }
 
     @GetMapping(value = "/get")
