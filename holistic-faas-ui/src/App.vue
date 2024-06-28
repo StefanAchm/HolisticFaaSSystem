@@ -78,6 +78,15 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item @click="openHelp">
+          <v-list-item-icon>
+            <v-icon>mdi-help</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Help</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
       </v-list>
 
       <template v-slot:append>
@@ -198,6 +207,10 @@ export default {
             this.$router.push({name: 'login'}).catch(() => {
             })
           });
+    },
+
+    openHelp() {
+      window.open('https://github.com/StefanAchm/HolisticFaaSSystem/blob/main/doc/GettingStarted.md');
     }
 
   },

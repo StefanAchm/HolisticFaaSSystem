@@ -7,6 +7,16 @@
 
     <v-card-title>
       <span class="text-h4">Profile</span>
+
+      <v-spacer></v-spacer>
+
+      <v-icon
+          color="info"
+          @click="openHelp">
+        mdi-help-circle-outline
+      </v-icon>
+
+
     </v-card-title>
 
     <v-spacer></v-spacer>
@@ -202,6 +212,10 @@ export default {
             this.$root.snackbar.showError({message: 'Error uploading credentials for ' + credentials.provider});
           })
 
+    },
+
+    openHelp() {
+      window.open('https://github.com/StefanAchm/HolisticFaaSSystem/blob/main/doc/GettingStarted.md#1-configure-your-user-account')
     }
 
   }

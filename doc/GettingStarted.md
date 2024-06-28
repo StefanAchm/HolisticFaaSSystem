@@ -8,6 +8,10 @@
 
 ### 1.1. AWS Credentials file (e.g. aws.properties):
 
+1. Click on your user name in the upper right corner and select the `Security credentials` button.
+2. Go to your `Access keys` and click on the `Create New Access Key` button.
+3. Create the key, download the credentials and store them in a file, like the following example:
+
 ```properties
 aws.accessKeyId=YOUR_ACCESS_KEY
 aws.secretAccessKey=YOUR_SECRET_KEY
@@ -17,6 +21,10 @@ aws.roleArn=YOUR_ROLE_ARN
 ```
 
 ### 1.2. GCP Credentials file (e.g. gcp.json):
+
+1. Create a service account in the 'IAM & Admin' section of the GCP console. 
+2. Open the service account and click on the `Keys` button.
+3. Create a new key and download the JSON file, which contains the credentials, like the following example:
 
 ```json
 
